@@ -1,0 +1,53 @@
+version: "2"
+
+services:
+  producer:
+    container_name: love-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    network_mode: "host"
+    ports:
+      - "8884:8884"
+    environment:
+      - OPSIM_HOSTNAME=test_hostname
+      - DISPLAY=127.0.0.1:0
+      - PYTHONPATH=/opt/rh/devtoolset-6/root/usr/lib64/python2.7/site-packages:/opt/rh/devtoolset-6/root/usr/lib/python2.7/site-packages:/home/opsim/dds/lib:/home/opsim/tsrepos/salobj/python
+      - LD_LIBRARY_PATH=/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/root/tsrepos/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/home/opsim/repos/ts_opensplice/OpenSpliceDDS/V6.4.1/HDE/x86_64.linux/lib:/home/opsim/dds/lib
+      - WEBSOCKET_HOST=localhost:8000/ws/subscription
+    volumes:
+      - app-volume:${LOVE_ROOT_PATH}
+      - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
+
+  manager:
+    container_name: love-manager
+    build:
+      context: ${DOCKERFILE_PATH_MANAGER}
+      dockerfile: Dockerfile
+    image: love-manager-image
+    network_mode: "host"
+    ports:
+      - "8000:8000"
+    volumes:
+      - app-volume:${LOVE_ROOT_PATH}
+
+  frontend:
+    container_name: love-frontend
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      dockerfile: Dockerfile
+    image: love-frontend-image
+    ports:
+      - "80:80"
+    volumes:
+      - app-volume:${LOVE_ROOT_PATH}
+
+  redis:
+    container_name: redis
+    image: redis:2.8
+    ports:
+      - "6379:6379"
+
+volumes:
+  app-volume: 
