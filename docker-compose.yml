@@ -36,6 +36,8 @@ services:
     container_name: love-frontend
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
+      args: 
+        WEBSOCKET_HOST: dev.love.inria.cl:8000
       dockerfile: Dockerfile
     image: love-frontend-image
     ports:
