@@ -51,5 +51,17 @@ services:
     ports:
       - "6379:6379"
 
+  nginx:
+    container_name: love-webserver
+    build: ${DOCKERFILE_PATH_WEBSERVER}
+    volumes:
+      - app-volume:${LOVE_ROOT_PATH}
+    network_mode: "host"
+    depends_on:
+      - manager
+      - frontend
+    ports:
+      - "80:80"
+
 volumes:
   app-volume: 
