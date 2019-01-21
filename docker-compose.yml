@@ -31,6 +31,7 @@ services:
       - "8000:8000"
     environment:
       - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
     volumes:
       - app-volume:${LOVE_ROOT_PATH}
@@ -53,6 +54,7 @@ services:
     image: redis:2.8
     ports:
       - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
 
   nginx:
     container_name: love-webserver
