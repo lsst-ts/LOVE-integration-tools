@@ -44,6 +44,8 @@ services:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile
     image: love-frontend-image
+    depends_on:
+      - manager
     ports:
       - "80:80"
     volumes:
@@ -51,7 +53,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis:2.8
+    image: redis:5.0.3
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
