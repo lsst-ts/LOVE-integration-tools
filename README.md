@@ -3,7 +3,7 @@
 This repository contains scripts and tools to integrate applications from the different development repositories, in order to be used for deployment purposes.
 
 ## Expected folder structure
-The LOVE repositories are expected to be at the same level under the same parent folder. Additionally the root folder should contain a folder named `tsrepos`, containing the LSST repositories `salobj`, `ts_sal` and `ts_xml`.  For example:
+The LOVE repositories are expected to be at the same level under the same parent folder. Additionally the root folder should contain a folder named `tsrepos`, containing the LSST repositories `ts_salobj`, `ts_sal` and `ts_xml`.  For example:
 
 * LOVE
   - LOVE-frontent
