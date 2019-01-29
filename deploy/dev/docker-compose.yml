@@ -16,7 +16,6 @@ services:
       - LD_LIBRARY_PATH=/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/root/tsrepos/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/home/opsim/repos/ts_opensplice/OpenSpliceDDS/V6.4.1/HDE/x86_64.linux/lib:/home/opsim/dds/lib
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
     volumes:
-      - app-volume:${LOVE_ROOT_PATH}
       - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
 
   manager:
