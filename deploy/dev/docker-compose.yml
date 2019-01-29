@@ -44,8 +44,6 @@ services:
     image: love-frontend-image
     depends_on:
       - manager
-    ports:
-      - "80:80"
     volumes:
       - app-volume:${LOVE_ROOT_PATH}
 
@@ -59,8 +57,6 @@ services:
   nginx:
     container_name: love-nginx
     build: ${DOCKERFILE_PATH_WEBSERVER}
-    volumes:
-      - app-volume:${LOVE_ROOT_PATH}
     restart: always
     depends_on:
       - manager
