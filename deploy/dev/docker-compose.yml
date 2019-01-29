@@ -1,4 +1,4 @@
-version: "2"
+version: "3.4"
 
 services:
   producer:
@@ -7,7 +7,6 @@ services:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile
     image: love-producer-image
-    network_mode: "host"
     ports:
       - "8884:8884"
     environment:
@@ -26,7 +25,6 @@ services:
       context: ${DOCKERFILE_PATH_MANAGER}
       dockerfile: Dockerfile
     image: love-manager-image
-    network_mode: "host"
     ports:
       - "8000:8000"
     environment:
@@ -40,7 +38,7 @@ services:
     container_name: love-frontend
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      args: 
+      args:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile
     image: love-frontend-image
@@ -59,11 +57,11 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
 
   nginx:
-    container_name: love-webserver
+    container_name: love-nginx
     build: ${DOCKERFILE_PATH_WEBSERVER}
     volumes:
       - app-volume:${LOVE_ROOT_PATH}
-    network_mode: "host"
+    restart: always
     depends_on:
       - manager
       - frontend
@@ -71,4 +69,4 @@ services:
       - "80:80"
 
 volumes:
-  app-volume: 
+  app-volume:
