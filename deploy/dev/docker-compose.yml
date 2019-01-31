@@ -31,7 +31,7 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
     volumes:
-      - manager-volume:/usr/src/love
+      - manager-volume:/usr/src/love/static
 
   frontend:
     container_name: love-frontend
