@@ -1,0 +1,73 @@
+version: "3.4"
+
+services:
+  producer:
+    container_name: love-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    ports:
+      - "8884:8884"
+    environment:
+      - OPSIM_HOSTNAME=test_hostname
+      - DISPLAY=127.0.0.1:0
+      - PYTHONPATH=/opt/rh/devtoolset-6/root/usr/lib64/python2.7/site-packages:/opt/rh/devtoolset-6/root/usr/lib/python2.7/site-packages:/home/opsim/dds/lib:/home/opsim/tsrepos/ts_salobj/python
+      - LD_LIBRARY_PATH=/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/root/tsrepos/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/home/opsim/repos/ts_opensplice/OpenSpliceDDS/V6.4.1/HDE/x86_64.linux/lib:/home/opsim/dds/lib
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+    volumes:
+      - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
+
+  manager:
+    container_name: love-manager-mount
+    build:
+      context: ${DOCKERFILE_PATH_MANAGER}
+      dockerfile: Dockerfile-dev
+    image: love-manager-image
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+    volumes:
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
+
+  frontend:
+    container_name: love-frontend
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      args:
+        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
+      dockerfile: Dockerfile
+    image: love-frontend-image
+    depends_on:
+      - manager
+    volumes:
+      - frontend-volume:/usr/src/love
+
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+
+  nginx:
+    container_name: love-nginx
+    build:
+      context: ${DOCKERFILE_PATH_WEBSERVER}
+      dockerfile: Dockerfile-dev
+    restart: always
+    depends_on:
+      - manager
+      - frontend
+    ports:
+      - "80:80"
+    volumes:
+      - frontend-volume:/usr/src/love-frontend
+      - manager-volume:/usr/src/love-manager
+
+volumes:
+  frontend-volume:
+  manager-volume:
