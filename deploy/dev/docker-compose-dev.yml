@@ -34,17 +34,19 @@ services:
       - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
 
   frontend:
-    container_name: love-frontend
+    container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
       args:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     image: love-frontend-image
+    ports:
+      - "3000:3000"
     depends_on:
       - manager
     volumes:
-      - frontend-volume:/usr/src/love
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
 
   redis:
     container_name: redis
@@ -64,10 +66,3 @@ services:
       - frontend
     ports:
       - "80:80"
-    volumes:
-      - frontend-volume:/usr/src/love-frontend
-      - manager-volume:/usr/src/love-manager
-
-volumes:
-  frontend-volume:
-  manager-volume:
