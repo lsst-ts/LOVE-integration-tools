@@ -23,7 +23,7 @@ services:
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
       dockerfile: Dockerfile-dev
-    image: love-manager-image
+    image: love-manager-image-mount
     ports:
       - "8000:8000"
     environment:
@@ -40,7 +40,7 @@ services:
       args:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile-dev
-    image: love-frontend-image
+    image: love-frontend-image-mount
     ports:
       - "3000:3000"
     depends_on:
@@ -56,7 +56,8 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
 
   nginx:
-    container_name: love-nginx
+    container_name: love-nginx-mount
+    image: love-nginx-image-mount
     build:
       context: ${DOCKERFILE_PATH_WEBSERVER}
       dockerfile: Dockerfile-dev
