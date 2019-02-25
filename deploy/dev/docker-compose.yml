@@ -15,6 +15,7 @@ services:
       - PYTHONPATH=/opt/rh/devtoolset-6/root/usr/lib64/python2.7/site-packages:/opt/rh/devtoolset-6/root/usr/lib/python2.7/site-packages:/home/opsim/dds/lib:/home/opsim/tsrepos/ts_salobj/python
       - LD_LIBRARY_PATH=/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/root/tsrepos/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/home/opsim/repos/ts_opensplice/OpenSpliceDDS/V6.4.1/HDE/x86_64.linux/lib:/home/opsim/dds/lib
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
 
@@ -30,6 +31,7 @@ services:
       - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - manager-volume:/usr/src/love/static
 
