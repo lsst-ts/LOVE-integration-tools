@@ -13,7 +13,7 @@ services:
     environment:
       - OPSIM_HOSTNAME=test_hostname
       - DISPLAY=127.0.0.1:0
-      - PYTHONPATH=/opt/rh/devtoolset-6/root/usr/lib64/python2.7/site-packages:/opt/rh/devtoolset-6/root/usr/lib/python2.7/site-packages:/home/opsim/dds/lib:/home/opsim/tsrepos/ts_salobj/python
+      - PYTHONPATH=/opt/rh/devtoolset-6/root/usr/lib64/python2.7/site-packages:/opt/rh/devtoolset-6/root/usr/lib/python2.7/site-packages:/home/opsim/dds/lib:/home/opsim/tsrepos/ts_salobj/python:/home/opsim/tsrepos/ts_scriptqueue/python/lsst/ts/scriptqueue/ui/:/home/opsim/tsrepos/ts_scriptqueue/python
       - LD_LIBRARY_PATH=/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/root/tsrepos/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib:/home/opsim/repos/ts_opensplice/OpenSpliceDDS/V6.4.1/HDE/x86_64.linux/lib:/home/opsim/dds/lib
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
     volumes:
