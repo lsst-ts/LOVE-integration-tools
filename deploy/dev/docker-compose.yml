@@ -18,6 +18,7 @@ services:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
     volumes:
       - app-volume:${LOVE_ROOT_PATH}
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/home/opsim/inria/producer
       - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
 
   manager:
