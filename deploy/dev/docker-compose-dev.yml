@@ -22,11 +22,11 @@ services:
       - ${DOCKERFILE_PATH_LSST_REPOS}:/home/opsim/tsrepos
 
   manager:
-    container_name: love-manager
+    container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile
-    image: love-manager-image
+      dockerfile: Dockerfile-dev
+    image: love-manager-image-mount
     ports:
       - "8000:8000"
     environment:
@@ -35,20 +35,22 @@ services:
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
-      - manager-volume:/usr/src/love/static
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
 
   frontend:
-    container_name: love-frontend
+    container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
       args:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
-      dockerfile: Dockerfile
-    image: love-frontend-image
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    ports:
+      - "3000:3000"
     depends_on:
       - manager
     volumes:
-      - frontend-volume:/usr/src/love
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
 
   redis:
     container_name: redis
@@ -58,20 +60,17 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
 
   nginx:
-    container_name: love-nginx
-    image: love-nginx-image
-    build: ${DOCKERFILE_PATH_WEBSERVER}
+    container_name: love-nginx-mount
+    image: love-nginx-image-mount
+    build:
+      context: ${DOCKERFILE_PATH_WEBSERVER}
+      dockerfile: Dockerfile-dev
     restart: always
     depends_on:
       - manager
       - frontend
     ports:
       - "80:80"
-    volumes:
-      - frontend-volume:/usr/src/love-frontend
-      - manager-volume:/usr/src/love-manager
 
 volumes:
-  frontend-volume:
-  manager-volume:
   producer-volume:
