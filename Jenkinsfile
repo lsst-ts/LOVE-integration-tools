@@ -6,7 +6,7 @@ pipeline {
     dockerImage = ""
   }
   stages {
-    stage("Build Docker image") {
+    stage("Build Nginx Docker image") {
       when {
         changeset "nginx/*"
         anyOf {
@@ -20,7 +20,7 @@ pipeline {
         }
       }
     }
-    stage("Push Docker image") {
+    stage("Push Nginx Docker image") {
       when {
         changeset "nginx/*"
         anyOf {
@@ -36,6 +36,7 @@ pipeline {
         }
       }
     }
+
     stage("Deploy develop version") {
       when {
         branch "develop"
@@ -43,11 +44,28 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose.yml love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose-dev.yml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@dev.love.inria.cl:.'
-            sh 'ssh love@dev.love.inria.cl docker-compose pull'
-            sh 'ssh love@dev.love.inria.cl docker-compose down -v'
-            sh 'ssh love@dev.love.inria.cl docker-compose up -d'
+            sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev pull'
+            sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev down -v'
+            sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev up -d'
+          }
+        }
+      }
+    }
+
+    stage("Deploy master version") {
+      when {
+        branch "master"
+      }
+      steps {
+        script {
+          sshagent(credentials: ['love-ssh-key']) {
+            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose.yml love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@love.inria.cl:.'
+            sh 'ssh love@love.inria.cl docker-compose pull'
+            sh 'ssh love@love.inria.cl docker-compose down -v'
+            sh 'ssh love@love.inria.cl docker-compose up -d'
           }
         }
       }
