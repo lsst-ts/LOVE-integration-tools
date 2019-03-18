@@ -37,17 +37,18 @@ pipeline {
       }
     }
     stage("Deploy develop version") {
-      def remote = [:]
-      remote.host = "dev.love.inria.cl"
-      remote.user = "love"
-      remote.identityFile = "love-ssh-key"
       when {
         branch "develop"
       }
       steps {
-        sshCommand remote: remote, command: "cat /proc/cpuinfo"
+        script {
+          def remote = [:]
+          remote.host = "dev.love.inria.cl"
+          remote.user = "love"
+          remote.identityFile = "love-ssh-key"
+          sshCommand remote: remote, command: "cat /proc/cpuinfo"
+        }
       }
     }
   }
-
 }
