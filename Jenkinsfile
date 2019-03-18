@@ -43,7 +43,7 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key']) {
-            sh 'ssh -o StrictHostKeyChecking=no -l love dev.love.inria.cl cat /proc/cpuinfo'
+            sh 'scp -o StrictHostKeyChecking=no README.md love@dev.love.inria.cl:.'
           }
         }
       }
