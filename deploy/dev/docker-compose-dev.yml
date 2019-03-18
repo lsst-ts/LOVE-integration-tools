@@ -1,0 +1,68 @@
+version: "3.4"
+
+services:
+  producer:
+    container_name: love-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image
+    ports:
+      - "8884:8884"
+    environment:
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LSST_DDS_DOMAIN="my_test"
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+
+  manager:
+    container_name: love-manager-mount
+    build:
+      context: ${DOCKERFILE_PATH_MANAGER}
+      dockerfile: Dockerfile-dev
+    image: love-manager-image-mount
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    volumes:
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
+
+  frontend:
+    container_name: love-frontend-mount
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      args:
+        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    ports:
+      - "3000:3000"
+    depends_on:
+      - manager
+    volumes:
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+
+  nginx:
+    container_name: love-nginx-mount
+    image: love-nginx-image-mount
+    build:
+      context: ${DOCKERFILE_PATH_WEBSERVER}
+      dockerfile: Dockerfile-dev
+    restart: always
+    depends_on:
+      - manager
+      - frontend
+    ports:
+      - "80:80"
