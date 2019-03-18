@@ -43,7 +43,8 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key']) {
-            sh 'scp -o StrictHostKeyChecking=no README.md love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose.yml love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@dev.love.inria.cl:.'
           }
         }
       }
