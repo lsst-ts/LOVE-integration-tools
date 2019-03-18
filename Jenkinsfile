@@ -4,7 +4,7 @@ pipeline {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
     dockerImage = ""
-    devServer = [:]
+    def devServer = [:]
     devServer.host = "dev.love.inria.cl"
     devServer.user = "love"
     devServer.identityFile = "love-ssh-key"
