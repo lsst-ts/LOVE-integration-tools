@@ -42,11 +42,9 @@ pipeline {
       }
       steps {
         script {
-          def remote = [:]
-          remote.host = "dev.love.inria.cl"
-          remote.user = "love"
-          remote.identityFile = "love-ssh-key"
-          sshCommand remote: remote, command: "cat /proc/cpuinfo"
+          sshagent(credentials: ['love-ssh-key']) {
+            sh 'ssh -o StrictHostKeyChecking=no -l love dev.love.inria.cl cat /proc/cpuinfo'
+          }
         }
       }
     }
