@@ -4,6 +4,10 @@ pipeline {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
     dockerImage = ""
+    devServer = [:]
+    devServer.host = "dev.love.inria.cl"
+    devServer.user = "love"
+    devServer.identityFile = "love-ssh-key"
   }
   stages {
     stage("Build Docker image") {
@@ -36,10 +40,6 @@ pipeline {
         }
       }
     }
-    def devServer = [:]
-    devServer.host = "dev.love.inria.cl"
-    devServer.user = "love"
-    devServer.identityFile = "love-ssh-key"
     stage("Deploy develop version") {
       when {
         branch "develop"
