@@ -22,6 +22,7 @@ pipeline {
     }
     stage("Push Docker image") {
       when {
+        changeset "nginx/*"
         anyOf {
           branch "master"
           branch "develop"
