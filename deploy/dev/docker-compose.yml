@@ -3,7 +3,10 @@ version: "3.4"
 services:
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:master
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
     ports:
       - "8884:8884"
     environment:
@@ -13,7 +16,10 @@ services:
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:master
+    build:
+      context: ${DOCKERFILE_PATH_MANAGER}
+      dockerfile: Dockerfile
+    image: love-manager-image
     ports:
       - "8000:8000"
     environment:
@@ -26,7 +32,12 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:master
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      args:
+        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
+      dockerfile: Dockerfile
+    image: love-frontend-image
     depends_on:
       - manager
     volumes:
@@ -41,7 +52,8 @@ services:
 
   nginx:
     container_name: love-nginx
-    image: inriachile/love-nginx:master
+    image: love-nginx-image
+    build: ${DOCKERFILE_PATH_WEBSERVER}
     restart: always
     depends_on:
       - manager
