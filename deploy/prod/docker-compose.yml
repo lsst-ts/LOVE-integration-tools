@@ -41,7 +41,7 @@ services:
 
   nginx:
     container_name: love-nginx
-    build: ${DOCKERFILE_PATH_WEBSERVER}
+    image: inriachile/love-nginx:develop
     restart: always
     depends_on:
       - manager
