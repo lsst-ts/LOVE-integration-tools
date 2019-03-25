@@ -1,6 +1,15 @@
 version: "3.4"
 
 services:
+  queuep:
+    container_name: love-queue
+    image: lsst/queue:latest
+    environment:
+      - LSST_DDS_DOMAIN=my_test
+    stdin_open: true
+    tty: true
+    network_mode: ${NETWORK_NAME}
+
   producer:
     container_name: love-producer
     build:
