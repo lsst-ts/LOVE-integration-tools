@@ -3,15 +3,16 @@ version: "3.4"
 services:
   queuep:
     container_name: love-queue
-    image: lsst/queue:latest
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-queue-image
     environment:
       - LSST_DDS_DOMAIN=my_test
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}      
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love      
-    stdin_open: true
-    tty: true
     network_mode: ${NETWORK_NAME}
 
   # producer:
