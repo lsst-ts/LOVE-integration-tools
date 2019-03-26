@@ -1,20 +1,33 @@
 version: "3.4"
 
 services:
-  producer:
-    container_name: love-producer
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-    image: love-producer-image
-    ports:
-      - "8884:8884"
+  queuep:
+    container_name: love-queue
+    image: lsst/queue:latest
     environment:
+      - LSST_DDS_DOMAIN=my_test
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LSST_DDS_DOMAIN="my_test"
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}      
     volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love      
+    stdin_open: true
+    tty: true
+    network_mode: ${NETWORK_NAME}
+
+  # producer:
+  #   container_name: love-producer
+  #   build:
+  #     context: ${DOCKERFILE_PATH_PRODUCER}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-producer-image
+  #   ports:
+  #     - "8884:8884"
+  #   environment:
+  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #     - LSST_DDS_DOMAIN="my_test"
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
 
   manager:
     container_name: love-manager-mount
@@ -31,6 +44,7 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
+    network_mode: ${NETWORK_NAME}
 
   frontend:
     container_name: love-frontend-mount
@@ -46,6 +60,7 @@ services:
       - manager
     volumes:
       - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+    network_mode: ${NETWORK_NAME}
 
   redis:
     container_name: redis
@@ -53,6 +68,7 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    network_mode: ${NETWORK_NAME}
 
   nginx:
     container_name: love-nginx-mount
@@ -66,3 +82,4 @@ services:
       - frontend
     ports:
       - "80:80"
+    network_mode: ${NETWORK_NAME}
