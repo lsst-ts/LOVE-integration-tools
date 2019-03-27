@@ -43,7 +43,7 @@ pipeline {
       }
       steps {
         script {
-          sshagent(credentials: ['love-ssh-key']) {
+          sshagent(credentials: ['love-ssh-key-2']) {
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose-dev.yml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml pull'
@@ -60,7 +60,7 @@ pipeline {
       }
       steps {
         script {
-          sshagent(credentials: ['love-ssh-key']) {
+          sshagent(credentials: ['love-ssh-key-2']) {
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose.yml love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@love.inria.cl:.'
             sh 'ssh love@love.inria.cl docker-compose pull'
