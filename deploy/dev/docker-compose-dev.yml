@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile-dev
     image: love-producer-image-mount
     environment:
-      - LSST_DDS_DOMAIN=my_test
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}      
     volumes:
