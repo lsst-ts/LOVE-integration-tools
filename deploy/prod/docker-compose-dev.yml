@@ -4,12 +4,12 @@ services:
   producer:
     container_name: love-producer
     image: inriachile/love-producer:develop
-    ports:
-      - "8884:8884"
     environment:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LSST_DDS_DOMAIN="my_test"
+    network_mode: ${NETWORK_NAME}
+
 
   manager:
     container_name: love-manager
@@ -23,6 +23,8 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - manager-volume:/usr/src/love/static
+    network_mode: ${NETWORK_NAME}
+
 
   frontend:
     container_name: love-frontend
@@ -31,6 +33,8 @@ services:
       - manager
     volumes:
       - frontend-volume:/usr/src/love
+    network_mode: ${NETWORK_NAME}
+
 
   redis:
     container_name: redis
@@ -38,6 +42,7 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    network_mode: ${NETWORK_NAME}
 
   nginx:
     container_name: love-nginx
@@ -51,6 +56,7 @@ services:
     volumes:
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
+    network_mode: ${NETWORK_NAME}
 
 volumes:
   frontend-volume:
