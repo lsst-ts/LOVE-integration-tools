@@ -2,11 +2,11 @@ version: "3.4"
 
 services:
   producer:
-    container_name: love-producer
+    container_name: love-producer-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
-    image: love-producer-image
+    image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=my_test
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
