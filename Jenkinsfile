@@ -48,6 +48,7 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml pull'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml down -v'
+            sh 'ssh love@dev.love.inria.cl docker network ls | grep testnet > /dev/null  || docker network create testnet'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml up -d'
           }
         }
