@@ -51,7 +51,7 @@ pipeline {
         }
       }
     }
-    stage("Push Nginx Docker image") {
+    stage("Push Nginx EIAS Docker image") {
       when {
         changeset "nginx/*"
         anyOf {
