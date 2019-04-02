@@ -47,7 +47,7 @@ pipeline {
       }
       steps {
         script {
-          dockerImageEIAS = docker.build("inriachile/love-nginx:eias", "./nginx/Dockerfile-eias")
+          dockerImageEIAS = docker.build("inriachile/love-nginx:eias", "./nginx/eias")
         }
       }
     }
