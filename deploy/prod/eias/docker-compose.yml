@@ -11,6 +11,11 @@ services:
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.209"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"    
 
 
   manager:
@@ -28,6 +33,11 @@ services:
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.210"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"            
 
 
   frontend:
@@ -39,7 +49,7 @@ services:
       - frontend-volume:/usr/src/love
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.211"
+        ipv4_address: "10.0.100.211" 
 
 
   redis:
@@ -51,6 +61,11 @@ services:
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.212"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"            
 
   nginx:
     container_name: love-nginx
@@ -67,6 +82,11 @@ services:
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.213"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"            
 
 volumes:
   frontend-volume:
