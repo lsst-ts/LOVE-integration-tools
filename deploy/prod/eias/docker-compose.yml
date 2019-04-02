@@ -1,0 +1,81 @@
+version: "3.4"
+
+services:
+  producer:
+    container_name: love-producer
+    image: inriachile/love-producer:develop
+    environment:
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LSST_DDS_DOMAIN_PROD=${LSST_DDS_DOMAIN}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.209"
+
+
+  manager:
+    container_name: love-manager
+    image: inriachile/love-manager:develop
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    volumes:
+      - manager-volume:/usr/src/love/static
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.210"
+
+
+  frontend:
+    container_name: love-frontend
+    image: inriachile/love-frontend:develop
+    depends_on:
+      - manager
+    volumes:
+      - frontend-volume:/usr/src/love
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.211"
+
+
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.212"
+
+  nginx:
+    container_name: love-nginx
+    image: inriachile/love-nginx:develop
+    restart: always
+    depends_on:
+      - manager
+      - frontend
+    ports:
+      - "80:80"
+    volumes:
+      - frontend-volume:/usr/src/love-frontend
+      - manager-volume:/usr/src/love-manager
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.213"
+
+volumes:
+  frontend-volume:
+  manager-volume:
+
+networks:
+  default:
+    external:
+      name: lab-priv-network
+  lab-priv-network:
+    external: true
+
