@@ -8,7 +8,9 @@ services:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LSST_DDS_DOMAIN_PROD=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.209"
 
 
   manager:
@@ -23,7 +25,9 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - manager-volume:/usr/src/love/static
-    network_mode: ${NETWORK_NAME}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.210"
 
 
   frontend:
@@ -33,7 +37,9 @@ services:
       - manager
     volumes:
       - frontend-volume:/usr/src/love
-    network_mode: ${NETWORK_NAME}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.211"
 
 
   redis:
@@ -42,7 +48,9 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.212"
 
   nginx:
     container_name: love-nginx
@@ -56,8 +64,18 @@ services:
     volumes:
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
-    network_mode: ${NETWORK_NAME}
+    networks:
+      lab-priv-network:
+        ipv4_address: "10.0.100.213"
 
 volumes:
   frontend-volume:
   manager-volume:
+
+networks:
+  default:
+    external:
+      name: lab-priv-network
+  lab-priv-network:
+    external: true
+
