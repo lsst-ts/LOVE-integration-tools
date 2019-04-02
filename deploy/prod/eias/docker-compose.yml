@@ -54,7 +54,7 @@ services:
 
   nginx:
     container_name: love-nginx
-    image: inriachile/love-nginx:develop
+    image: inriachile/love-nginx:eia
     restart: always
     depends_on:
       - manager
