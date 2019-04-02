@@ -4,6 +4,7 @@ pipeline {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
     dockerImage = ""
+    dockerImageEIAS = ""
   }
   stages {
     stage("Build Nginx Docker image") {
@@ -32,6 +33,35 @@ pipeline {
         script {
           docker.withRegistry("", registryCredential) {
             dockerImage.push()
+          }
+        }
+      }
+    }
+
+    stage("Build EIAS Nginx Docker image") {
+      when {
+        changeset "nginx/*"
+        anyOf {
+          branch "develop"
+        }
+      }
+      steps {
+        script {
+          dockerImageEIAS = docker.build("inriachile/love-nginx:eias", "./nginx/Dockerfile-eias")
+        }
+      }
+    }
+    stage("Push Nginx Docker image") {
+      when {
+        changeset "nginx/*"
+        anyOf {
+          branch "develop"
+        }
+      }
+      steps {
+        script {
+          docker.withRegistry("", registryCredential) {
+            dockerImageEIAS.push()
           }
         }
       }
