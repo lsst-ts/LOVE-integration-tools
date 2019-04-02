@@ -53,7 +53,7 @@ pipeline {
     }
     stage("Push Nginx EIAS Docker image") {
       when {
-        changeset "nginx/*"
+        changeset "nginx/eias/*"
         anyOf {
           branch "develop"
         }
