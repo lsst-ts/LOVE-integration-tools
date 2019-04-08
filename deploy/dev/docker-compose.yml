@@ -13,7 +13,12 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}      
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love      
-    network_mode: ${NETWORK_NAME}      
+    network_mode: ${NETWORK_NAME} 
+      logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"         
 
   manager:
     container_name: love-manager
@@ -31,6 +36,11 @@ services:
     volumes:
       - manager-volume:/usr/src/love/static
     network_mode: ${NETWORK_NAME}
+      logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
 
 
   frontend:
@@ -46,6 +56,11 @@ services:
     volumes:
       - frontend-volume:/usr/src/love
     network_mode: ${NETWORK_NAME}
+      logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
 
   redis:
     container_name: redis
@@ -54,6 +69,11 @@ services:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     network_mode: ${NETWORK_NAME}
+      logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
 
 
   nginx:
@@ -70,6 +90,11 @@ services:
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
     network_mode: ${NETWORK_NAME}
+      logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
 
 
 volumes:
