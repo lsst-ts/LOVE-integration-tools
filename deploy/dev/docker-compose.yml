@@ -16,7 +16,7 @@ services:
   emitter:
     container_name: love-emitter
     build:
-      context: ${DOCKERFILE_PATH_PRODUCER}/producer/emitters
+      context: ${DOCKERFILE_PATH_EMITTER}
       dockerfile: Dockerfile
     image: love-emitter-image
     environment:
