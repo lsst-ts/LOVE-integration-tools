@@ -47,7 +47,7 @@ pipeline {
       }
       steps {
         script {
-          dockerImageTucson = docker.build("inriachile/love-nginx:eia", "./deploy/tucson/nginx")
+          dockerImageTucson = docker.build("inriachile/love-nginx:tucson", "./deploy/tucson/nginx")
         }
       }
     }
