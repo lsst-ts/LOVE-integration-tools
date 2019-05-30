@@ -42,7 +42,7 @@ pipeline {
       when {
         changeset "deploy/tucson/nginx/*"
         anyOf {
-          branch "master"
+          branch "develop"
         }
       }
       steps {
@@ -55,7 +55,7 @@ pipeline {
       when {
         changeset "deploy/tucson/nginx/*"
         anyOf {
-          branch "master"
+          branch "develop"
         }
       }
       steps {
