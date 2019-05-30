@@ -72,7 +72,7 @@ pipeline {
 
     stage("Deploy Linode develop version") {
       when {
-        changeset "deploy/linode*"
+        changeset "deploy/linode/*"
         branch "develop"
       }
       steps {
@@ -91,7 +91,7 @@ pipeline {
 
     stage("Deploy Linode master version") {
       when {
-        changeset "deploy/linode*"
+        changeset "deploy/linode/*"
         branch "master"
       }
       steps {
