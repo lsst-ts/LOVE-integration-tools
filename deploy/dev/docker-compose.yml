@@ -13,12 +13,12 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: ${NETWORK_NAME}
 
-  emitter:
-    container_name: love-emitter
+  simulator:
+    container_name: love-simulator
     build:
-      context: ${DOCKERFILE_PATH_EMITTER}
+      context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile
-    image: love-emitter-image
+    image: love-simulator-image
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
