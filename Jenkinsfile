@@ -3,13 +3,13 @@ pipeline {
   environment {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
-    dockerImage = ""
-    dockerImageEIA = ""
+    dockerImageLinode = ""
+    dockerImageTucson = ""
   }
   stages {
-    stage("Build Nginx Docker image") {
+    stage("Build Linode Nginx Docker image") {
       when {
-        changeset "nginx/*"
+        changeset "deploy/linode/nginx/*"
         anyOf {
           branch "master"
           branch "develop"
@@ -17,13 +17,13 @@ pipeline {
       }
       steps {
         script {
-          dockerImage = docker.build(dockerImageName, "./nginx")
+          dockerImageLinode = docker.build(dockerImageName, "./deploy/linode/nginx")
         }
       }
     }
-    stage("Push Nginx Docker image") {
+    stage("Push Linode Nginx Docker image") {
       when {
-        changeset "nginx/*"
+        changeset "deploy/linode/nginx/*"
         anyOf {
           branch "master"
           branch "develop"
@@ -32,28 +32,28 @@ pipeline {
       steps {
         script {
           docker.withRegistry("", registryCredential) {
-            dockerImage.push()
+            dockerImageLinode.push()
           }
         }
       }
     }
 
-    stage("Build EIA Nginx Docker image") {
+    stage("Build Tucson Nginx Docker image") {
       when {
-        changeset "nginx/eia/*"
+        changeset "deploy/tucson/nginx/*"
         anyOf {
           branch "develop"
         }
       }
       steps {
         script {
-          dockerImageEIA = docker.build("inriachile/love-nginx:eia", "./nginx/eia")
+          dockerImageTucson = docker.build("inriachile/love-nginx:eia", "./deploy/tucson/nginx")
         }
       }
     }
-    stage("Push Nginx EIAS Docker image") {
+    stage("Push Nginx Tucson Docker image") {
       when {
-        changeset "nginx/eia/*"
+        changeset "deploy/tucson/nginx/*"
         anyOf {
           branch "develop"
         }
@@ -61,14 +61,18 @@ pipeline {
       steps {
         script {
           docker.withRegistry("", registryCredential) {
-            dockerImageEIA.push()
+            dockerImageTucson.push()
           }
         }
       }
     }
 
-    stage("Deploy develop version") {
+
+
+
+    stage("Deploy Linode develop version") {
       when {
+        changeset "deploy/linode*"
         branch "develop"
       }
       steps {
@@ -85,8 +89,9 @@ pipeline {
       }
     }
 
-    stage("Deploy master version") {
+    stage("Deploy Linode master version") {
       when {
+        changeset "deploy/linode*"
         branch "master"
       }
       steps {
