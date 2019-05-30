@@ -65,7 +65,7 @@ services:
   nginx:
     container_name: love-nginx
     image: love-nginx-image
-    build: ${DOCKERFILE_PATH_WEBSERVER}
+    build: ${DOCKERFILE_PATH_NGINX}
     restart: always
     depends_on:
       - manager
