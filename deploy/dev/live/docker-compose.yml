@@ -10,9 +10,21 @@ services:
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}      
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love      
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+    network_mode: ${NETWORK_NAME}
+
+  emitter:
+    container_name: love-emitter-mount
+    build:
+      context: ${DOCKERFILE_PATH_EMITTER}
+      dockerfile: Dockerfile-dev
+    image: love-emitter-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_EMITTER}:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   manager:
