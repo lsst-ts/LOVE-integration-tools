@@ -72,8 +72,7 @@ services:
     container_name: love-nginx-mount
     image: love-nginx-image-mount
     build:
-      context: ${DOCKERFILE_PATH_WEBSERVER}
-      dockerfile: Dockerfile-dev
+      context: ${DOCKERFILE_PATH_NGINX}
     restart: always
     depends_on:
       - manager
