@@ -15,16 +15,16 @@ services:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
-  emitter:
-    container_name: love-emitter-mount
+  simulator:
+    container_name: love-simulator-mount
     build:
-      context: ${DOCKERFILE_PATH_EMITTER}
+      context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-dev
-    image: love-emitter-image-mount
+    image: love-simulator-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
-      - ${DOCKERFILE_PATH_EMITTER}:/usr/src/love
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   manager:
