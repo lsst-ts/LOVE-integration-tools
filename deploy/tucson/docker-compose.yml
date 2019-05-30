@@ -66,7 +66,7 @@ services:
 
   nginx:
     container_name: love-nginx
-    image: inriachile/love-nginx:eia
+    image: inriachile/love-nginx:tucson
     restart: always
     depends_on:
       - manager
