@@ -10,6 +10,12 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
 
+  simulator:
+    container_name: love-simulator
+    image: inriachile/love-simulator:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
 
   manager:
     container_name: love-manager
@@ -25,7 +31,6 @@ services:
       - manager-volume:/usr/src/love/static
     network_mode: ${NETWORK_NAME}
 
-
   frontend:
     container_name: love-frontend
     image: inriachile/love-frontend:develop
@@ -34,7 +39,6 @@ services:
     volumes:
       - frontend-volume:/usr/src/love
     network_mode: ${NETWORK_NAME}
-
 
   redis:
     container_name: redis
