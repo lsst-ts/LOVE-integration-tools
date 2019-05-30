@@ -62,6 +62,7 @@ services:
       - manager-volume:/usr/src/love-manager
     network_mode: ${NETWORK_NAME}
 
+
 volumes:
   frontend-volume:
   manager-volume:
