@@ -2,33 +2,37 @@ version: "3.4"
 
 services:
   producer:
-    container_name: love-producer
+    container_name: love-producer-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile
-    image: love-producer-image
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   simulator:
-    container_name: love-simulator
+    container_name: love-simulator-mount
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile
-    image: love-simulator-image
+      dockerfile: Dockerfile-dev
+    image: love-simulator-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   manager:
-    container_name: love-manager
+    container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile
-    image: love-manager-image
+      dockerfile: Dockerfile-dev
+    image: love-manager-image-mount
     ports:
       - "8000:8000"
     environment:
@@ -37,21 +41,23 @@ services:
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
-      - manager-volume:/usr/src/love/static
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   frontend:
-    container_name: love-frontend
+    container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
       args:
         WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
-      dockerfile: Dockerfile
-    image: love-frontend-image
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    ports:
+      - "3000:3000"
     depends_on:
       - manager
     volumes:
-      - frontend-volume:/usr/src/love
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
     network_mode: ${NETWORK_NAME}
 
   redis:
@@ -63,20 +69,14 @@ services:
     network_mode: ${NETWORK_NAME}
 
   nginx:
-    container_name: love-nginx
-    image: love-nginx-image
-    build: ${DOCKERFILE_PATH_WEBSERVER}
+    container_name: love-nginx-mount
+    image: love-nginx-image-mount
+    build:
+      context: ${DOCKERFILE_PATH_NGINX}
     restart: always
     depends_on:
       - manager
       - frontend
     ports:
       - "80:80"
-    volumes:
-      - frontend-volume:/usr/src/love-frontend
-      - manager-volume:/usr/src/love-manager
     network_mode: ${NETWORK_NAME}
-
-volumes:
-  frontend-volume:
-  manager-volume:
