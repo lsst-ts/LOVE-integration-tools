@@ -10,7 +10,7 @@ The LOVE repositories are expected to be at the same level under the same parent
   - LOVE-manager
   - LOVE-producer
   - LOVE-integration-tools
-  - LOVE-simulation
+  - LOVE-simulator
 ---
 
 ## Content
