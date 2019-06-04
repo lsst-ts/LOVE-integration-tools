@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.7"
 
 services:
   producer:
@@ -58,6 +58,7 @@ services:
       - manager
     volumes:
       - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+      - /usr/src/love/node_modules
     network_mode: ${NETWORK_NAME}
 
   redis:
