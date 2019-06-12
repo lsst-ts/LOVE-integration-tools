@@ -5,6 +5,7 @@ pipeline {
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
     dockerImageLinode = ""
     dockerImageTucson = ""
+    dockerImageLaSerena = ""
   }
   stages {
     stage("Build Linode Nginx Docker image") {
@@ -40,10 +41,11 @@ pipeline {
 
     stage("Build Tucson Nginx Docker image") {
       when {
-        changeset "deploy/tucson/nginx/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/tucson/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
@@ -53,10 +55,11 @@ pipeline {
     }
     stage("Push Tucson Nginx Docker image") {
       when {
-        changeset "deploy/tucson/nginx/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/tucson/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
@@ -69,10 +72,11 @@ pipeline {
 
     stage("Build La Serena Nginx Docker image") {
       when {
-        changeset "deploy/laserena/prod/nginx/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/laserena/prod/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
@@ -82,10 +86,11 @@ pipeline {
     }
     stage("Push LaSerena Nginx Docker image") {
       when {
-        changeset "deploy/laserena/prod/nginx/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/laserena/prod/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
