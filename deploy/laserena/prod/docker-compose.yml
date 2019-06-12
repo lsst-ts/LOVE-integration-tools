@@ -3,7 +3,7 @@ version: "3.7"
 services:
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:master
+    image: inriachile/love-producer:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
@@ -12,14 +12,14 @@ services:
 
   simulator:
     container_name: love-simulator
-    image: inriachile/love-simulator:master
+    image: inriachile/love-simulator:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: "host"
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:master
+    image: inriachile/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -33,7 +33,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:master
+    image: inriachile/love-frontend:develop
     depends_on:
       - manager
     volumes:
