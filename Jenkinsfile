@@ -51,7 +51,7 @@ pipeline {
         }
       }
     }
-    stage("Push Nginx Tucson Docker image") {
+    stage("Push Tucson Nginx Docker image") {
       when {
         changeset "deploy/tucson/nginx/*"
         anyOf {
@@ -67,7 +67,34 @@ pipeline {
       }
     }
 
-
+    stage("Build La Serena Nginx Docker image") {
+      when {
+        changeset "deploy/laserena/prod/nginx/*"
+        anyOf {
+          branch "develop"
+        }
+      }
+      steps {
+        script {
+          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/prod/nginx")
+        }
+      }
+    }
+    stage("Push LaSerena Nginx Docker image") {
+      when {
+        changeset "deploy/laserena/prod/nginx/*"
+        anyOf {
+          branch "develop"
+        }
+      }
+      steps {
+        script {
+          docker.withRegistry("", registryCredential) {
+            dockerImageTucson.push()
+          }
+        }
+      }
+    }
 
 
     stage("Deploy Linode develop version") {
