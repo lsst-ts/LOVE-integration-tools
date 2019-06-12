@@ -90,7 +90,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry("", registryCredential) {
-            dockerImageTucson.push()
+            dockerImageLaSerena.push()
           }
         }
       }
