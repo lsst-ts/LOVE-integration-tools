@@ -73,21 +73,21 @@ pipeline {
     stage("Build La Serena Nginx Docker image") {
       when {
         anyOf {
-          changeset "deploy/laserena/prod/nginx/*"
+          changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
       }
       steps {
         script {
-          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/prod/nginx")
+          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/nginx")
         }
       }
     }
     stage("Push LaSerena Nginx Docker image") {
       when {
         anyOf {
-          changeset "deploy/laserena/prod/nginx/*"
+          changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
