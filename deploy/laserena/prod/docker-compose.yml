@@ -10,13 +10,6 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: "host"
 
-  simulator:
-    container_name: love-simulator
-    image: inriachile/love-simulator:develop
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: "host"
-
   manager:
     container_name: love-manager
     image: inriachile/love-manager:develop
