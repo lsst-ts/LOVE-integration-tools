@@ -13,16 +13,6 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: "host"
 
-  simulator:
-    container_name: love-simulator
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile
-    image: love-simulator-image
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: "host"
-
   manager:
     container_name: love-manager
     build:

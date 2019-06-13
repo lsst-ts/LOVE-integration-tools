@@ -14,9 +14,7 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
     network_mode: "host"
-
-
-
+    
   manager:
     container_name: love-manager-mount
     build:
