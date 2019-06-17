@@ -1,15 +1,42 @@
 version: "3.7"
 
 services:
+  #----- simulators -------
+  atdome-sim:
+    image: lsstts/at_dome_sim:3.9-0.5
+    container_name: atdome-sim
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: "host"
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
+
+  simulator:
+    container_name: love-simulator
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile
+    image: love-simulator-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
+    network_mode: "host"
+  
+
+  #----- LOVE--------------
   producer:
-    container_name: love-producer-mount
+    container_name: love-producer
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile
     image: love-producer-image
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: "host"
 
