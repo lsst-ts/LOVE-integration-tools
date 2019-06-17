@@ -3,8 +3,11 @@ version: "3.7"
 services:
   #----- simulators -------
   atdome-sim:
-    image: lsstts/at_dome_sim:3.9-0.5
-    container_name: atdome-sim
+    build: 
+      context: ./atdome-sim/
+      dockerfile: Dockerfile
+    # image: lsstts/at_dome_sim:3.9-0.5
+    container_name: atdome-sim-build
     environment:
         - OSPL_URI=${OSPL_URI}
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -25,7 +28,6 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
     network_mode: "host"
-
     
   #----- LOVE--------------
   producer:
