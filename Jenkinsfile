@@ -3,13 +3,14 @@ pipeline {
   environment {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "inriachile/love-nginx:${GIT_BRANCH}"
-    dockerImage = ""
-    dockerImageEIA = ""
+    dockerImageLinode = ""
+    dockerImageTucson = ""
+    dockerImageLaSerena = ""
   }
   stages {
-    stage("Build Nginx Docker image") {
+    stage("Build Linode Nginx Docker image") {
       when {
-        changeset "nginx/*"
+        changeset "deploy/linode/nginx/*"
         anyOf {
           branch "master"
           branch "develop"
@@ -17,13 +18,13 @@ pipeline {
       }
       steps {
         script {
-          dockerImage = docker.build(dockerImageName, "./nginx")
+          dockerImageLinode = docker.build(dockerImageName, "./deploy/linode/nginx")
         }
       }
     }
-    stage("Push Nginx Docker image") {
+    stage("Push Linode Nginx Docker image") {
       when {
-        changeset "nginx/*"
+        changeset "deploy/linode/nginx/*"
         anyOf {
           branch "master"
           branch "develop"
@@ -32,50 +33,88 @@ pipeline {
       steps {
         script {
           docker.withRegistry("", registryCredential) {
-            dockerImage.push()
+            dockerImageLinode.push()
           }
         }
       }
     }
 
-    stage("Build EIA Nginx Docker image") {
+    stage("Build Tucson Nginx Docker image") {
       when {
-        changeset "nginx/eia/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/tucson/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
-          dockerImageEIA = docker.build("inriachile/love-nginx:eia", "./nginx/eia")
+          dockerImageTucson = docker.build("inriachile/love-nginx:tucson", "./deploy/tucson/nginx")
         }
       }
     }
-    stage("Push Nginx EIAS Docker image") {
+    stage("Push Tucson Nginx Docker image") {
       when {
-        changeset "nginx/eia/*"
         anyOf {
-          branch "develop"
+          changeset "deploy/tucson/nginx/*"
+          changeset "Jenkinsfile"
         }
+        branch "develop"
       }
       steps {
         script {
           docker.withRegistry("", registryCredential) {
-            dockerImageEIA.push()
+            dockerImageTucson.push()
           }
         }
       }
     }
 
-    stage("Deploy develop version") {
+    stage("Build La Serena Nginx Docker image") {
       when {
+        anyOf {
+          changeset "deploy/laserena/prod/nginx/*"
+          changeset "Jenkinsfile"
+        }
+        branch "develop"
+      }
+      steps {
+        script {
+          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/prod/nginx")
+        }
+      }
+    }
+    stage("Push LaSerena Nginx Docker image") {
+      when {
+        anyOf {
+          changeset "deploy/laserena/prod/nginx/*"
+          changeset "Jenkinsfile"
+        }
+        branch "develop"
+      }
+      steps {
+        script {
+          docker.withRegistry("", registryCredential) {
+            dockerImageLaSerena.push()
+          }
+        }
+      }
+    }
+
+
+    stage("Deploy Linode develop version") {
+      when {
+        anyOf {
+          changeset "deploy/linode/*"
+          changeset "Jenkinsfile"
+        }
         branch "develop"
       }
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose-dev.yml love@dev.love.inria.cl:.'
-            sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-dev.yml love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml pull'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml down -v'
             sh 'ssh love@dev.love.inria.cl "docker network ls | grep testnet > /dev/null  || docker network create testnet"'
@@ -85,15 +124,19 @@ pipeline {
       }
     }
 
-    stage("Deploy master version") {
+    stage("Deploy Linode master version") {
       when {
+        anyOf {
+          changeset "deploy/linode/*"
+          changeset "Jenkinsfile"
+        }
         branch "master"
       }
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/prod/docker-compose.yml love@love.inria.cl:.'
-            sh 'scp -o StrictHostKeyChecking=no deploy/prod/.env love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose.yml love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@love.inria.cl:.'
             sh 'ssh love@love.inria.cl docker-compose pull'
             sh 'ssh love@love.inria.cl docker-compose down -v'
             sh 'ssh love@love.inria.cl docker-compose up -d'
