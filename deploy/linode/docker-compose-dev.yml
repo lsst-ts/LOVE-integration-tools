@@ -1,6 +1,25 @@
 version: "3.4"
 
 services:
+  atdome-sim:
+    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    container_name: atdome-sim-build
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
+
+  simulator:
+    container_name: love-simulator
+    image: inriachile/love-simulator:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+
   producer:
     container_name: love-producer
     image: inriachile/love-producer:develop
@@ -10,12 +29,7 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
 
-  simulator:
-    container_name: love-simulator
-    image: inriachile/love-simulator:develop
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
+
 
   manager:
     container_name: love-manager
