@@ -8,7 +8,7 @@ services:
     environment:
         - OSPL_URI=${OSPL_URI}
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
@@ -24,7 +24,7 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
       - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
     
   #----- LOVE--------------
   producer:
@@ -39,7 +39,7 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
     
   manager:
     container_name: love-manager-mount
@@ -56,7 +56,7 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
 
   frontend:
     container_name: love-frontend-mount
@@ -73,7 +73,7 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
       - /usr/src/love/node_modules
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
 
   redis:
     container_name: redis
@@ -81,7 +81,7 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
 
   nginx:
     container_name: love-nginx-mount
@@ -94,4 +94,4 @@ services:
       - frontend
     ports:
       - "80:80"
-    network_mode: "host"
+    network_mode: ${NETWORK_NAME}
