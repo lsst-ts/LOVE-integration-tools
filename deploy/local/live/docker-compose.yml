@@ -1,19 +1,18 @@
 version: "3.7"
 
 services:
-  producer:
-    container_name: love-producer-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-    image: love-producer-image-mount
+  #----- simulators -------
+  atdome-sim:
+    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    container_name: atdome-sim-build
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
 
   simulator:
     container_name: love-simulator-mount
@@ -32,6 +31,27 @@ services:
           max-file: "5"
           max-size: "10m"    
 
+    
+  #----- LOVE--------------
+  producer:
+    container_name: love-producer-mount
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
+    
   manager:
     container_name: love-manager-mount
     build:
