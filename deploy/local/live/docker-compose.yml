@@ -1,6 +1,32 @@
 version: "3.7"
 
 services:
+  #----- simulators -------
+  atdome-sim:
+    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    container_name: atdome-sim-build
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
+
+  simulator:
+    container_name: love-simulator-mount
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-dev
+    image: love-simulator-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
+    network_mode: ${NETWORK_NAME}
+    
+  #----- LOVE--------------
   producer:
     container_name: love-producer-mount
     build:
@@ -14,19 +40,7 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
     network_mode: ${NETWORK_NAME}
-
-  simulator:
-    container_name: love-simulator-mount
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-dev
-    image: love-simulator-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
-    network_mode: ${NETWORK_NAME}
-
+    
   manager:
     container_name: love-manager-mount
     build:
