@@ -105,7 +105,7 @@ pipeline {
     stage("Deploy Linode develop version") {
       when {
         anyOf {
-          changeset "deploy/linode/*"
+          changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
@@ -127,7 +127,7 @@ pipeline {
     stage("Deploy Linode master version") {
       when {
         anyOf {
-          changeset "deploy/linode/*"
+          changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
         }
         branch "master"
