@@ -73,21 +73,21 @@ pipeline {
     stage("Build La Serena Nginx Docker image") {
       when {
         anyOf {
-          changeset "deploy/laserena/prod/nginx/*"
+          changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
       }
       steps {
         script {
-          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/prod/nginx")
+          dockerImageLaSerena = docker.build("inriachile/love-nginx:laserena", "./deploy/laserena/nginx")
         }
       }
     }
     stage("Push LaSerena Nginx Docker image") {
       when {
         anyOf {
-          changeset "deploy/laserena/prod/nginx/*"
+          changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
@@ -105,7 +105,7 @@ pipeline {
     stage("Deploy Linode develop version") {
       when {
         anyOf {
-          changeset "deploy/linode/*"
+          changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
         }
         branch "develop"
@@ -115,9 +115,9 @@ pipeline {
           sshagent(credentials: ['love-ssh-key-2']) {
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-dev.yml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/ospl.xml love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml pull'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml down -v'
-            sh 'ssh love@dev.love.inria.cl "docker network ls | grep testnet > /dev/null  || docker network create testnet"'
             sh 'ssh love@dev.love.inria.cl docker-compose -f docker-compose-dev.yml up -d'
           }
         }
@@ -127,7 +127,7 @@ pipeline {
     stage("Deploy Linode master version") {
       when {
         anyOf {
-          changeset "deploy/linode/*"
+          changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
         }
         branch "master"
