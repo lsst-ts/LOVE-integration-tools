@@ -23,8 +23,6 @@ services:
     image: inriachile/love-simulator:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
     network_mode: ${NETWORK_NAME}
   
 
