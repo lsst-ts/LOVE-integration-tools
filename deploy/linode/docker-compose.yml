@@ -1,25 +1,42 @@
-version: "3.4"
+version: "3.7"
 
 services:
-  producer:
-    container_name: love-producer
-    image: inriachile/love-producer:master
+  #----- simulators -------
+  atdome-sim:
+    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    container_name: atdome-sim
     environment:
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
 
   simulator:
     container_name: love-simulator
-    image: inriachile/love-simulator:master
+    image: inriachile/love-simulator:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
+    network_mode: ${NETWORK_NAME}
+  
+
+  #----- LOVE--------------
+  producer:
+    container_name: love-producer
+    image: inriachile/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: ${NETWORK_NAME}
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:master
+    image: inriachile/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -33,7 +50,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:master
+    image: inriachile/love-frontend:develop
     depends_on:
       - manager
     volumes:
@@ -50,7 +67,8 @@ services:
 
   nginx:
     container_name: love-nginx
-    image: inriachile/love-nginx:master
+    image: love-nginx-image
+    build: ${DOCKERFILE_PATH_NGINX}
     restart: always
     depends_on:
       - manager
