@@ -3,7 +3,10 @@ version: "3.7"
 services:
   #----- simulators -------
   atdome-sim:
-    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    # image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    build:
+      context: ./atdome-sim
+      dockerfile: Dockerfile
     container_name: atdome-sim-build
     environment:
         - OSPL_URI=${OSPL_URI}
