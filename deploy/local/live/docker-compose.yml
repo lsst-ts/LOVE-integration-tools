@@ -14,6 +14,16 @@ services:
 
     entrypoint: ["/home/saluser/.setup.sh"]
 
+  scriptqueue-sim:
+    build:
+      context: ./scriptqueue-sim
+      dockerfile: Dockerfile
+    container_name: scriptqueue-sim
+    environment:
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    
+
   simulator:
     container_name: love-simulator-mount
     build:
