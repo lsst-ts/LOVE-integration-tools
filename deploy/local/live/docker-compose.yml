@@ -3,7 +3,10 @@ version: "3.7"
 services:
   #----- simulators -------
   atdome-sim:
-    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    # image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    build:
+      context: ./atdome-sim
+      dockerfile: Dockerfile
     container_name: atdome-sim-build
     environment:
         - OSPL_URI=${OSPL_URI}
@@ -13,6 +16,16 @@ services:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
     entrypoint: ["/home/saluser/.setup.sh"]
+
+  scriptqueue-sim:
+    build:
+      context: ./scriptqueue-sim
+      dockerfile: Dockerfile
+    container_name: scriptqueue-sim
+    environment:
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    
 
   simulator:
     container_name: love-simulator-mount
@@ -30,6 +43,9 @@ services:
       options:
           max-file: "5"
           max-size: "10m"    
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
 
     
   #----- LOVE--------------
