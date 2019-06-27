@@ -23,4 +23,4 @@ setup ts_ATDome -t $USER
 cd /home/saluser/repos/ts_ATDome/bin/
 
 echo "# Starting ATDome Simulator CSC"
-python ./run_atdome.py -s -i 21
+python ./run_atdome.py -s -i 1
