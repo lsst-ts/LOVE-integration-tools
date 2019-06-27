@@ -43,6 +43,9 @@ services:
       options:
           max-file: "5"
           max-size: "10m"    
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
 
     
   #----- LOVE--------------
