@@ -25,7 +25,7 @@ services:
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
-    
+
 
   simulator:
     container_name: love-simulator-mount
@@ -36,18 +36,19 @@ services:
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
+      - ./config:/usr/src/love/config/
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
+          max-size: "10m"
     depends_on:
       - scriptqueue-sim
       - atdome-sim
 
-    
+
   #----- LOVE--------------
   producer:
     container_name: love-producer-mount
@@ -61,13 +62,14 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
+      - ./config:/usr/src/love/config/
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
-    
+          max-size: "10m"
+
   manager:
     container_name: love-manager-mount
     build:
@@ -88,7 +90,7 @@ services:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
+          max-size: "10m"
 
   frontend:
     container_name: love-frontend-mount
@@ -110,7 +112,7 @@ services:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
+          max-size: "10m"
 
   redis:
     container_name: redis
@@ -123,7 +125,7 @@ services:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
+          max-size: "10m"
 
   nginx:
     container_name: love-nginx-mount
@@ -141,4 +143,4 @@ services:
       driver: "json-file"
       options:
           max-file: "5"
-          max-size: "10m"    
+          max-size: "10m"
