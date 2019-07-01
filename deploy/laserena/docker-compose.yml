@@ -4,6 +4,8 @@ services:
   producer:
     container_name: love-producer
     image: inriachile/love-producer:develop
+    volumes:
+      - ./config:/usr/src/love/config/
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
