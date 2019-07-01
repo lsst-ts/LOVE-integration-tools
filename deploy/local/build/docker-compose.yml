@@ -4,8 +4,8 @@ services:
   #----- simulators -------
   atdome-sim:
     build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}/atdome-sim
-      dockerfile: Dockerfile
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-atdome
     container_name: atdome-sim-build
     environment:
         - OSPL_URI=${OSPL_URI}
@@ -13,6 +13,7 @@ services:
     network_mode: ${NETWORK_NAME}
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+        - ./config:/home/saluser/config/
     entrypoint: ["/home/saluser/.setup.sh"]
     logging:
       driver: "json-file"
@@ -22,11 +23,13 @@ services:
 
   scriptqueue-sim:
     build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}/scriptqueue-sim
-      dockerfile: Dockerfile
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-scriptqueue
     container_name: scriptqueue-sim
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+        - ./config:/home/saluser/config/
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
@@ -43,7 +46,6 @@ services:
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
       - ./config:/usr/src/love/config/
     network_mode: ${NETWORK_NAME}
     logging:
