@@ -13,8 +13,12 @@ services:
     network_mode: ${NETWORK_NAME}
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-
     entrypoint: ["/home/saluser/.setup.sh"]
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
 
   scriptqueue-sim:
     build:
@@ -24,6 +28,11 @@ services:
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
 
 
   simulator:
