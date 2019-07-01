@@ -14,7 +14,7 @@ services:
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
         - ./config:/home/saluser/config/
-    entrypoint: ["/home/saluser/.setup.sh"]
+    entrypoint: ["/home/saluser/atdome-setup.sh"]
     logging:
       driver: "json-file"
       options:
@@ -25,7 +25,7 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-scriptqueue
-    container_name: scriptqueue-sim
+    container_name: scriptqueue-sim-build
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
