@@ -7,9 +7,7 @@ pipeline {
     dockerImageTucson = ""
     dockerImageLaSerena = ""
   }
-  parameters {
-    string(defaultValue: 'false', description: 'Force the deployment', name: 'forceUpdate')
-  }
+
   stages {
     stage("Build Linode Nginx Docker image") {
       when {
@@ -110,7 +108,7 @@ pipeline {
         anyOf {
           changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
-          expression { params.forceUpdate == 'true' }
+          triggeredBy "UpstreamCause"
         }
         branch "develop"
       }
@@ -133,6 +131,7 @@ pipeline {
         anyOf {
           changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
+          triggeredBy "UpstreamCause"
         }
         branch "master"
       }
