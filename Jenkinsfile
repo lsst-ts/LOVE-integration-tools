@@ -8,7 +8,7 @@ pipeline {
     dockerImageLaSerena = ""
   }
   parameters {
-    booleanParam(defaultValue: 'false', description: 'Force the deployment', name: 'forceUpdate')
+    stringParam(defaultValue: 'false', description: 'Force the deployment', name: 'forceUpdate')
   }
   stages {
     stage("Build Linode Nginx Docker image") {
