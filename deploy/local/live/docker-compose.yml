@@ -3,9 +3,8 @@ version: "3.7"
 services:
   #----- simulators -------
   atdome-sim:
-    # image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
     build:
-      context: ./atdome-sim
+      context: ${DOCKERFILE_PATH_SIMULATOR}/atdome-sim
       dockerfile: Dockerfile
     container_name: atdome-sim-build
     environment:
@@ -19,7 +18,7 @@ services:
 
   scriptqueue-sim:
     build:
-      context: ./scriptqueue-sim
+      context: ${DOCKERFILE_PATH_SIMULATOR}/scriptqueue-sim
       dockerfile: Dockerfile
     container_name: scriptqueue-sim
     environment:
