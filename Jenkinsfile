@@ -7,6 +7,7 @@ pipeline {
     dockerImageTucson = ""
     dockerImageLaSerena = ""
   }
+
   stages {
     stage("Build Linode Nginx Docker image") {
       when {
@@ -107,6 +108,7 @@ pipeline {
         anyOf {
           changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
+          triggeredBy "UpstreamCause"
         }
         branch "develop"
       }
@@ -129,6 +131,7 @@ pipeline {
         anyOf {
           changeset "deploy/linode/**/*"
           changeset "Jenkinsfile"
+          triggeredBy "UpstreamCause"
         }
         branch "master"
       }
