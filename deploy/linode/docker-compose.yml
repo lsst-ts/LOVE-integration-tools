@@ -38,8 +38,17 @@ services:
     image: inriachile/love-simulator:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ./config:/usr/src/love/config/
     network_mode: ${NETWORK_NAME}
-
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
 
   #----- LOVE--------------
   producer:
