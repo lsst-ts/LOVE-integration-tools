@@ -72,7 +72,7 @@ services:
     depends_on:
       - scriptqueue-sim
       - atdome-sim
-
+      - testcsc-sim
 
   #----- LOVE--------------
   producer:
