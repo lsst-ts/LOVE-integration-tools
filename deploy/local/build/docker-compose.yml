@@ -2,6 +2,22 @@ version: "3.7"
 
 services:
   #----- simulators -------
+  testcsc-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-testcsc
+    container_name: testcsc-sim-build
+    environment:
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+        - ./config:/home/saluser/config/
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
   atdome-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
