@@ -11,7 +11,12 @@ pipeline {
   stages {
     stage("Build Linode Nginx Docker image") {
       when {
-        changeset "deploy/linode/nginx/*"
+        anyOf {
+          changeset "deploy/linode/nginx/*"
+          expression {
+            return currentBuild.number == 1
+          }
+        }
         anyOf {
           branch "master"
           branch "develop"
@@ -25,7 +30,12 @@ pipeline {
     }
     stage("Push Linode Nginx Docker image") {
       when {
-        changeset "deploy/linode/nginx/*"
+        anyOf {
+          changeset "deploy/linode/nginx/*"
+          expression {
+            return currentBuild.number == 1
+          }
+        }
         anyOf {
           branch "master"
           branch "develop"
@@ -45,6 +55,9 @@ pipeline {
         anyOf {
           changeset "deploy/tucson/nginx/*"
           changeset "Jenkinsfile"
+          expression {
+            return currentBuild.number == 1
+          }
         }
         branch "develop"
       }
@@ -59,6 +72,9 @@ pipeline {
         anyOf {
           changeset "deploy/tucson/nginx/*"
           changeset "Jenkinsfile"
+          expression {
+            return currentBuild.number == 1
+          }
         }
         branch "develop"
       }
@@ -76,6 +92,9 @@ pipeline {
         anyOf {
           changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
+          expression {
+            return currentBuild.number == 1
+          }
         }
         branch "develop"
       }
@@ -90,6 +109,9 @@ pipeline {
         anyOf {
           changeset "deploy/laserena/nginx/*"
           changeset "Jenkinsfile"
+          expression {
+            return currentBuild.number == 1
+          }
         }
         branch "develop"
       }
