@@ -161,7 +161,7 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose.yml love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-master.yml love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/ospl.xml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
