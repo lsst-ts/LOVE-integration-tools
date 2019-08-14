@@ -1,0 +1,26 @@
+version: "3.7"
+
+services: 
+  atdome-sim:
+    image: lsstts/at_dome_sim:3.9-0.5
+    container_name: atdome-sim
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: "host"
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+    entrypoint: ["/home/saluser/.setup.sh"]
+
+  simulator:
+    container_name: love-simulator-mount
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-dev
+    image: love-simulator-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
+    network_mode: "host"

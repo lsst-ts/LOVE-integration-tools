@@ -1,19 +1,20 @@
-version: "3.4"
+version: "3.7"
 
 services:
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:master
-    ports:
-      - "8884:8884"
+    image: inriachile/love-producer:develop
+    volumes:
+      - ./config:/usr/src/love/config/
     environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LSST_DDS_DOMAIN="my_test"
+    network_mode: ${NETWORK_NAME}
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:master
+    image: inriachile/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -21,16 +22,23 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
       - manager-volume:/usr/src/love/static
+    network_mode: ${NETWORK_NAME}
+    depends_on:
+      - redis
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:master
+    image: inriachile/love-frontend:develop
     depends_on:
       - manager
     volumes:
       - frontend-volume:/usr/src/love
+    network_mode: ${NETWORK_NAME}
 
   redis:
     container_name: redis
@@ -38,10 +46,11 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    network_mode: ${NETWORK_NAME}
 
   nginx:
     container_name: love-nginx
-    image: inriachile/love-nginx:master
+    image: inriachile/love-nginx:laserena
     restart: always
     depends_on:
       - manager
@@ -51,6 +60,8 @@ services:
     volumes:
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
+    network_mode: ${NETWORK_NAME}
+
 
 volumes:
   frontend-volume:

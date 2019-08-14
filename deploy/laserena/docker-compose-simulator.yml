@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+  #----- simulators -------
+  atdome-sim:
+    image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+    container_name: atdome-sim
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+    entrypoint: ["/home/saluser/.setup.sh"]
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"    
+
+  simulator:
+    container_name: love-simulator
+    image: inriachile/love-simulator:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+  
