@@ -85,7 +85,7 @@ services:
     image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_MOUNT_WEBSOCKET_HOST}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love
@@ -110,6 +110,9 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
       - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
     network_mode: ${NETWORK_NAME}
@@ -118,6 +121,8 @@ services:
       options:
           max-file: "5"
           max-size: "10m"
+    depends_on:
+      - redis
 
   frontend:
     container_name: love-frontend-mount
