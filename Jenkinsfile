@@ -121,7 +121,7 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl docker-compose  pull'
             sh 'ssh love@dev.love.inria.cl docker-compose  down -v'
-            sh 'ssh love@dev.love.inria.cl docker-compose  up -d'
+            sh 'ssh love@dev.love.inria.cl "source local_env.sh; docker-compose up -d"'
           }
         }
       }
@@ -145,7 +145,7 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
             sh 'ssh love@love.inria.cl docker-compose -f docker-compose-master.yml pull'
             sh 'ssh love@love.inria.cl docker-compose -f docker-compose-master.yml down -v'
-            sh 'ssh love@love.inria.cl docker-compose -f docker-compose-master.yml up -d'
+            sh 'ssh love@love.inria.cl "source local_env.sh; docker-compose -f docker-compose-master.yml up -d"'
           }
         }
       }
