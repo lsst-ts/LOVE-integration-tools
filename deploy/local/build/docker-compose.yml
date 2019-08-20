@@ -155,8 +155,7 @@ services:
 
   nginx:
     container_name: love-nginx
-    image: love-nginx-image
-    build: ${DOCKERFILE_PATH_NGINX}
+    image: nginx:1.13.1
     restart: always
     depends_on:
       - manager
@@ -164,6 +163,7 @@ services:
     ports:
       - "80:80"
     volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
     network_mode: ${NETWORK_NAME}
