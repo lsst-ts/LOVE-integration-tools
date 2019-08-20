@@ -3,7 +3,7 @@ version: "3.7"
 services:
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:develop
+    image: inriachile/love-producer:master
     volumes:
       - ./config:/usr/src/love/config/
     environment:
@@ -14,7 +14,7 @@ services:
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:develop
+    image: inriachile/love-manager:master
     ports:
       - "8000:8000"
     environment:
@@ -33,7 +33,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:develop
+    image: inriachile/love-frontend:master
     depends_on:
       - manager
     volumes:
