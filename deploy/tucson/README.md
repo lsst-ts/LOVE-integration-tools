@@ -1,15 +1,15 @@
-# Deployment In La Serena
+# Deployment In Tucson
 
 ## 1. Prepare deployment
 ### 1.1. Copy required files
 Copy the docker-compose and configuration files to the machine <USER>@<SERVER>:
 
 ```bash
-scp deploy/laserena/docker-compose.yml <USER>@<SERVER>:.
-scp deploy/laserena/.env <USER>@<SERVER>:.
-scp deploy/laserena/nginx.conf <USER>@<SERVER>:.
-scp deploy/laserena/ospl.xml <USER>@<SERVER>:.
-scp deploy/laserena/config <USER>@<SERVER>:.
+scp deploy/tucson/docker-compose.yml <USER>@<SERVER>:.
+scp deploy/tucson/.env <USER>@<SERVER>:.
+scp deploy/tucson/nginx.conf <USER>@<SERVER>:.
+scp deploy/tucson/ospl.xml <USER>@<SERVER>:.
+scp deploy/tucson/config <USER>@<SERVER>:.
 ```
 
 ### 1.2. (Optional) Change services versions
