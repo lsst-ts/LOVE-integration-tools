@@ -8,7 +8,11 @@ pipeline {
     stage("Deploy Linode develop version") {
       when {
         anyOf {
-          changeset "deploy/linode/**/*"
+          changeset "deploy/linode/config/*"
+          changeset "deploy/linode/.env"
+          changeset "deploy/linode/ospl.xml"
+          changeset "deploy/linode/docker-compose.yml"
+          changeset "deploy/linode/nginx-develop.conf"
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
         }
@@ -33,11 +37,15 @@ pipeline {
     stage("Deploy Linode master version") {
       when {
         anyOf {
-          changeset "deploy/linode/**/*"
+          changeset "deploy/linode/config/*"
+          changeset "deploy/linode/.env"
+          changeset "deploy/linode/ospl.xml"
+          changeset "deploy/linode/docker-compose-master.yml"
+          changeset "deploy/linode/nginx-master.conf"
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
         }
-        branch "master"
+        branch "develop"
       }
       steps {
         script {
