@@ -1,9 +1,23 @@
-version: "3.4"
+version: "3.7"
 
 services:
   #----- simulators -------
+  testcsc-sim:
+    image: lsstts/love-testcsc-sim:develop
+    container_name: testcsc-sim-build
+    environment:
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+        - ./config:/home/saluser/config/
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
   atdome-sim:
-    image: inriachile/love-atdome-sim:develop
+    image: lsstts/love-atdome-sim:develop
     container_name: atdome-sim
     environment:
         - OSPL_URI=${OSPL_URI}
@@ -20,7 +34,7 @@ services:
           max-size: "10m"
 
   scriptqueue-sim:
-    image: inriachile/love-scriptqueue-sim:develop
+    image: lsstts/love-scriptqueue-sim:develop
     container_name: scriptqueue-sim
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -35,7 +49,7 @@ services:
 
   simulator:
     container_name: love-simulator
-    image: inriachile/love-simulator:develop
+    image: lsstts/love-simulator:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
@@ -53,7 +67,7 @@ services:
   #----- LOVE--------------
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:develop
+    image: lsstts/love-producer:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
@@ -64,7 +78,7 @@ services:
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:develop
+    image: lsstts/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -88,7 +102,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:develop
+    image: lsstts/love-frontend:develop
     depends_on:
       - manager
     volumes:
