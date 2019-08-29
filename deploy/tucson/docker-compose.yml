@@ -3,7 +3,7 @@ version: "3.7"
 services:
   producer:
     container_name: love-producer
-    image: lsstts/love-producer:master
+    image: lsstts/love-producer:develop
     environment:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
@@ -21,7 +21,7 @@ services:
 
   manager:
     container_name: love-manager
-    image: lsstts/love-manager:master
+    image: lsstts/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -33,7 +33,7 @@ services:
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
-      - manager-volume:/usr/src/love/static
+      - manager-volume:/usr/src/love/manager/static
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.210"
@@ -45,7 +45,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: lsstts/love-frontend:master
+    image: lsstts/love-frontend:develop
     depends_on:
       - manager
     volumes:
