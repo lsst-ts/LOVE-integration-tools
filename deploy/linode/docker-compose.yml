@@ -95,7 +95,7 @@ services:
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
-      - manager-volume:/usr/src/love/static
+      - manager-volume:/usr/src/love/manager/static
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"

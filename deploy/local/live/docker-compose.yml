@@ -114,7 +114,7 @@ services:
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
-      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love
+      - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
