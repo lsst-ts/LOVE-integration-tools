@@ -9,7 +9,7 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
-      - ./config:/usr/src/love/config/
+      - ./config:/usr/src/love/producer/config/
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.209"
