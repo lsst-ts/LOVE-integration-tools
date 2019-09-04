@@ -3,7 +3,6 @@ venv
 */venv
 **/*.pyc
 *.cache
-assets
 webpack-stats.*
 .vscode
 *.sqlite3
