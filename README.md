@@ -1,4 +1,4 @@
-# Integration Tools
+# LOVE-integration-tools instructions
 
 This repository contains scripts and tools to integrate applications from the different development repositories, in order to be used for development and deployment purposes.
 
@@ -29,13 +29,13 @@ Each environment contains the following types of files:
 
 #### Environments
 The `deploy` directory is structured as follows:
-  * ***linode***: corresponds to the deployment in Inria linode machines, for demonstration purposes
+  * **linode**: corresponds to the deployment in Inria linode machines, for demonstration purposes
     * `docker-compose-dev.yml`: deploys the development version, using docker images pulled from dockerhub tagged as `dev`
     * `docker-compose.yml`: deploys the development version, using docker images pulled from dockerhub tagged as
-  * ***local***: contains environments for local development. Building images from local repositories, located as described in "Expected folder structure"
-    * ***build***: contains the files for deploying the system by building production docker images from local repositories.
-    * ***live***: contains the files for deploying the system by building development docker images from local repositories. These images work by mounting the source code of their corresponding repositories as a volume, rather than copying it. They also use development or "live" modes for running some of the applications, Manager and Frontend.
-  * ***tucson***: corresponds to the deployment in the machines in Tucson. The configuration is different in the network configuration, in order to connect to the SAL components.
+  * **local**: contains environments for local development. Building images from local repositories, located as described in "Expected folder structure"
+    * **build**: contains the files for deploying the system by building production docker images from local repositories.
+    * **live**: contains the files for deploying the system by building development docker images from local repositories. These images work by mounting the source code of their corresponding repositories as a volume, rather than copying it. They also use development or "live" modes for running some of the applications, Manager and Frontend.
+  * **tucson**: corresponds to the deployment in the machines in Tucson. The configuration is different in the network configuration, in order to connect to the SAL components.
 
 ### Jenkinsfile
 Defines the jobs to be executed by a Jenkins machine when changes are committed in this repository. These jobs include:
