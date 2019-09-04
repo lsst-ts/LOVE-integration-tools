@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="1. Overview" href="overview.html" /> 
+    <link rel="prev" title="1. LOVE Project Overview" href="overview.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,7 +81,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">1. LOVE Project Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. LOVE-integration-tools instructions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#expected-folder-structure">2.1. Expected folder structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#content">2.2. Content</a><ul>
@@ -100,6 +100,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#develop-branch-version">2.3.2.2. Develop branch version</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#update-documentation">2.4. Update documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load-and-get-into-the-docker-image">2.4.1. Load and get into the docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-documentation">2.4.2. Build documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -282,6 +287,28 @@
 </div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="update-documentation">
+<h2>2.4. Update documentation<a class="headerlink" href="#update-documentation" title="Permalink to this headline">¶</a></h2>
+<p>We provide a docker image and a docker-compose file in order to load the LOVE-integration-tools locally to build the documentation.</p>
+<p>This docker-compose does not copy the code into the image, but instead it mounts the repository inside the image, this way you can edit the code from outside the docker container with no need to rebuild or restart.</p>
+<div class="section" id="load-and-get-into-the-docker-image">
+<h3>2.4.1. Load and get into the docker image<a class="headerlink" href="#load-and-get-into-the-docker-image" title="Permalink to this headline">¶</a></h3>
+<p>Follow these instructions to run the application in a docker container and get into it:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+<span class="n">docker</span><span class="o">-</span><span class="k">exec</span> <span class="n">tools</span> <span class="n">bash</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-documentation">
+<h3>2.4.2. Build documentation<a class="headerlink" href="#build-documentation" title="Permalink to this headline">¶</a></h3>
+<p>Once inside the container you will be in the <code class="docutils literal notranslate"><span class="pre">/usr/src/love/</span></code> folder, where you can move into the <code class="docutils literal notranslate"><span class="pre">docsrc</span></code> folder and build the documentation as follows:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docsrc</span>
+<span class="p">.</span><span class="o">/</span><span class="n">create_docs</span><span class="p">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -293,7 +320,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="overview.html" class="btn btn-neutral float-left" title="1. Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="overview.html" class="btn btn-neutral float-left" title="1. LOVE Project Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
