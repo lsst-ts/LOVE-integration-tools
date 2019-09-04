@@ -35,3 +35,24 @@ LOVE-simulator
 --------------
 The `LOVE-simulator <https://github.com/lsst-ts/LOVE-simulator>`_ repository contains different Python modules used to simulate the software components of a real LSST environment interacting with SAL.
 It is meant to be used for development and testing purposes.
+
+
+LOVE Components interaction
+===========================
+.. image:: ../assets/LOVE_overview.svg
+
+As shown in the figure above, the LOVE-frontend is executed in the client browser (as it is a web application) while the rest of the components are executed in the LSST Servers.
+The LOVE-frontend communicates with the rest fo the system through the LOVE-manager. The LOVE-frontend sends users credentials to login and then established a websocket connection with the LOVE-manager to receive data from it.
+
+The LOVE-manager gets the data from the LOVE-Producer through a websocket connection. The LOVE-Producer interacts with the rest of the system through the Software Abstraction Layer (SAL).
+The rest of the system consists on Commandable SAL Components (CSCs) which interact with each other through SAL.
+
+CSCs communication consists in 4 types:
+
+- Telemetries: values that represent a software or hardware measurement in the real world
+- Events: that are triggered upon some defined conditions, for example, when a critical condition is reached, or when a process has finished.
+- Commands: instructions for another CSC to execute an action.
+- Command Acknowledgements: acknowledgements of sucessful command executions, sent for the CSC that sent the command.
+
+
+We also developed the LOVE-simulator, for development and testing purposes, which acts as a "fake" CSC that sends data and commands to SAL, replicating the behavior of some defined CSCs.
