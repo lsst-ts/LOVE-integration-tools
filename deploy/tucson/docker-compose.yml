@@ -1,13 +1,15 @@
-version: "3.4"
+version: "3.7"
 
 services:
   producer:
     container_name: love-producer
-    image: inriachile/love-producer:develop
+    image: lsstts/love-producer:develop
     environment:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    volumes:
+      - ./config:/usr/src/love/producer/config/
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.209"
@@ -19,7 +21,7 @@ services:
 
   manager:
     container_name: love-manager
-    image: inriachile/love-manager:develop
+    image: lsstts/love-manager:develop
     ports:
       - "8000:8000"
     environment:
@@ -27,8 +29,11 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
     volumes:
-      - manager-volume:/usr/src/love/static
+      - manager-volume:/usr/src/love/manager/static
     networks:
       lab-priv-network:
         ipv4_address: "10.0.100.210"
@@ -40,7 +45,7 @@ services:
 
   frontend:
     container_name: love-frontend
-    image: inriachile/love-frontend:develop
+    image: lsstts/love-frontend:develop
     depends_on:
       - manager
     volumes:
