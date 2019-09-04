@@ -82,7 +82,16 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. LOVE Project Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. LOVE Project Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#love-software-repositories">1.1. LOVE Software repositories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#love-frontend">1.1.1. LOVE-frontend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-manager">1.1.2. LOVE-manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-producer">1.1.3. LOVE-producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-simulator">1.1.4. LOVE-simulator</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">2. LOVE-integration-tools instructions</a></li>
 </ul>
 
@@ -150,6 +159,38 @@
             
   <div class="section" id="love-project-overview">
 <h1>1. LOVE Project Overview<a class="headerlink" href="#love-project-overview" title="Permalink to this headline">¶</a></h1>
+<p>The LSST Operation and Visualization Environment (L.O.V.E.) project consists in the development of graphical user interfaces (GUI) for the monitoring and operation of the LSST.
+The GUIs are built using web technologies in order to enable users access from different locations and different host systems.</p>
+<p>This section provides a general overview of the LOVE project, how it is structured, how its software components interact, etc.
+For usage instructions please refer to the <a class="reference internal" href="readme_link.html#love-integration-tools-instructions"><span class="std std-ref">LOVE-integration-tools instructions</span></a> section.</p>
+<div class="section" id="love-software-repositories">
+<h2>1.1. LOVE Software repositories<a class="headerlink" href="#love-software-repositories" title="Permalink to this headline">¶</a></h2>
+<p>The LOVE project is integrated by the following software components, each with its own repository</p>
+<div class="section" id="love-frontend">
+<h3>1.1.1. LOVE-frontend<a class="headerlink" href="#love-frontend" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-frontend">LOVE-frontend</a> is the web application that provides the LOVE GUIs.
+It is built using <a class="reference external" href="https://reactjs.org/">ReactJS</a> to generate the static content (html, css and javascript files) of the LOVE web application.
+For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-frontend/html/index.html">LOVE-frontend docs</a>.</p>
+</div>
+<div class="section" id="love-manager">
+<h3>1.1.2. LOVE-manager<a class="headerlink" href="#love-manager" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-manager">LOVE-manager</a> is a backend application that acts as middleware for the LOVE-frontend.
+It is built using <a class="reference external" href="https://channels.readthedocs.io/en/latest/">Django Channels</a> with <a class="reference external" href="https://redis.io/">Redis</a> as a <a class="reference external" href="https://channels.readthedocs.io/en/latest/topics/channel_layers.html">Channel Layer</a>
+For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-manager/html/index.html">LOVE-manager docs</a>.</p>
+</div>
+<div class="section" id="love-producer">
+<h3>1.1.3. LOVE-producer<a class="headerlink" href="#love-producer" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-producer">LOVE-producer</a> is a backend application that acts as middleware between the LOVE-manager and SAL.
+It is built as a Python module that uses salobj and websockets to produce messages between SAL and the LOVE-manager. “Messages” can be understood without distinction as events, telemetries or commands parameters and their acknowledgements.
+It is built using ReactJS to generate the static content (html, css and javascript files) of the LOVE web application.
+For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-producer/html/index.html">LOVE-producer docs</a>.</p>
+</div>
+<div class="section" id="love-simulator">
+<h3>1.1.4. LOVE-simulator<a class="headerlink" href="#love-simulator" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-simulator">LOVE-simulator</a> repository contains different Python modules used to simulate the software components of a real LSST environment interacting with SAL.
+It is meant to be used for development and testing purposes.</p>
+</div>
+</div>
 </div>
 
 
