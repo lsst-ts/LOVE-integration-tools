@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+
+  tools:
+    container_name: tools
+    build: .
+    image: love-integration-image-mount
+    volumes:
+      - ..:/usr/src/love
+    command: ""
+    stdin_open: true
+    tty: true

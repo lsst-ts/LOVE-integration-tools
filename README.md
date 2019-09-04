@@ -86,3 +86,24 @@ If there is a problem loading the static files from the browser, try deleting th
 ```
 docker-system prune --volumes
 ```
+
+---
+## Update documentation
+We provide a docker image and a docker-compose file in order to load the LOVE-integration-tools locally to build the documentation.
+
+This docker-compose does not copy the code into the image, but instead it mounts the repository inside the image, this way you can edit the code from outside the docker container with no need to rebuild or restart.
+
+### Load and get into the docker image
+Follow these instructions to run the application in a docker container and get into it:
+
+```
+docker-compose up -d
+docker-exec tools bash
+```
+
+### Build documentation
+Once inside the container you will be in the `/usr/src/love/` folder, where you can move into the `docsrc` folder and build the documentation as follows:
+```
+cd docsrc
+./create_docs.sh
+```
