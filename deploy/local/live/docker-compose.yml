@@ -62,8 +62,7 @@ services:
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}/simulator:/usr/src/love/simulator
-      - ./config:/usr/src/love/config/
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
