@@ -133,11 +133,12 @@ services:
     image: love-frontend-image-mount
     ports:
       - "3000:3000"
+      - "3001:3001"
     depends_on:
       - manager
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
-      - /usr/src/love/node_modules
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love/love
+      - /usr/src/love/love/node_modules
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
