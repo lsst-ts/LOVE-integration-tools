@@ -124,6 +124,7 @@ services:
     image: lsstts/love-manager:develop
     depends_on:
       - redis
+      - database
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
