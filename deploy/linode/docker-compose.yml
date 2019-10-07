@@ -7,9 +7,10 @@ services:
     container_name: testcsc-sim-build
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
         - ./config:/home/saluser/config/
-    network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
@@ -19,14 +20,15 @@ services:
   atdome-sim:
     image: lsstts/love-atdome-sim:develop
     container_name: atdome-sim
+    entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
         - OSPL_URI=${OSPL_URI}
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
         - ./config:/home/saluser/config/
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
     logging:
       driver: "json-file"
       options:
@@ -39,6 +41,7 @@ services:
     environment:
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
         - ./config:/home/saluser/config/
     logging:
@@ -50,21 +53,23 @@ services:
   simulator:
     container_name: love-simulator
     image: lsstts/love-simulator:develop
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
+      - testcsc-sim
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
       - ./config:/usr/src/love/config/
-    network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
           max-file: "5"
           max-size: "10m"
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
 
-  #----- LOVE--------------
+  #----- LOVE PRODUCER --------------
   producer:
     container_name: love-producer
     image: lsstts/love-producer:develop
@@ -72,9 +77,42 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  #----- LOVE MANAGER --------------
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     network_mode: ${NETWORK_NAME}
+    ports:
+      - "6379:6379"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  database:
+    container_name: love-database
+    image: postgres:12.0
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
     logging:
       driver: "json-file"
       options:
@@ -84,48 +122,43 @@ services:
   manager:
     container_name: love-manager
     image: lsstts/love-manager:develop
-    ports:
-      - "8000:8000"
+    depends_on:
+      - redis
     environment:
-      - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "8000:8000"
+    restart: always
     volumes:
       - manager-volume:/usr/src/love/manager/static
-    network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
           max-file: "5"
           max-size: "10m"
-    depends_on:
-      - redis
 
+  #----- LOVE FRONTEND --------------
   frontend:
     container_name: love-frontend
     image: lsstts/love-frontend:develop
     depends_on:
       - manager
+    network_mode: ${NETWORK_NAME}
     volumes:
       - frontend-volume:/usr/src/love
-    network_mode: ${NETWORK_NAME}
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
-
-  redis:
-    container_name: redis
-    image: redis:5.0.3
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
@@ -135,17 +168,17 @@ services:
   nginx:
     container_name: love-nginx
     image: nginx:1.13.1
-    restart: always
     depends_on:
       - manager
       - frontend
+    network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
+    restart: always
     volumes:
       - ./nginx-develop.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
-    network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
       options:
