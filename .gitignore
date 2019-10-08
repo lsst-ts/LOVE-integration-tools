@@ -8,3 +8,4 @@ webpack-stats.*
 *.sqlite3
 **/__pycache__
 **/.DS_Store
+**/db_data
