@@ -1,4 +1,10 @@
 {
+  "ATMCS": [
+    { "source": "command_sim" }
+  ],
+  "ATDome": [
+    { "source": "command_sim" }
+  ],
   "Test": [
     { "index": 1, "source": "command_sim" },
     { "index": 2, "source": "command_sim" },
@@ -9,4 +15,3 @@
     { "index": 2, "source": "command_sim" }
   ]
 }
-
