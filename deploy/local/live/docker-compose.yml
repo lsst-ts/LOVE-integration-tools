@@ -113,7 +113,7 @@ services:
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}/producer:/usr/src/love/producer
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
       - ./config:/usr/src/love/producer/config/
     logging:
       driver: "json-file"
@@ -181,7 +181,7 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love/manager
+      - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
     logging:
       driver: "json-file"
       options:
