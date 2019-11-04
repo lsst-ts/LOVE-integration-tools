@@ -13,5 +13,8 @@
   "ScriptQueue": [
     { "index": 1, "source": "command_sim" },
     { "index": 2, "source": "command_sim" }
+  ],
+  "Watcher": [
+    { "index": 0, "source": "command_sim"}
   ]
 }

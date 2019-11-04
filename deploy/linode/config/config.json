@@ -18,5 +18,8 @@
     { "index": 2, "source": "emitter" }
   ],
   "ATCamera": [{ "index": 0, "source": "emitter" }],
-  "ATSpectrograph": [{ "index": 0, "source": "emitter" }]
+  "ATSpectrograph": [{ "index": 0, "source": "emitter" }],
+  "Watcher": [
+    { "index": 0, "source": "command_sim"}
+  ]
 }
