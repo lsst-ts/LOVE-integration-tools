@@ -98,9 +98,6 @@ services:
     image: lsstts/love-frontend:develop
     depends_on:
       - manager
-    networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.213"
     volumes:
       - frontend-volume:/usr/src/love
     logging:
@@ -118,7 +115,7 @@ services:
       - frontend
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.214"
+        ipv4_address: "10.0.100.213"
     ports:
       - "80:80"
     restart: always
