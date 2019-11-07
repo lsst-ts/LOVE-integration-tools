@@ -23,7 +23,7 @@ services:
 
   #----- LOVE MANAGER --------------
   redis:
-    container_name: redis
+    container_name: love-redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     networks:
@@ -47,7 +47,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.210"
+        ipv4_address: "10.0.100.211"
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
@@ -80,7 +80,7 @@ services:
       - DB_PORT=${DB_PORT}
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.210"
+        ipv4_address: "10.0.100.212"
     ports:
       - "8000:8000"
     restart: always
@@ -100,7 +100,7 @@ services:
       - manager
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.211"
+        ipv4_address: "10.0.100.213"
     volumes:
       - frontend-volume:/usr/src/love
     logging:
@@ -118,7 +118,7 @@ services:
       - frontend
     networks:
       lab-priv-network:
-        ipv4_address: "10.0.100.213"
+        ipv4_address: "10.0.100.214"
     ports:
       - "80:80"
     restart: always
