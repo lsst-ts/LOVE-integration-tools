@@ -30,7 +30,7 @@ services:
       lab-priv-network:
         ipv4_address: "10.0.100.210"
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:6379"
     restart: always
     logging:
       driver: "json-file"
@@ -65,6 +65,7 @@ services:
       - database
     environment:
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
