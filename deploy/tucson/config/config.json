@@ -5,8 +5,8 @@
     { "index": 3, "source": "command_sim" }
   ],
   "ScriptQueue": [
-    { "index": 1, "source": "command_sim" },
-    { "index": 2, "source": "command_sim" }
+    { "index": 1, "source": "" },
+    { "index": 2, "source": "" }
   ],
   "ATMCS": [{ "index": 0, "source": "" }],
   "ATPtg": [{ "index": 0, "source": "" }],
@@ -18,5 +18,6 @@
     { "index": 2, "source": "" }
   ],
   "ATCamera": [{ "index": 0, "source": "" }],
-  "ATSpectrograph": [{ "index": 0, "source": "" }]
+  "ATSpectrograph": [{ "index": 0, "source": "" }],
+  "Watcher": [{ "index": 0, "source": "" }]
 }
