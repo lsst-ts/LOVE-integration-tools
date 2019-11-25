@@ -8,7 +8,9 @@
     { "index": 1, "source": "command_sim" },
     { "index": 2, "source": "command_sim" }
   ],
-  "ATMCS": [{ "index": 0, "source": "emitter" }],
+  "ATMCS": [{ "source": "command_sim" }],
+  "ATDome": [{ "source": "command_sim" }],
+
   "ATPtg": [{ "index": 0, "source": "emitter" }],
   "ATDomeTrajectory": [{ "index": 0, "source": "emitter" }],
   "ATMonochromator": [{ "index": 0, "source": "emitter" }],
@@ -19,7 +21,5 @@
   ],
   "ATCamera": [{ "index": 0, "source": "emitter" }],
   "ATSpectrograph": [{ "index": 0, "source": "emitter" }],
-  "Watcher": [
-    { "index": 0, "source": "command_sim"}
-  ]
+  "Watcher": [{ "index": 0, "source": "command_sim" }]
 }
