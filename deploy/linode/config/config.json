@@ -1,24 +1,11 @@
 {
   "Test": [
-    { "index": 1, "source": "command_sim" },
-    { "index": 2, "source": "command_sim" },
-    { "index": 3, "source": "command_sim" }
+    { "index": 1, "source": "command_sim" }
   ],
   "ScriptQueue": [
-    { "index": 1, "source": "command_sim" },
-    { "index": 2, "source": "command_sim" }
+    { "index": 1, "source": "command_sim" }
   ],
-  "ATMCS": [{ "index": 0, "source": "emitter" }],
-  "ATPtg": [{ "index": 0, "source": "emitter" }],
-  "ATDomeTrajectory": [{ "index": 0, "source": "emitter" }],
-  "ATMonochromator": [{ "index": 0, "source": "emitter" }],
-  "FiberSpectrograph": [{ "index": 0, "source": "emitter" }],
-  "Electrometer": [
-    { "index": 1, "source": "emitter" },
-    { "index": 2, "source": "emitter" }
-  ],
-  "ATCamera": [{ "index": 0, "source": "emitter" }],
-  "ATSpectrograph": [{ "index": 0, "source": "emitter" }],
+  "ATMCS": [{ "index": 0, "source": "command_sim" }],
   "Watcher": [
     { "index": 0, "source": "command_sim"}
   ]
