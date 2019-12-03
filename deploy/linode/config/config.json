@@ -6,6 +6,7 @@
     { "index": 1, "source": "command_sim" }
   ],
   "ATMCS": [{ "index": 0, "source": "command_sim" }],
+  "ATDome": [{ "index": 0, "source": "command_sim" }],
   "Watcher": [
     { "index": 0, "source": "command_sim"}
   ]
