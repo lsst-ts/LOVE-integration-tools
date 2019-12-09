@@ -39,20 +39,19 @@ services:
           max-file: "5"
           max-size: "10m"
 
-  watcher-sim:
+  atmcs-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-watcher
-    container_name: watcher-sim-build
-    entrypoint: ["/home/saluser/watcher-setup.sh"]
+      dockerfile: Dockerfile-atmcs
+    container_name: atmcs-sim-build
     environment:
         - OSPL_URI=${OSPL_URI}
         - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
-    restart: always
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
         - ./config:/home/saluser/config/
+    entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
       options:
@@ -69,6 +68,26 @@ services:
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
+        - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  watcher-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-watcher
+    container_name: watcher-sim-build
+    entrypoint: ["/home/saluser/watcher-setup.sh"]
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
         - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
@@ -161,7 +180,7 @@ services:
       - redis
       - database
     environment:
-      - REDIS_HOST=${LOVE_MANAGER_REDIS_HOST}
+      - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
