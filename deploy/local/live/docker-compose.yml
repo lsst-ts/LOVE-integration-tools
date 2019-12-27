@@ -101,10 +101,10 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-dev
     image: love-simulator-image-mount
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
-      - testcsc-sim
+    # depends_on:
+    #   - scriptqueue-sim
+    #   - atdome-sim
+    #   - testcsc-sim
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
