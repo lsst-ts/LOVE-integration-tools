@@ -95,6 +95,25 @@ services:
           max-file: "5"
           max-size: "10m"
 
+  gencam-sim:
+    image: lsstts/gencam:latest
+    container_name: gencam-sim
+    environment:
+        - OSPL_URI=${OSPL_URI}
+        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+        # - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    ports:
+      - 5013:5013
+
   simulator:
     container_name: love-simulator-mount
     build:
@@ -238,6 +257,7 @@ services:
     depends_on:
       - manager
       - frontend
+      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
