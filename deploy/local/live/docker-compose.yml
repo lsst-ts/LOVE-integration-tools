@@ -2,101 +2,103 @@ version: "3.7"
 
 services:
   #----- simulators -------
-  testcsc-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-testcsc
-    container_name: testcsc-sim-build
-    environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-        - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # testcsc-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-testcsc
+  #   container_name: testcsc-sim-build
+  #   environment:
+  #       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #       - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
-  atdome-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atdome
-    container_name: atdome-sim-build
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
-    environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # atdome-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-atdome
+  #   container_name: atdome-sim-build
+  #   entrypoint: ["/home/saluser/atdome-setup.sh"]
+  #   environment:
+  #       - OSPL_URI=${OSPL_URI}
+  #       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #       - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
-  atmcs-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atmcs
-    container_name: atmcs-sim-build
-    environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
-    entrypoint: ["/home/saluser/atmcs-setup.sh"]
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # atmcs-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-atmcs
+  #   container_name: atmcs-sim-build
+  #   environment:
+  #       - OSPL_URI=${OSPL_URI}
+  #       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   volumes:
+  #       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #       - ./config:/home/saluser/config/
+  #   entrypoint: ["/home/saluser/atmcs-setup.sh"]
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
-  scriptqueue-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-scriptqueue
-    container_name: scriptqueue-sim-build
-    environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-        - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # scriptqueue-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-scriptqueue
+  #   container_name: scriptqueue-sim-build
+  #   environment:
+  #       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #       - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
-  watcher-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-watcher
-    container_name: watcher-sim-build
-    entrypoint: ["/home/saluser/watcher-setup.sh"]
-    environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # watcher-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-watcher
+  #   container_name: watcher-sim-build
+  #   entrypoint: ["/home/saluser/watcher-setup.sh"]
+  #   environment:
+  #       - OSPL_URI=${OSPL_URI}
+  #       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #       - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
   gencam-sim:
-    image: lsstts/gencam:latest
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-gencam
     container_name: gencam-sim
     environment:
         - OSPL_URI=${OSPL_URI}
@@ -105,6 +107,7 @@ services:
     restart: always
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+        - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py 
         # - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
@@ -139,26 +142,26 @@ services:
 
 
   #----- LOVE PRODUCER --------------
-  producer:
-    container_name: love-producer-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-    image: love-producer-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # producer:
+  #   container_name: love-producer-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_PRODUCER}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-producer-image-mount
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+  #     - ./config:/usr/src/love/producer/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #         max-file: "5"
+  #         max-size: "10m"
 
   #----- LOVE MANAGER --------------
   redis:
