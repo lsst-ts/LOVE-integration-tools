@@ -107,8 +107,6 @@ services:
     restart: always
     volumes:
         - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py 
-        # - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
