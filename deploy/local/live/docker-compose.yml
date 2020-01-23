@@ -139,6 +139,21 @@ services:
           max-size: "10m"
 
 
+  jupyter:
+    container_name: love-jupyter
+    image: lsstts/develop-env:sal_v4.0.0_salobj_v5.0.0
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    volumes: 
+      - ./jupyter.sh:/home/saluser/.setup.sh
+    ports:
+      - 1234:1234
   #----- LOVE PRODUCER --------------
   # producer:
   #   container_name: love-producer-mount
