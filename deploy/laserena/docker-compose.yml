@@ -4,7 +4,7 @@ services:
   #----- LOVE PRODUCER --------------
   producer:
     container_name: love-producer
-    image: lsstts/love-producer:master
+    image: lsstts/love-producer:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
@@ -107,7 +107,7 @@ services:
       - "80:80"
     restart: always
     volumes:
-      - ./nginx-develop.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
     logging:
