@@ -95,6 +95,27 @@ services:
           max-file: "5"
           max-size: "10m"
 
+  gencam-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-gencam
+    container_name: gencam-sim
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    # restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - 5013:5013
+
   simulator:
     container_name: love-simulator-mount
     build:
@@ -115,10 +136,24 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
-
+  jupyter:
+    container_name: love-jupyter
+    image: lsstts/develop-env:sal_v4.0.0_salobj_v5.0.0
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ./jupyter.sh:/home/saluser/.setup.sh
+    ports:
+      - 1234:1234
   #----- LOVE PRODUCER --------------
   producer:
     container_name: love-producer-mount
@@ -153,8 +188,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   database:
     container_name: love-database
@@ -170,8 +205,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   manager:
     container_name: love-manager-mount
@@ -205,8 +240,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -229,8 +264,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx-mount
@@ -238,6 +273,7 @@ services:
     depends_on:
       - manager
       - frontend
+      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
@@ -247,5 +283,5 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
