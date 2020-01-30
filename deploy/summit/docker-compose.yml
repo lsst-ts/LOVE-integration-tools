@@ -9,25 +9,21 @@ version: "3.7"
 
 services:
   # #----- LOVE PRODUCER --------------
-  # producer:
-  #   <<: *service
-  #   container_name: love-producer
-  #   image: lsstts/love-producer:develop
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-  #   networks:
-  #     control-network:
-  #       ipv4_address: "139.229.167.192"
-  #   restart: always
-  #   volumes:
-  #     - ./config:/usr/src/love/producer/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  producer:
+    # <<: *service
+    container_name: love-producer
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    networks:
+      control-network:
+        ipv4_address: "139.229.167.192"
+      love:
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
 
   # #----- LOVE MANAGER --------------
   redis:
@@ -52,7 +48,7 @@ services:
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
-      
+
   manager:
     container_name: love-manager
     image: lsstts/love-manager:develop
@@ -89,11 +85,6 @@ services:
     #   - manager
     volumes:
       - frontend-volume:/usr/src/love
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
 
   nginx:
     container_name: love-nginx
@@ -113,11 +104,6 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - manager-volume:/usr/src/love-manager
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
 
 volumes:
   frontend-volume:
