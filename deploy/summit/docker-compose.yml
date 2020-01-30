@@ -1,16 +1,16 @@
-# x-service: &service
-#   logging:
-#     driver: "json-file"
-#     options:
-#       max-file: "5"
-#       max-size: "10m"
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
 
 version: "3.7"
 
 services:
   # #----- LOVE PRODUCER --------------
   producer:
-    # <<: *service
+    <<: *service
     container_name: love-producer
     image: lsstts/love-producer:develop
     environment:
@@ -27,6 +27,7 @@ services:
 
   # #----- LOVE MANAGER --------------
   redis:
+    <<: *service
     container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
@@ -37,6 +38,7 @@ services:
     restart: always
 
   database:
+    <<: *service
     container_name: love-database
     image: postgres:12.0
     environment:
@@ -50,6 +52,7 @@ services:
       - ./db_data:/var/lib/postgresql/data
 
   manager:
+    <<: *service
     container_name: love-manager
     image: lsstts/love-manager:develop
     depends_on:
@@ -79,6 +82,7 @@ services:
 
   #----- LOVE FRONTEND --------------
   frontend:
+    <<: *service
     container_name: love-frontend
     image: lsstts/love-frontend:develop
     # depends_on:
@@ -87,6 +91,7 @@ services:
       - frontend-volume:/usr/src/love
 
   nginx:
+    <<: *service
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
