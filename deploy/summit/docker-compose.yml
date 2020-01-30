@@ -1,110 +1,129 @@
+# x-service: &service
+#   logging:
+#     driver: "json-file"
+#     options:
+#       max-file: "5"
+#       max-size: "10m"
+
 version: "3.7"
 
 services:
-  #----- LOVE PRODUCER --------------
-  producer:
-    container_name: love-producer
-    image: lsstts/love-producer:develop
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # #----- LOVE PRODUCER --------------
+  # producer:
+  #   <<: *service
+  #   container_name: love-producer
+  #   image: lsstts/love-producer:develop
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #   networks:
+  #     control-network:
+  #       ipv4_address: "139.229.167.192"
+  #   restart: always
+  #   volumes:
+  #     - ./config:/usr/src/love/producer/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
-  #----- LOVE MANAGER --------------
-  redis:
-    container_name: redis
-    image: redis:5.0.3
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    network_mode: ${NETWORK_NAME}
-    ports:
-      - "6379:6379"
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # #----- LOVE MANAGER --------------
+  # redis:
+  #   container_name: redis
+  #   image: redis:5.0.3
+  #   command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+  #   networks:
+  #     control-network:
+  #       ipv4_address: "139.229.167.193"
+  #   ports:
+  #     - "6379:6379"
+  #   restart: always
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
-  database:
-    container_name: love-database
-    image: postgres:12.0
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./db_data:/var/lib/postgresql/data
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
-  manager:
-    container_name: love-manager
-    image: lsstts/love-manager:develop
-    depends_on:
-      - redis
-    environment:
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PASS=${REDIS_PASS}
-      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
-      - USER_USER_PASS=${USER_USER_PASS}
-      - CMD_USER_PASS=${CMD_USER_PASS}
-      - DB_ENGINE=${DB_ENGINE}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-    network_mode: ${NETWORK_NAME}
-    ports:
-      - "8000:8000"
-    restart: always
-    volumes:
-      - manager-volume:/usr/src/love/manager/static
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+  # database:
+  #   container_name: love-database
+  #   image: postgres:12.0
+  #   environment:
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_PASSWORD=${DB_PASS}
+  #   networks:
+  #     control-network:
+  #       ipv4_address: "139.229.167.194"
+  #   restart: always
+  #   volumes:
+  #     - ./db_data:/var/lib/postgresql/data
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  # manager:
+  #   container_name: love-manager
+  #   image: lsstts/love-manager:develop
+  #   depends_on:
+  #     - redis
+  #   environment:
+  #     - REDIS_HOST=${REDIS_HOST}
+  #     - REDIS_PASS=${REDIS_PASS}
+  #     - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+  #     - USER_USER_PASS=${USER_USER_PASS}
+  #     - CMD_USER_PASS=${CMD_USER_PASS}
+  #     - DB_ENGINE=${DB_ENGINE}
+  #     - DB_NAME=${DB_NAME}
+  #     - DB_USER=${DB_USER}
+  #     - DB_PASS=${DB_PASS}
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_PORT=${DB_PORT}
+  #   networks:
+  #     control-network:
+  #       ipv4_address: "139.229.167.195"
+  #   ports:
+  #     - "8000:8000"
+  #   restart: always
+  #   volumes:
+  #     - manager-volume:/usr/src/love/manager/static
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
     container_name: love-frontend
     image: lsstts/love-frontend:develop
-    depends_on:
-      - manager
-    network_mode: ${NETWORK_NAME}
+    # depends_on:
+    #   - manager
     volumes:
       - frontend-volume:/usr/src/love
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      # - manager
       - frontend
-    network_mode: ${NETWORK_NAME}
+    # networks:
+    #   control-network:
+    #     ipv4_address: "139.229.167.196"
+    networks:
+      love:
     ports:
-      - "80:80"
+      - 80:80
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
@@ -113,9 +132,17 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
 volumes:
   frontend-volume:
   manager-volume:
+
+networks:
+  default:
+    external:
+      name: control-network
+  control-network:
+    external: true
+  love:
