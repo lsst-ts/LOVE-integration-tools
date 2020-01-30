@@ -30,72 +30,56 @@ services:
   #       max-size: "10m"
 
   # #----- LOVE MANAGER --------------
-  # redis:
-  #   container_name: redis
-  #   image: redis:5.0.3
-  #   command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-  #   networks:
-  #     control-network:
-  #       ipv4_address: "139.229.167.193"
-  #   ports:
-  #     - "6379:6379"
-  #   restart: always
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    networks:
+      love:
+    ports:
+      - "6379:6379"
+    restart: always
 
-  # database:
-  #   container_name: love-database
-  #   image: postgres:12.0
-  #   environment:
-  #     - POSTGRES_DB=${DB_NAME}
-  #     - POSTGRES_USER=${DB_USER}
-  #     - POSTGRES_PASSWORD=${DB_PASS}
-  #   networks:
-  #     control-network:
-  #       ipv4_address: "139.229.167.194"
-  #   restart: always
-  #   volumes:
-  #     - ./db_data:/var/lib/postgresql/data
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-  # manager:
-  #   container_name: love-manager
-  #   image: lsstts/love-manager:develop
-  #   depends_on:
-  #     - redis
-  #   environment:
-  #     - REDIS_HOST=${REDIS_HOST}
-  #     - REDIS_PASS=${REDIS_PASS}
-  #     - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
-  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-  #     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
-  #     - USER_USER_PASS=${USER_USER_PASS}
-  #     - CMD_USER_PASS=${CMD_USER_PASS}
-  #     - DB_ENGINE=${DB_ENGINE}
-  #     - DB_NAME=${DB_NAME}
-  #     - DB_USER=${DB_USER}
-  #     - DB_PASS=${DB_PASS}
-  #     - DB_HOST=${DB_HOST}
-  #     - DB_PORT=${DB_PORT}
-  #   networks:
-  #     control-network:
-  #       ipv4_address: "139.229.167.195"
-  #   ports:
-  #     - "8000:8000"
-  #   restart: always
-  #   volumes:
-  #     - manager-volume:/usr/src/love/manager/static
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  database:
+    container_name: love-database
+    image: postgres:12.0
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    networks:
+      love:
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      
+  manager:
+    container_name: love-manager
+    image: lsstts/love-manager:develop
+    depends_on:
+      - redis
+      - database
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    networks:
+      love:
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - manager-volume:/usr/src/love/manager/static
 
   #----- LOVE FRONTEND --------------
   frontend:
