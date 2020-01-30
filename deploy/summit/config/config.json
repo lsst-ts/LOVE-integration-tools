@@ -1,8 +1,13 @@
 {
-  "ATDome": [{ "index": 0, "source": "command_sim" }],
+  "ATDome": [{ "index": 0, "source": "" }],
+  "Test": [
+    { "index": 1, "source": "" },
+    { "index": 2, "source": "" },
+    { "index": 3, "source": "" }
+  ],
   "ScriptQueue": [
-    { "index": 1, "source": "command_sim" },
-    { "index": 2, "source": "command_sim" }
+    { "index": 1, "source": "" },
+    { "index": 2, "source": "" }
   ],
   "ATMCS": [{ "index": 0, "source": "" }],
   "ATPtg": [{ "index": 0, "source": "" }],
@@ -14,5 +19,10 @@
     { "index": 2, "source": "" }
   ],
   "ATCamera": [{ "index": 0, "source": "" }],
-  "ATSpectrograph": [{ "index": 0, "source": "" }]
+  "ATSpectrograph": [{ "index": 0, "source": "" }],
+  "Environment": [{ "index": 1, "source": "" }],
+  "DIMM": [
+    { "index": 1, "source": "" }, 
+    { "index": 2, "source": "" }
+  ]
 }
