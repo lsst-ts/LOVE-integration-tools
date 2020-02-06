@@ -15,6 +15,7 @@ pipeline {
           changeset "deploy/linode/nginx-develop.conf"
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
+          isRestartedRun()
         }
         branch "develop"
       }
