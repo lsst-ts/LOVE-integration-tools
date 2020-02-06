@@ -15,7 +15,6 @@ The LOVE repositories are expected to be at the same level under the same parent
 ---
 
 ## Content
-
 ### Deploy directory
 This directory contains different the files needed for deployment environments. Each environment is enclosed in a directory, with the possibility of having sub-environments in nested sub-directories, following a tree structure.
 
