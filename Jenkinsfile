@@ -16,7 +16,6 @@ pipeline {
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
           isRestartedRun()
-          isRestartedRun
         }
         branch "develop"
       }
