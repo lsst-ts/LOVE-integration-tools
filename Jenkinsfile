@@ -27,6 +27,7 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/ospl.xml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/nginx-develop.conf love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl "docker network inspect testnet >/dev/null 2>&1 || docker network create testnet"'
             sh 'ssh love@dev.love.inria.cl docker-compose  pull'
             sh 'ssh love@dev.love.inria.cl docker-compose  down -v'
