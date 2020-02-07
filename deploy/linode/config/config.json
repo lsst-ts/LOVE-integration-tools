@@ -10,5 +10,8 @@
   ],
   "Watcher": [
     { "index": 0, "source": "command_sim"}
+  ],
+  "GenericCamera": [
+    { "index": 1, "source": "command_sim"}
   ]
 }

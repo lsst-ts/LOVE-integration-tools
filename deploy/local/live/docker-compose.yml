@@ -96,9 +96,7 @@ services:
           max-size: "10m"
 
   gencam-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-gencam
+    image: lsstts/gencam:latest
     container_name: gencam-sim
     environment:
       - OSPL_URI=${OSPL_URI}
@@ -152,6 +150,7 @@ services:
         max-size: "10m"
     volumes:
       - ./jupyter.sh:/home/saluser/.setup.sh
+      - ${JUPYTER_NOTEBOOKS}:/home/saluser/notebooks
     ports:
       - 1234:1234
   #----- LOVE PRODUCER --------------
