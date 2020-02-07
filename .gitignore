@@ -9,3 +9,4 @@ webpack-stats.*
 **/__pycache__
 **/.DS_Store
 **/db_data
+**/.ipynb_checkpoints
