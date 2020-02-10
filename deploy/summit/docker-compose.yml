@@ -24,6 +24,7 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
+      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
 
   # #----- LOVE MANAGER --------------
   redis:
