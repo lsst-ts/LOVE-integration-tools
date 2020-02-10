@@ -24,5 +24,8 @@
   "DIMM": [
     { "index": 1, "source": "" }, 
     { "index": 2, "source": "" }
-  ]
+  ],
+  "ATAOS": [{ "index": 0, "source": "" }],
+  "ATPneumatics": [{ "index": 0, "source": "" }],
+  "ATHexapod": [{ "index": 0, "source": "" }]  
 }
