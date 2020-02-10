@@ -16,7 +16,7 @@
     </Domain>
     <DDSI2Service name="ddsi2">
         <General>
-            <NetworkInterfaceAddress>auto</NetworkInterfaceAddress>
+            <NetworkInterfaceAddress>bond0</NetworkInterfaceAddress>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
             <CoexistWithNativeNetworking>false</CoexistWithNativeNetworking>
