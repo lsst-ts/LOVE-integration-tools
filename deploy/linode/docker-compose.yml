@@ -112,6 +112,8 @@ services:
       - scriptqueue-sim
       - atdome-sim
       - testcsc-sim
+      - gencam-sim
+      - atmcs-sim
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
