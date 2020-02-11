@@ -1,6 +1,22 @@
 version: "3.7"
 
 services:
+  love:
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-lovecsc-dev
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
+    ports:
+      - 9999:9999
+    depends_on:
+      - nginx
+
   #----- simulators -------
   testcsc-sim:
     build:
