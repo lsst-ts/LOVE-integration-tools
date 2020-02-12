@@ -5,6 +5,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-lovecsc-dev
+    image: love_csc
+    container: love_csc
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
@@ -136,10 +138,11 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-dev
     image: love-simulator-image-mount
-    # depends_on:
-    #   - scriptqueue-sim
-    #   - atdome-sim
-    #   - testcsc-sim
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
+      - testcsc-sim
+      - gencam-sim
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
