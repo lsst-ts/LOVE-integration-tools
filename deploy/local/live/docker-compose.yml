@@ -155,7 +155,7 @@ services:
 
   jupyter:
     container_name: love-jupyter
-    image: lsstts/develop-env:sal_v4.0.0_salobj_v5.0.0
+    image: lsstts/develop-env:b31
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
