@@ -13,5 +13,6 @@
   ],
   "GenericCamera": [
     { "index": 1, "source": "command_sim"}
-  ]
+  ],
+  "LOVE": [{ "index": 0, "source": "" }]
 }
