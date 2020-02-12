@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-  #----- simulators -------
   love:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
@@ -17,6 +16,7 @@ services:
       - 9999:9999
     depends_on:
       - nginx
+  #----- simulators -------
   testcsc-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
