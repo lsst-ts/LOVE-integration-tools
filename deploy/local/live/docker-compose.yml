@@ -6,7 +6,7 @@ services:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-lovecsc-dev
     image: love_csc
-    container: love_csc
+    container_name: love_csc
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
