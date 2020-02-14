@@ -99,6 +99,7 @@ services:
     #   - manager
     volumes:
       - frontend-volume:/usr/src/love
+    tty: true
 
   nginx:
     <<: *service
