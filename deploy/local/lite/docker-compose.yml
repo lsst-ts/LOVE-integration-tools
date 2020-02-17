@@ -5,8 +5,6 @@ services:
     container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      args:
-        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile-dev
     image: love-frontend-image-mount
     # network_mode: ${NETWORK_NAME}

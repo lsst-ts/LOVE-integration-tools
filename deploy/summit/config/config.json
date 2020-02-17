@@ -1,10 +1,5 @@
 {
   "ATDome": [{ "index": 0, "source": "" }],
-  "Test": [
-    { "index": 1, "source": "" },
-    { "index": 2, "source": "" },
-    { "index": 3, "source": "" }
-  ],
   "ScriptQueue": [
     { "index": 1, "source": "" },
     { "index": 2, "source": "" }
