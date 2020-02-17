@@ -12,8 +12,6 @@ services:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: ${NETWORK_NAME}
-    ports:
-      - 9999:9999
     depends_on:
       - nginx
   #----- simulators -------
