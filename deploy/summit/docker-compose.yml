@@ -9,17 +9,20 @@ version: "3.7"
 
 services:
   # #----- LOVE PRODUCER --------------
-  love-csc:
-    <<: *service
-    container_name: love-csc
-    image: lsstts/love-csc:develop
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    depends_on:
-      - nginx
+ # love-csc:
+ #   image: lsstts/love-csc:develop
+ #   environment:
+ #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+ #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+ #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+ #   networks:
+ #     control-network:
+ #       ipv4_address: "139.229.167.196"
+ #     love:
+ #   depends_on:
+ #     - nginx
+ #   volumes:
+ #     - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
 
   producer:
     <<: *service
@@ -91,7 +94,7 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-volume:/usr/src/love/manager/static
+      - manager-volume:/usr/src/love/manager
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -109,7 +112,7 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      # - manager
+      - manager
       - frontend
     # networks:
     #   control-network:

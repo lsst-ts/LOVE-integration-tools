@@ -230,7 +230,7 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-volume:/usr/src/love/manager/static
+      - manager-volume:/usr/src/love/manager
     logging:
       driver: "json-file"
       options:
