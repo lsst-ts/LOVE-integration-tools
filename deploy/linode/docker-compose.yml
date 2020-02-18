@@ -130,6 +130,7 @@ services:
 
   love:
     image: lsstts/love-csc:develop
+    container_name: love_csc
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
