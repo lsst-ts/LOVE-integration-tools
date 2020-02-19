@@ -10,6 +10,8 @@ version: "3.7"
 services:
   # #----- LOVE PRODUCER --------------
   love-csc:
+    <<: *service
+    container_name: love-csc
     image: lsstts/love-csc:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
