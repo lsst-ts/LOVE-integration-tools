@@ -21,6 +21,13 @@ setup ts_ATDomeTrajectory -t current
 setup ts_standardscripts -t current
 setup ts_externalscripts -t current
 
+cd /home/saluser/repos
+git clone https://github.com/lsst-ts/ts_watcher.git
+cd ts_watcher
+setup -r .
+scons install declare
+
+cd /home/saluser/
 /bin/bash --rcfile /home/saluser/.bashrc
 unset LSST_DDS_IP
 make_idl_files.py GenericCamera
