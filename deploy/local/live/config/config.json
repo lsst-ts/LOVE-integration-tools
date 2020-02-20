@@ -1,11 +1,6 @@
 {
   "ATMCS": [{ "source": "command_sim" }],
   "ATDome": [{ "source": "command_sim" }],
-  "Test": [
-    { "index": 1, "source": "command_sim" },
-    { "index": 2, "source": "command_sim" },
-    { "index": 3, "source": "command_sim" }
-  ],
   "Watcher": [{ "index": 0, "source": "command_sim" }],
   "GenericCamera": [{ "index": 1, "source": "command_sim" }],
   "ScriptQueue": [{ "index": 1, "source": "command_sim" }],
