@@ -155,10 +155,11 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-
   jupyter:
     container_name: love-jupyter
-    image: lsstts/develop-env:b31
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-jupyter
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
