@@ -10,3 +10,4 @@ webpack-stats.*
 **/.DS_Store
 **/db_data
 **/.ipynb_checkpoints
+**/local_env.sh
