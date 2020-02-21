@@ -26,16 +26,16 @@ services:
       dockerfile: Dockerfile-testcsc
     container_name: testcsc-sim-build
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   atdome-sim:
     build:
@@ -44,18 +44,18 @@ services:
     container_name: atdome-sim-build
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   atmcs-sim:
     build:
@@ -63,18 +63,18 @@ services:
       dockerfile: Dockerfile-atmcs
     container_name: atmcs-sim-build
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   scriptqueue-sim:
     build:
@@ -82,16 +82,16 @@ services:
       dockerfile: Dockerfile-scriptqueue
     container_name: scriptqueue-sim-build
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   watcher-sim:
     build:
@@ -100,18 +100,18 @@ services:
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   gencam-sim:
     image: lsstts/gencam:latest
@@ -155,6 +155,7 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
+        
   jupyter:
     container_name: love-jupyter
     build:
@@ -174,8 +175,9 @@ services:
     ports:
       - 1234:1234
   #----- LOVE PRODUCER --------------
-  producer:
-    container_name: love-producer-mount
+
+  events:
+    container_name: love-events_producer-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
@@ -184,6 +186,7 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=EVENTS
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -192,11 +195,106 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     depends_on:
       - nginx
 
+  telemetries:
+    container_name: love-telemetries_producer-mount
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=TELEMETRIES
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - nginx
+
+  commands:
+    container_name: love-commands_producer-mount
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=COMMANDS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - nginx
+
+  scriptqueue:
+    container_name: love-scriptqueue-mount
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=SCRIPTQUEUE
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - nginx
+
+  heartbeats:
+    container_name: love-heartbeat_producers-mount
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=CSC_HEARTBEATS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - nginx
   #----- LOVE MANAGER --------------
   redis:
     container_name: redis
