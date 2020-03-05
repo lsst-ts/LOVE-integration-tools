@@ -155,7 +155,7 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-        
+
   jupyter:
     container_name: love-jupyter
     build:
@@ -378,7 +378,7 @@ services:
       - "3000:3000"
       - "3001:3001"
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love/love
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
       - /usr/src/love/love/node_modules
     logging:
       driver: "json-file"
