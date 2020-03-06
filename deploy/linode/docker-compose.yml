@@ -139,13 +139,94 @@ services:
     depends_on:
       - nginx
 
-  producer:
-    container_name: love-producer
+  events:
+    container_name: love-events-producer
     image: lsstts/love-producer:develop
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=EVENTS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    depends_on:
+      - nginx
+
+  telemetries:
+    container_name: love-telemetries-producer
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=TELEMETRIES
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    depends_on:
+      - nginx
+
+  commands:
+    container_name: love-commands-producer
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=COMMANDS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    depends_on:
+      - nginx
+
+  scriptqueue:
+    container_name: love-scriptqueue-producer
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=SCRIPTQUEUE
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    depends_on:
+      - nginx
+
+  heartbeats:
+    container_name: love-heartbeats
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=CSC_HEARTBEATS
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
