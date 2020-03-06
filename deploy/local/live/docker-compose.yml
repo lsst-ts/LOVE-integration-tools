@@ -163,6 +163,7 @@ services:
       dockerfile: Dockerfile-jupyter
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - JUPYTER_PASS=${JUPYTER_PASS}
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
@@ -170,7 +171,6 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - ${JUPYTER_PATH}/jupyter.sh:/home/saluser/.setup.sh
       - ${JUPYTER_PATH}:/home/saluser/notebooks
     ports:
       - 1234:1234

@@ -31,4 +31,4 @@ cd /home/saluser/
 /bin/bash --rcfile /home/saluser/.bashrc
 unset LSST_DDS_IP
 make_idl_files.py GenericCamera
-jupyter lab --no-browser --port=1234 --ip=0.0.0.0 --allow-root --NotebookApp.token='' 
+jupyter lab --no-browser --port=1234 --ip=0.0.0.0 --allow-root --NotebookApp.token=$JUPYTER_PASS
