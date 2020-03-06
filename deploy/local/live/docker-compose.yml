@@ -170,8 +170,8 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - ./jupyter.sh:/home/saluser/.setup.sh
-      - ${JUPYTER_NOTEBOOKS}:/home/saluser/notebooks
+      - ${JUPYTER_PATH}/jupyter.sh:/home/saluser/.setup.sh
+      - ${JUPYTER_PATH}:/home/saluser/notebooks
     ports:
       - 1234:1234
 
