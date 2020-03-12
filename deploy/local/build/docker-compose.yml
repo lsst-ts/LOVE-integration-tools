@@ -150,8 +150,8 @@ services:
           max-size: "10m"
 
   #----- LOVE PRODUCER --------------
-  producer:
-    container_name: love-producer
+  events:
+    container_name: love-events-producer
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile
@@ -160,6 +160,7 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=EVENTS
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -169,6 +170,91 @@ services:
       options:
           max-file: "5"
           max-size: "10m"
+
+  telemetries:
+    container_name: love-telemetries-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=TELEMETRIES
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  commands:
+    container_name: love-commands-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=COMMANDS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  scriptqueue:
+    container_name: love-scriptqueue-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=SCRIPTQUEUE
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
+  heartbeats:
+    container_name: love-heartbeats-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile
+    image: love-producer-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - LOVE_PRODUCERS=CSC_HEARTBEATS
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+
 
   #----- LOVE MANAGER --------------
   redis:
