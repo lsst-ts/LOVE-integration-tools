@@ -350,6 +350,7 @@ services:
     depends_on:
       - manager
       - frontend
+      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
