@@ -313,7 +313,8 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-volume:/usr/src/love/manager
+      - manager-static:/usr/src/love/manager
+      - ./media:/usr/src/love/manager/media
     logging:
       driver: "json-file"
       options:
@@ -348,7 +349,8 @@ services:
     volumes:
       - ./nginx-develop.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
-      - manager-volume:/usr/src/love-manager
+      - manager-static:/usr/src/love-manager/static
+      - ./media:/usr/src/love-manager/media
     logging:
       driver: "json-file"
       options:
@@ -357,4 +359,4 @@ services:
 
 volumes:
   frontend-volume:
-  manager-volume:
+  manager-static:
