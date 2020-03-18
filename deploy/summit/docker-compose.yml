@@ -96,7 +96,8 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-volume:/usr/src/love/manager
+        - manager-static:/usr/src/love/manager
+        - ./media:/usr/src/love/manager/media
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -127,11 +128,12 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
-      - manager-volume:/usr/src/love-manager
+      - manager-static:/usr/src/love-manager/static
+      - ./media:/usr/src/love-manager/media
 
 volumes:
   frontend-volume:
-  manager-volume:
+  manager-static:
 
 networks:
   default:
