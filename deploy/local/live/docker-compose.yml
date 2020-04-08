@@ -175,6 +175,24 @@ services:
     ports:
       - 1234:1234
 
+  #----- LOVE COMMANDER ---------
+  commander:
+    container_name: love-commander-mount
+    build:
+      context: ${DOCKERFILE_PATH_COMMANDER}
+      dockerfile: Dockerfile-dev
+    image: love-commander-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
   #----- LOVE PRODUCER --------------
 
   events:
@@ -351,6 +369,8 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander-mount
+      - COMMANDER_PORT=5000
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
@@ -395,6 +415,7 @@ services:
       - manager
       - frontend
       - gencam-sim
+      - commander
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
