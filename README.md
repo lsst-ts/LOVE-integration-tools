@@ -107,3 +107,14 @@ Once inside the container you will be in the `/usr/src/love/` folder, where you 
 cd docsrc
 ./create_docs.sh
 ```
+
+## Integration testing
+To run the integration tests against the dev environment, run the following commands from the e2e directory:
+
+### Headless:
+
+```docker-compose up --exit-code-from cypress```
+
+### Interactive:
+
+```docker-compose -f docker-compose.yml -f cy-open.yml up --exit-code-from cypress```
