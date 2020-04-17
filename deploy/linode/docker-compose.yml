@@ -6,86 +6,85 @@ services:
     image: lsstts/love-testcsc-sim:develop
     container_name: testcsc-sim-build
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   atdome-sim:
     image: lsstts/love-atdome-sim:develop
     container_name: atdome-sim
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
-
+        max-file: "5"
+        max-size: "10m"
 
   atmcs-sim:
     image: lsstts/love-atmcs-sim:develop
     container_name: atmcs-sim
     entrypoint: ["/home/saluser/atmcs-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   watcher-sim:
     image: lsstts/love-watcher-sim:develop
     container_name: watcher-sim
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   scriptqueue-sim:
     image: lsstts/love-scriptqueue-sim:develop
     container_name: scriptqueue-sim
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   gencam-sim:
     image: lsstts/gencam:latest
@@ -123,8 +122,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
@@ -171,8 +170,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     depends_on:
       - nginx
 
@@ -191,28 +190,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
-    depends_on:
-      - nginx
-
-  commands:
-    container_name: love-commands-producer
-    image: lsstts/love-producer:develop
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=COMMANDS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     depends_on:
       - nginx
 
@@ -231,8 +210,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     depends_on:
       - nginx
 
@@ -251,10 +230,24 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     depends_on:
       - nginx
+
+    #-----LOVE COMMANDER -----------
+  commander:
+    container_name: love-commander
+    image: lsstts/love-commander:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE MANAGER --------------
   redis:
@@ -268,8 +261,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   database:
     container_name: love-database
@@ -285,8 +278,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   manager:
     container_name: love-manager
@@ -308,6 +301,8 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
@@ -318,8 +313,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -333,8 +328,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx
@@ -342,6 +337,7 @@ services:
     depends_on:
       - manager
       - frontend
+      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
@@ -354,8 +350,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
 volumes:
   frontend-volume:
