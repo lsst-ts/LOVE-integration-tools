@@ -1,3 +1,10 @@
+# available ips
+# 139.229.167.192
+# 139.229.167.193
+# 139.229.167.194
+# 139.229.167.195
+# 139.229.167.196
+
 x-service: &service
   logging:
     driver: "json-file"
@@ -8,7 +15,6 @@ x-service: &service
 version: "3.7"
 
 services:
-  # #----- LOVE PRODUCER --------------
   love-csc:
     <<: *service
     container_name: love-csc
@@ -25,7 +31,7 @@ services:
       - nginx
     volumes:
       - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
-
+  #----- LOVE PRODUCER --------------
   producer:
     <<: *service
     container_name: love-producer
@@ -42,6 +48,22 @@ services:
     volumes:
       - ./config:/usr/src/love/producer/config/
       - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+
+  #-----LOVE COMMANDER -----------
+  commander:
+    container_name: love-commander
+    image: lsstts/love-commander:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    networks:
+      control-network:
+        ipv4_address: "139.229.167.194"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   # #----- LOVE MANAGER --------------
   redis:
@@ -76,6 +98,7 @@ services:
     depends_on:
       - redis
       - database
+      - commander
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
@@ -90,6 +113,9 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+
     networks:
       love:
     ports:
