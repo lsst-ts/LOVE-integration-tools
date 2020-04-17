@@ -192,27 +192,6 @@ services:
           max-file: "5"
           max-size: "10m"
 
-  commands:
-    container_name: love-commands-producer
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile
-    image: love-producer-image
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=COMMANDS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-          max-file: "5"
-          max-size: "10m"
-
   scriptqueue:
     container_name: love-scriptqueue-producer
     build:
@@ -255,6 +234,23 @@ services:
           max-file: "5"
           max-size: "10m"
 
+  #-----LOVE COMMANDER -----------
+
+  commander:
+    container_name: love-commander
+    build:
+      context: ${DOCKERFILE_PATH_COMMANDER}
+      dockerfile: Dockerfile
+    image: love-commander-image
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"    
 
   #----- LOVE MANAGER --------------
   redis:
@@ -297,6 +293,7 @@ services:
     depends_on:
       - redis
       - database
+      - commander
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
@@ -311,6 +308,8 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
