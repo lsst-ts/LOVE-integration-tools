@@ -11,7 +11,10 @@ services:
   # Cypress container
   cypress:
     # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
-    image: "cypress/included:4.3.0"
+    container_name: cypress-test
+    build:
+      context: .
+      dockerfile: Dockerfile
     # depends_on:
     #   - love
     environment:
