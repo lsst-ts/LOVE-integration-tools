@@ -15,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    user: "${UID}:${GID}"
     # depends_on:
     #   - love
     environment:
@@ -22,5 +23,6 @@ services:
       - CYPRESS_baseUrl=http://dev.love.inria.cl
     # share the current folder as volume to avoid copying
     working_dir: /e2e
+    shm_size: '2gb'
     volumes:
       - ./:/e2e
