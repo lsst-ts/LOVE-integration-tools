@@ -1,0 +1,14 @@
+virtualenv
+venv
+*/venv
+**/*.pyc
+*.cache
+webpack-stats.*
+.vscode
+*.sqlite3
+**/__pycache__
+**/.DS_Store
+**/db_data
+**/.ipynb_checkpoints
+**/local_env.sh
+**/media

@@ -1,0 +1,172 @@
+# available ips
+# 139.229.167.192
+# 139.229.167.193
+# 139.229.167.194
+# 139.229.167.195
+# 139.229.167.196
+
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+version: "3.7"
+
+services:
+  love-csc:
+    <<: *service
+    container_name: love-csc
+    image: lsstts/love-csc:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    networks:
+      control-network:
+        ipv4_address: "139.229.167.193"
+      love:
+    depends_on:
+      - nginx
+    volumes:
+      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+  #----- LOVE PRODUCER --------------
+  producer:
+    <<: *service
+    container_name: love-producer
+    image: lsstts/love-producer:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    networks:
+      control-network:
+        ipv4_address: "139.229.167.192"
+      love:
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/producer/config/
+      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+
+  #-----LOVE COMMANDER -----------
+  commander:
+    container_name: love-commander
+    image: lsstts/love-commander:develop
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    networks:
+      control-network:
+        ipv4_address: "139.229.167.194"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+
+  # #----- LOVE MANAGER --------------
+  redis:
+    <<: *service
+    container_name: redis
+    image: redis:5.0.3
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    networks:
+      love:
+    ports:
+      - "6379:6379"
+    restart: always
+
+  database:
+    <<: *service
+    container_name: love-database
+    image: postgres:12.0
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    networks:
+      love:
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+
+  manager:
+    <<: *service
+    container_name: love-manager
+    image: lsstts/love-manager:develop
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+
+    networks:
+      love:
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+        - manager-static:/usr/src/love/manager
+        - ./media:/usr/src/love/manager/media
+
+  #----- LOVE FRONTEND --------------
+  frontend:
+    <<: *service
+    container_name: love-frontend
+    image: lsstts/love-frontend:develop
+    # depends_on:
+    #   - manager
+    volumes:
+      - frontend-volume:/usr/src/love
+    tty: true
+
+  nginx:
+    <<: *service
+    container_name: love-nginx
+    image: nginx:1.13.1
+    depends_on:
+      - manager
+      - frontend
+    # networks:
+    #   control-network:
+    #     ipv4_address: "139.229.167.196"
+    networks:
+      love:
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - frontend-volume:/usr/src/love-frontend
+      - manager-static:/usr/src/love-manager/static
+      - ./media:/usr/src/love-manager/media
+
+volumes:
+  frontend-volume:
+  manager-static:
+
+networks:
+  default:
+    external:
+      name: control-network
+  control-network:
+    external: true
+  love:

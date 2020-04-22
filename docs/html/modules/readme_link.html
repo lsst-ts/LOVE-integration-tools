@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. LOVE-integration-tools instructions &mdash; LOVE-integration-tools 0.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="1. LOVE Project Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> LOVE-integration-tools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">1. LOVE Project Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. LOVE-integration-tools instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#expected-folder-structure">2.1. Expected folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content">2.2. Content</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-directory">2.2.1. Deploy directory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#environment-content">2.2.1.1. Environment content</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environments">2.2.1.2. Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jenkinsfile">2.2.2. Jenkinsfile</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-project">2.3. Run the project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-from-local-repositories">2.3.1. Building from local repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pulling-images-form-dockerhub">2.3.2. Pulling images form Dockerhub</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#master-branch-version">2.3.2.1. Master branch version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#develop-branch-version">2.3.2.2. Develop branch version</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#update-documentation">2.4. Update documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load-and-get-into-the-docker-image">2.4.1. Load and get into the docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-documentation">2.4.2. Build documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LOVE-integration-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>2. LOVE-integration-tools instructions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/readme_link.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="love-integration-tools-instructions">
+<h1>2. LOVE-integration-tools instructions<a class="headerlink" href="#love-integration-tools-instructions" title="Permalink to this headline">¶</a></h1>
+<p>The LOVE-integration-tools repository provides scripts and tools to integrate the applications from the different development repositories, in order to be used for development and deployment purposes.
+See the full documentation here: <a class="reference external" href="https://lsst-ts.github.io/LOVE-integration-tools/html/index.html">https://lsst-ts.github.io/LOVE-integration-tools/html/index.html</a></p>
+<div class="section" id="expected-folder-structure">
+<h2>2.1. Expected folder structure<a class="headerlink" href="#expected-folder-structure" title="Permalink to this headline">¶</a></h2>
+<p>The LOVE repositories are expected to be at the same level under the same parent folder, for example:</p>
+<ul class="simple">
+<li><p>LOVE</p>
+<ul>
+<li><p>LOVE-frontent</p></li>
+<li><p>LOVE-manager</p></li>
+<li><p>LOVE-producer</p></li>
+<li><p>LOVE-integration-tools</p></li>
+<li><p>LOVE-simulator</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="content">
+<h2>2.2. Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="deploy-directory">
+<h3>2.2.1. Deploy directory<a class="headerlink" href="#deploy-directory" title="Permalink to this headline">¶</a></h3>
+<p>This directory contains different the files needed for deployment environments. Each environment is enclosed in a directory, with the possibility of having sub-environments in nested sub-directories, following a tree structure.</p>
+<div class="section" id="environment-content">
+<h4>2.2.1.1. Environment content<a class="headerlink" href="#environment-content" title="Permalink to this headline">¶</a></h4>
+<p>Each environment contains the following types of files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml:</span></code> these files define the services that will be run with docker</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.env:</span></code> these files contains the environment variables with different configuration parameters, such as the different project paths, network configuration, among others.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nginx</span></code> directory: contains NGINX configuration files (<code class="docutils literal notranslate"><span class="pre">default.conf</span></code> and <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>) in order to coordinate HTTP requests between the django server and the frontend.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">default.conf</span></code>: Nginx configuraiton file that defines the routing and other network configuraitons</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>: to build the docker image needed to run the Nginx service</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="environments">
+<h4>2.2.1.2. Environments<a class="headerlink" href="#environments" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">deploy</span></code> directory is structured as follows:</p>
+<ul class="simple">
+<li><p><strong>linode</strong>: corresponds to the deployment in Inria linode machines, for demonstration purposes</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-compose-dev.yml</span></code>: deploys the development version, using docker images pulled from dockerhub tagged as <code class="docutils literal notranslate"><span class="pre">dev</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>: deploys the development version, using docker images pulled from dockerhub tagged as</p></li>
+</ul>
+</li>
+<li><p><strong>local</strong>: contains environments for local development. Building images from local repositories, located as described in “Expected folder structure”</p>
+<ul>
+<li><p><strong>build</strong>: contains the files for deploying the system by building production docker images from local repositories.</p></li>
+<li><p><strong>live</strong>: contains the files for deploying the system by building development docker images from local repositories. These images work by mounting the source code of their corresponding repositories as a volume, rather than copying it. They also use development or “live” modes for running some of the applications, Manager and Frontend.</p></li>
+</ul>
+</li>
+<li><p><strong>tucson</strong>: corresponds to the deployment in the machines in Tucson. The configuration is different in the network configuration, in order to connect to the SAL components.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="jenkinsfile">
+<h3>2.2.2. Jenkinsfile<a class="headerlink" href="#jenkinsfile" title="Permalink to this headline">¶</a></h3>
+<p>Defines the jobs to be executed by a Jenkins machine when changes are committed in this repository. These jobs include:</p>
+<ul class="simple">
+<li><p>Building and pushing Nginx docker images to Dockerhub, when there are changes in the corresponding <code class="docutils literal notranslate"><span class="pre">nginx</span></code> directories</p></li>
+<li><p>Pulling images, and redeploying the LOVE services in the production environments, when there are changes in the definition of the environments (or if triggered by the jobs that update the docker image in each related repo). Currently, this is only done for the Linode environments (master and develop)</p></li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="run-the-project">
+<h2>2.3. Run the project<a class="headerlink" href="#run-the-project" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="building-from-local-repositories">
+<h3>2.3.1. Building from local repositories<a class="headerlink" href="#building-from-local-repositories" title="Permalink to this headline">¶</a></h3>
+<p>For this you will need local clones of all the repositories in the same parent level as this repository (as explained in the “Expected folder structure” section above). In order to run the application follow these instructions:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LOVE</span><span class="o">-</span><span class="n">integration</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">deploy</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>If there is a problem loading the static files from the browser, try deleting the docker volumes:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="k">system</span> <span class="n">prune</span> <span class="c1">--volumes</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pulling-images-form-dockerhub">
+<h3>2.3.2. Pulling images form Dockerhub<a class="headerlink" href="#pulling-images-form-dockerhub" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="master-branch-version">
+<h4>2.3.2.1. Master branch version<a class="headerlink" href="#master-branch-version" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LOVE</span><span class="o">-</span><span class="n">integration</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">linode</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>If there is a problem loading the static files from the browser, try deleting the docker volumes:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="k">system</span> <span class="n">prune</span> <span class="c1">--volumes</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="develop-branch-version">
+<h4>2.3.2.2. Develop branch version<a class="headerlink" href="#develop-branch-version" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LOVE</span><span class="o">-</span><span class="n">integration</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">linode</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>If there is a problem loading the static files from the browser, try deleting the docker volumes:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="k">system</span> <span class="n">prune</span> <span class="c1">--volumes</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="update-documentation">
+<h2>2.4. Update documentation<a class="headerlink" href="#update-documentation" title="Permalink to this headline">¶</a></h2>
+<p>We provide a docker image and a docker-compose file in order to load the LOVE-integration-tools locally to build the documentation.</p>
+<p>This docker-compose does not copy the code into the image, but instead it mounts the repository inside the image, this way you can edit the code from outside the docker container with no need to rebuild or restart.</p>
+<div class="section" id="load-and-get-into-the-docker-image">
+<h3>2.4.1. Load and get into the docker image<a class="headerlink" href="#load-and-get-into-the-docker-image" title="Permalink to this headline">¶</a></h3>
+<p>Follow these instructions to run the application in a docker container and get into it:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+<span class="n">docker</span><span class="o">-</span><span class="k">exec</span> <span class="n">tools</span> <span class="n">bash</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-documentation">
+<h3>2.4.2. Build documentation<a class="headerlink" href="#build-documentation" title="Permalink to this headline">¶</a></h3>
+<p>Once inside the container you will be in the <code class="docutils literal notranslate"><span class="pre">/usr/src/love/</span></code> folder, where you can move into the <code class="docutils literal notranslate"><span class="pre">docsrc</span></code> folder and build the documentation as follows:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docsrc</span>
+<span class="p">.</span><span class="o">/</span><span class="n">create_docs</span><span class="p">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="1. LOVE Project Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Inria Chile
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

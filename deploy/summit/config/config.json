@@ -1,0 +1,30 @@
+{
+  "ATDome": [{ "index": 0, "source": "" }],
+  "ScriptQueue": [
+    { "index": 1, "source": "" },
+    { "index": 2, "source": "" }
+  ],
+  "ATMCS": [{ "index": 0, "source": "" }],
+  "ATPtg": [{ "index": 0, "source": "" }],
+  "ATDomeTrajectory": [{ "index": 0, "source": "" }],
+  "ATMonochromator": [{ "index": 0, "source": "" }],
+  "FiberSpectrograph": [{ "index": 0, "source": "" }],
+  "Electrometer": [
+    { "index": 1, "source": "" },
+    { "index": 2, "source": "" }
+  ],
+  "ATCamera": [{ "index": 0, "source": "" }],
+  "ATSpectrograph": [{ "index": 0, "source": "" }],
+  "Environment": [{ "index": 1, "source": "" }],
+  "DIMM": [
+    { "index": 1, "source": "" }, 
+    { "index": 2, "source": "" }
+  ],
+  "ATAOS": [{ "index": 0, "source": "" }],
+  "ATPneumatics": [{ "index": 0, "source": "" }],
+  "ATHexapod": [{ "index": 0, "source": "" }],
+  "Watcher": [{ "index": 0, "source": "" }],
+  "LOVE": [{ "index": 0, "source": "" }],
+  "ATHeaderService": [{ "index": 0, "source": "" }],
+  "ATArchiver": [{ "index": 0, "source": "" }]
+}
