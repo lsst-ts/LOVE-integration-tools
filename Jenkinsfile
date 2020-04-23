@@ -31,8 +31,8 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl "docker network inspect testnet >/dev/null 2>&1 || docker network create testnet"'
-            sh 'ssh love@dev.love.inria.cl docker-compose  pull'
-            sh 'ssh love@dev.love.inria.cl docker-compose  down -v'
+            sh 'ssh love@dev.love.inria.cl docker-compose pull'
+            sh 'ssh love@dev.love.inria.cl docker-compose down -v'
             sh 'ssh love@dev.love.inria.cl "source local_env.sh; docker-compose up -d"'
           }
         }
@@ -56,15 +56,17 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-master.yml love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-master.yml love@love.inria.cl:./docker-compose.yml'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/ospl.xml love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/nginx-master.conf love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no -r jupyter love@love.inria.cl:.'
             sh 'ssh love@love.inria.cl "docker network inspect testnet >/dev/null 2>&1 || docker network create testnet"'
-            sh 'ssh love@love.inria.cl docker-compose -f docker-compose-master.yml pull'
-            sh 'ssh love@love.inria.cl docker-compose -f docker-compose-master.yml down -v'
-            sh 'ssh love@love.inria.cl "source local_env.sh; docker-compose -f docker-compose-master.yml up -d"'
+            sh 'ssh love@love.inria.cl docker-compose pull'
+            sh 'ssh love@love.inria.cl docker-compose down -v'
+            sh 'ssh love@love.inria.cl "source local_env.sh; docker-compose up -d"'
           }
         }
       }
