@@ -308,7 +308,7 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-static:/usr/src/love/manager
+      - manager-static:/usr/src/love/manager/static
       - ./media:/usr/src/love/manager/media
     logging:
       driver: "json-file"
