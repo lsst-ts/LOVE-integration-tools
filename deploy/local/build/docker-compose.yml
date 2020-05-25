@@ -21,16 +21,16 @@ services:
       dockerfile: Dockerfile-testcsc
     container_name: testcsc-sim-build
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   atdome-sim:
     build:
@@ -39,18 +39,18 @@ services:
     container_name: atdome-sim-build
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   atmcs-sim:
     build:
@@ -58,18 +58,18 @@ services:
       dockerfile: Dockerfile-atmcs
     container_name: atmcs-sim-build
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   scriptqueue-sim:
     build:
@@ -77,16 +77,16 @@ services:
       dockerfile: Dockerfile-scriptqueue
     container_name: scriptqueue-sim-build
     environment:
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ./config:/home/saluser/config/
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   watcher-sim:
     build:
@@ -95,18 +95,18 @@ services:
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
-        - OSPL_URI=${OSPL_URI}
-        - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-        - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-        - ./config:/home/saluser/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   gencam-sim:
     image: lsstts/gencam:latest
@@ -146,8 +146,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE PRODUCER --------------
   events:
@@ -168,8 +168,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   telemetries:
     container_name: love-telemetries-producer
@@ -189,8 +189,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   scriptqueue:
     container_name: love-scriptqueue-producer
@@ -210,8 +210,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   heartbeats:
     container_name: love-heartbeats-producer
@@ -231,8 +231,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #-----LOVE COMMANDER -----------
 
@@ -250,7 +250,7 @@ services:
       driver: "json-file"
       options:
         max-file: "5"
-        max-size: "10m"    
+        max-size: "10m"
 
   #----- LOVE MANAGER --------------
   redis:
@@ -264,8 +264,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   database:
     container_name: love-database
@@ -281,8 +281,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   manager:
     container_name: love-manager
@@ -295,6 +295,7 @@ services:
       - database
       - commander
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
@@ -320,16 +321,14 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
     container_name: love-frontend
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      args:
-        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile
     image: love-frontend-image
     depends_on:
@@ -340,8 +339,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
     tty: true
 
   nginx:
@@ -363,8 +362,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
 volumes:
   frontend-volume:

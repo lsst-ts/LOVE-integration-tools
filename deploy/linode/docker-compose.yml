@@ -288,6 +288,7 @@ services:
       - redis
       - database
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
