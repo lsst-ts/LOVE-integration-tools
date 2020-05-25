@@ -102,6 +102,7 @@ services:
       - database
       - commander
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
@@ -124,8 +125,8 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-        - manager-static:/usr/src/love/manager
-        - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager
+      - ./media:/usr/src/love/manager/media
 
   #----- LOVE FRONTEND --------------
   frontend:

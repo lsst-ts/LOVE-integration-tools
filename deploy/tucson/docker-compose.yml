@@ -18,8 +18,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE MANAGER --------------
   redis:
@@ -35,8 +35,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   database:
     container_name: love-database
@@ -54,8 +54,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   manager:
     container_name: love-manager
@@ -64,6 +64,7 @@ services:
       - redis
       - database
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASS=${REDIS_PASS}
@@ -90,8 +91,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -104,9 +105,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
-
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx
@@ -128,8 +128,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
 volumes:
   frontend-volume:
