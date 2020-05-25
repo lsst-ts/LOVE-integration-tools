@@ -291,7 +291,7 @@ services:
     depends_on:
       - nginx
   #----- LOVE MANAGER --------------
-  
+
   redis:
     container_name: redis
     image: redis:5.0.3
@@ -334,6 +334,7 @@ services:
       - database
       - commander
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
@@ -367,8 +368,6 @@ services:
     container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      args:
-        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile-dev
     image: love-frontend-image-mount
     depends_on:
