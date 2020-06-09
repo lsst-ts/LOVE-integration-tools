@@ -356,6 +356,7 @@ services:
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+      - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
     logging:
       driver: "json-file"

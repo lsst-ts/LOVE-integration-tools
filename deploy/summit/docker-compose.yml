@@ -126,6 +126,7 @@ services:
     restart: always
     volumes:
       - manager-static:/usr/src/love/manager
+      - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
   #----- LOVE FRONTEND --------------
