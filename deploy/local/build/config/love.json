@@ -1,7 +1,11 @@
 {
   "alarm_sounds": {
-    "critical": 1,
-    "serious": 1,
+    "critical": 0,
+    "serious": 0,
     "warning": 0
+  },
+  "cam_feeds": {
+    "generic": "http://localhost/gencam",
+    "all_sky": "http://localhost/gencam"
   }
 }
