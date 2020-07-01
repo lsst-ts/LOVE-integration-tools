@@ -4,7 +4,7 @@
     "minSeverityNotification": "warning"
   },
   "camFeeds": {
-    "generic": "http://localhost/gencam",
-    "allSky": "http://localhost/gencam"
+    "generic": "/gencam",
+    "allSky": "/gencam"
   }
 }
