@@ -351,6 +351,7 @@ services:
       - manager
       - frontend
       - gencam-sim
+      - commander
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"

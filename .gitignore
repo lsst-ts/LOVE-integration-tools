@@ -16,3 +16,4 @@ webpack-stats.*
 */cypress/videos
 **/__snapshots__/*
 **/__image_snapshots__/*
+**/*.log
