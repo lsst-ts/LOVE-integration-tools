@@ -71,6 +71,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
+  environment-sim:
+    image: lsstts/love-environment-sim:develop
+    container_name: environment-sim
+    entrypoint: ["/home/saluser/environment-setup.sh"]
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
   scriptqueue-sim:
     image: lsstts/love-scriptqueue-sim:develop
     container_name: scriptqueue-sim
