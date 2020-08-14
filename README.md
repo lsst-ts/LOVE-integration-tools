@@ -13,8 +13,10 @@ The LOVE repositories are expected to be at the same level under the same parent
   - LOVE-producer
   - LOVE-integration-tools
   - LOVE-simulator
-
+  - ts_standardscripts (for `linode` and `local/live` environments only)
+  - ts_externalscripts (for `linode` and `local/live` environments only)
 ---
+
 
 ## Content
 

@@ -87,6 +87,8 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
+      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
     logging:
       driver: "json-file"
       options:
@@ -152,30 +154,30 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  simulator:
-    container_name: love-simulator-mount
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-dev
-    image: love-simulator-image-mount
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
-      - testcsc-sim
-      - gencam-sim
-      - environment-sim
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
-      - ./config:/usr/src/love/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # simulator:
+  #   container_name: love-simulator-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-simulator-image-mount
+  #   depends_on:
+  #     - scriptqueue-sim
+  #     - atdome-sim
+  #     - testcsc-sim
+  #     - gencam-sim
+  #     - environment-sim
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
+  #     - ./config:/usr/src/love/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
@@ -433,7 +435,7 @@ services:
       - frontend
       # - styleguide
       - gencam-sim
-      - commander
+      # - commander
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
