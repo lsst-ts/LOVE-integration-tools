@@ -11,6 +11,7 @@ The LOVE repositories are expected to be at the same level under the same parent
   - LOVE-frontent
   - LOVE-manager
   - LOVE-producer
+  - LOVE-commander
   - LOVE-integration-tools
   - LOVE-simulator
 
@@ -78,9 +79,9 @@ docker-system prune --volumes
 
 ```
 cd LOVE-integration-tools/linode
-docker-compose down -v
-docker-compose build
-docker-compose up -d
+docker-compose -f docker-compose-master.yml down -v
+docker-compose -f docker-compose-master.yml build
+docker-compose -f docker-compose-master.yml up -d
 ```
 
 If there is a problem loading the static files from the browser, try deleting the docker volumes:
@@ -93,9 +94,9 @@ docker-system prune --volumes
 
 ```
 cd LOVE-integration-tools/linode
-docker-compose -f docker-compose-dev.yml down -v
-docker-compose -f docker-compose-dev.yml build
-docker-compose -f docker-compose-dev.yml up -d
+docker-compose down -v
+docker-compose build
+docker-compose up -d
 ```
 
 If there is a problem loading the static files from the browser, try deleting the docker volumes:
