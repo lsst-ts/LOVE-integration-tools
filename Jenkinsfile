@@ -32,7 +32,7 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
-            sh 'ssh love@dev.love.inria.cl "./run.sh'
+            sh 'ssh love@dev.love.inria.cl "./run.sh"'
           }
         }
       }
