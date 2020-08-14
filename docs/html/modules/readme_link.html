@@ -107,6 +107,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#build-documentation">2.4.2. Build documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">2.5. Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#integration-testing">2.5.1. Integration testing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#headless">2.5.1.1. Headless:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interactive">2.5.1.2. Interactive:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#load-testing">2.5.2. Load testing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -308,6 +317,31 @@ See the full documentation here: <a class="reference external" href="https://lss
 <span class="p">.</span><span class="o">/</span><span class="n">create_docs</span><span class="p">.</span><span class="n">sh</span>
 </pre></div>
 </div>
+<p>–</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>2.5. Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>Tests are available in the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder</p>
+<div class="section" id="integration-testing">
+<h3>2.5.1. Integration testing<a class="headerlink" href="#integration-testing" title="Permalink to this headline">¶</a></h3>
+<p>To run the integration tests against the dev environment, run the following commands from the <code class="docutils literal notranslate"><span class="pre">tests/e2e</span></code> directory:</p>
+<div class="section" id="headless">
+<h4>2.5.1.1. Headless:<a class="headerlink" href="#headless" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span> <span class="pre">--exit-code-from</span> <span class="pre">cypress</span></code></p>
+</div>
+<div class="section" id="interactive">
+<h4>2.5.1.2. Interactive:<a class="headerlink" href="#interactive" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">-f</span> <span class="pre">docker-compose.yml</span> <span class="pre">-f</span> <span class="pre">cy-open.yml</span> <span class="pre">up</span> <span class="pre">--exit-code-from</span> <span class="pre">cypress</span></code></p>
+</div>
+</div>
+<div class="section" id="load-testing">
+<h3>2.5.2. Load testing<a class="headerlink" href="#load-testing" title="Permalink to this headline">¶</a></h3>
+<p>To run the loads tests run the following commands from the <code class="docutils literal notranslate"><span class="pre">tests/load</span></code> directory:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span> <span class="pre">-d</span></code></p>
+<p>Then open <code class="docutils literal notranslate"><span class="pre">localhost:1234</span></code> on your web browser and enter into jupyter using the password <code class="docutils literal notranslate"><span class="pre">jupyter</span></code>.
+In jupyter open the file <code class="docutils literal notranslate"><span class="pre">notebooks/stress_test.ipynb</span></code> and run all the cells</p>
+<p>The tests are also available from any jupyter installation along side a love deployment. For example <code class="docutils literal notranslate"><span class="pre">deploy/local/live</span></code>, depending on the case you may need to change the <code class="docutils literal notranslate"><span class="pre">manager_location</span></code> variable on the first cell accordingly (see comments in cell).</p>
 </div>
 </div>
 </div>
