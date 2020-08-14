@@ -33,6 +33,10 @@ Each environment contains the following types of files:
   - `default.conf`: Nginx configuraiton file that defines the routing and other network configuraitons
   - `Dockerfile`: to build the docker image needed to run the Nginx service
 
+**IMPORTANT:** make sure to redefine the secrets defined by the `.env` files for real production environments. You can do that by defining them in your environment directly, if the variables are defined in your environment they will have priority over the values defines in the `.env` files. See the `.env` files to see which variables should be overriden, search for the following comment line:
+
+`## (Dummy) secrets, make sure to replace them in real production environments!`
+
 #### Environments
 
 The `deploy` directory is structured as follows:

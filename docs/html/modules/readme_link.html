@@ -195,6 +195,7 @@ See the full documentation here: <a class="reference external" href="https://lss
 <li><p>LOVE-frontent</p></li>
 <li><p>LOVE-manager</p></li>
 <li><p>LOVE-producer</p></li>
+<li><p>LOVE-commander</p></li>
 <li><p>LOVE-integration-tools</p></li>
 <li><p>LOVE-simulator</p></li>
 </ul>
@@ -220,6 +221,8 @@ See the full documentation here: <a class="reference external" href="https://lss
 </ul>
 </li>
 </ul>
+<p><strong>IMPORTANT:</strong> make sure to redefine the secrets defined by the <code class="docutils literal notranslate"><span class="pre">.env</span></code> files for real production environments. You can do that by defining them in your environment directly, if the variables are defined in your environment they will have priority over the values defines in the <code class="docutils literal notranslate"><span class="pre">.env</span></code> files. See the <code class="docutils literal notranslate"><span class="pre">.env</span></code> files to see which variables should be overriden, search for the following comment line:</p>
+<p><code class="docutils literal notranslate"><span class="pre">##</span> <span class="pre">(Dummy)</span> <span class="pre">secrets,</span> <span class="pre">make</span> <span class="pre">sure</span> <span class="pre">to</span> <span class="pre">replace</span> <span class="pre">them</span> <span class="pre">in</span> <span class="pre">real</span> <span class="pre">production</span> <span class="pre">environments!</span></code></p>
 </div>
 <div class="section" id="environments">
 <h4>2.2.1.2. Environments<a class="headerlink" href="#environments" title="Permalink to this headline">¶</a></h4>
@@ -272,9 +275,9 @@ See the full documentation here: <a class="reference external" href="https://lss
 <div class="section" id="master-branch-version">
 <h4>2.3.2.1. Master branch version<a class="headerlink" href="#master-branch-version" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LOVE</span><span class="o">-</span><span class="n">integration</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">linode</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">master</span><span class="p">.</span><span class="n">yml</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">master</span><span class="p">.</span><span class="n">yml</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">master</span><span class="p">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
 </pre></div>
 </div>
 <p>If there is a problem loading the static files from the browser, try deleting the docker volumes:</p>
@@ -285,9 +288,9 @@ See the full documentation here: <a class="reference external" href="https://lss
 <div class="section" id="develop-branch-version">
 <h4>2.3.2.2. Develop branch version<a class="headerlink" href="#develop-branch-version" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LOVE</span><span class="o">-</span><span class="n">integration</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">linode</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">build</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">-</span><span class="n">dev</span><span class="p">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
 </pre></div>
 </div>
 <p>If there is a problem loading the static files from the browser, try deleting the docker volumes:</p>
