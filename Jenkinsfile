@@ -23,6 +23,7 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/run.sh love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose.yml love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/ospl.xml love@dev.love.inria.cl:.'
@@ -30,10 +31,8 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
-            sh 'ssh love@dev.love.inria.cl "docker network inspect testnet >/dev/null 2>&1 || docker network create testnet"'
-            sh 'ssh love@dev.love.inria.cl docker-compose pull'
-            sh 'ssh love@dev.love.inria.cl docker-compose down -v'
-            sh 'ssh love@dev.love.inria.cl "source local_env.sh; docker-compose up -d"'
+            sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
+            sh 'ssh love@dev.love.inria.cl "./run.sh'
           }
         }
       }

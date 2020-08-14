@@ -17,3 +17,5 @@ webpack-stats.*
 **/__snapshots__/*
 **/__image_snapshots__/*
 **/*.log
+**/ts_externalscripts
+**/ts_standardscripts
