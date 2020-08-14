@@ -98,6 +98,8 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
+      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
     logging:
       driver: "json-file"
       options:
