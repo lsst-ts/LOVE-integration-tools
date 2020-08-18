@@ -99,7 +99,7 @@ services:
     volumes:
       - ./config:/home/saluser/config/
       - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
-      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
+      - ./scripts:/home/saluser/repos/ts_scriptqueue/tests/data/external/
     logging:
       driver: "json-file"
       options:
@@ -124,26 +124,26 @@ services:
         max-size: "10m"
     ports:
       - 5013:5013
-  # simulator:
-  #   container_name: love-simulator
-  #   image: lsstts/love-simulator:develop
-  #   depends_on:
-  #     - scriptqueue-sim
-  #     - atdome-sim
-  #     - testcsc-sim
-  #     - gencam-sim
-  #     - atmcs-sim
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/usr/src/love/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  simulator:
+    container_name: love-simulator
+    image: lsstts/love-simulator:develop
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
+      - testcsc-sim
+      - gencam-sim
+      - atmcs-sim
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/usr/src/love/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
