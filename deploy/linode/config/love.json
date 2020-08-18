@@ -1,7 +1,7 @@
 {
   "alarms": {
-    "minSeveritySound": "critical",
-    "minSeverityNotification": "critical"
+    "minSeveritySound": "serious",
+    "minSeverityNotification": "serious"
   },
   "camFeeds": {
     "generic": "/gencam",
