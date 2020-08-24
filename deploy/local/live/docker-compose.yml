@@ -87,6 +87,8 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
+      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
     logging:
       driver: "json-file"
       options:
@@ -132,29 +134,50 @@ services:
     ports:
       - 5013:5013
 
-  simulator:
-    container_name: love-simulator-mount
+  environment-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-dev
-    image: love-simulator-image-mount
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
-      - testcsc-sim
-      - gencam-sim
+      dockerfile: Dockerfile-environment
+    container_name: environment-sim-build
+    entrypoint: ["/home/saluser/environment-setup.sh"]
     environment:
+      - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
-      - ./config:/usr/src/love/config/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
+
+  # simulator:
+  #   container_name: love-simulator-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-simulator-image-mount
+  #   depends_on:
+  #     - scriptqueue-sim
+  #     - atdome-sim
+  #     - testcsc-sim
+  #     - gencam-sim
+  #     - environment-sim
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
+  #     - ./config:/usr/src/love/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
@@ -291,7 +314,7 @@ services:
     depends_on:
       - nginx
   #----- LOVE MANAGER --------------
-  
+
   redis:
     container_name: redis
     image: redis:5.0.3
@@ -334,10 +357,12 @@ services:
       - database
       - commander
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
@@ -355,6 +380,7 @@ services:
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+      - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
     logging:
       driver: "json-file"
@@ -367,8 +393,6 @@ services:
     container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      args:
-        WEBSOCKET_HOST: ${LOVE_FRONTEND_WEBSOCKET_HOST}
       dockerfile: Dockerfile-dev
     image: love-frontend-image-mount
     depends_on:
@@ -376,6 +400,24 @@ services:
     network_mode: ${NETWORK_NAME}
     ports:
       - "3000:3000"
+    volumes:
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+      - /usr/src/love/love/node_modules
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  styleguide:
+    container_name: love-styleguide-mount
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    command: yarn guide:start --disable-host-check
+    network_mode: ${NETWORK_NAME}
+    ports:
       - "3001:3001"
     volumes:
       - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
@@ -392,8 +434,9 @@ services:
     depends_on:
       - manager
       - frontend
+      # - styleguide
       - gencam-sim
-      - commander
+      # - commander
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"

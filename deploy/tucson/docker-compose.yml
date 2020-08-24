@@ -18,8 +18,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE MANAGER --------------
   redis:
@@ -35,8 +35,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   database:
     container_name: love-database
@@ -54,8 +54,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   manager:
     container_name: love-manager
@@ -64,11 +64,13 @@ services:
       - redis
       - database
     environment:
+      - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
@@ -86,12 +88,13 @@ services:
     restart: always
     volumes:
       - manager-static:/usr/src/love/manager
+      - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -104,9 +107,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
-
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx
@@ -128,8 +130,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: "5"
-          max-size: "10m"
+        max-file: "5"
+        max-size: "10m"
 
 volumes:
   frontend-volume:

@@ -12,3 +12,10 @@ webpack-stats.*
 **/.ipynb_checkpoints
 **/local_env.sh
 **/media
+*/cypress/screenshots
+*/cypress/videos
+**/__snapshots__/*
+**/__image_snapshots__/*
+**/*.log
+**/ts_externalscripts
+**/ts_standardscripts

@@ -1,0 +1,28 @@
+version: '3.2'
+
+# run Cypress tests and exit with command
+#   docker-compose up --exit-code-from cypress
+services:
+  # this is the web application we are going to test
+  # love:
+  #   build: ../
+  #   environment:
+  #     - PORT=8123
+  # Cypress container
+  cypress:
+    # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
+    container_name: cypress-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "${UID}:${GID}"
+    # depends_on:
+    #   - love
+    environment:
+      # pass base url to test pointing at the web application
+      - CYPRESS_baseUrl=http://dev.love.inria.cl
+    # share the current folder as volume to avoid copying
+    working_dir: /e2e
+    shm_size: '2gb'
+    volumes:
+      - ./:/e2e

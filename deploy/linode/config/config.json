@@ -14,6 +14,9 @@
   "GenericCamera": [
     { "index": 1, "source": "command_sim"}
   ],
+  "Environment": [
+    { "index": 1, "source": "command_sim"}
+  ],
   "LOVE": [{ "index": 0, "source": "" }],
   "ATSpectrograph": [{"index": 0, "source": "emitter"}],
   "ATCamera": [{"index": 0, "source": "emitter"}]
