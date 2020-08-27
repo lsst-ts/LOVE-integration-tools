@@ -11,10 +11,13 @@ The LOVE repositories are expected to be at the same level under the same parent
   - LOVE-frontent
   - LOVE-manager
   - LOVE-producer
+  - LOVE-commander
   - LOVE-integration-tools
   - LOVE-simulator
-
+  - ts_standardscripts (for `linode` and `local/live` environments only)
+  - ts_externalscripts (for `linode` and `local/live` environments only)
 ---
+
 
 ## Content
 
@@ -31,6 +34,10 @@ Each environment contains the following types of files:
 - `nginx` directory: contains NGINX configuration files (`default.conf` and `Dockerfile`) in order to coordinate HTTP requests between the django server and the frontend.
   - `default.conf`: Nginx configuraiton file that defines the routing and other network configuraitons
   - `Dockerfile`: to build the docker image needed to run the Nginx service
+
+**IMPORTANT:** make sure to redefine the secrets defined by the `.env` files for real production environments. You can do that by defining them in your environment directly, if the variables are defined in your environment they will have priority over the values defines in the `.env` files. See the `.env` files to see which variables should be overriden, search for the following comment line:
+
+`## (Dummy) secrets, make sure to replace them in real production environments!`
 
 #### Environments
 
@@ -78,9 +85,9 @@ docker-system prune --volumes
 
 ```
 cd LOVE-integration-tools/linode
-docker-compose down -v
-docker-compose build
-docker-compose up -d
+docker-compose -f docker-compose-master.yml down -v
+docker-compose -f docker-compose-master.yml build
+docker-compose -f docker-compose-master.yml up -d
 ```
 
 If there is a problem loading the static files from the browser, try deleting the docker volumes:
@@ -93,9 +100,9 @@ docker-system prune --volumes
 
 ```
 cd LOVE-integration-tools/linode
-docker-compose -f docker-compose-dev.yml down -v
-docker-compose -f docker-compose-dev.yml build
-docker-compose -f docker-compose-dev.yml up -d
+docker-compose down -v
+docker-compose build
+docker-compose up -d
 ```
 
 If there is a problem loading the static files from the browser, try deleting the docker volumes:

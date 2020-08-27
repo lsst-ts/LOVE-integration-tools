@@ -87,10 +87,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#love-frontend">1.1.1. LOVE-frontend</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#love-manager">1.1.2. LOVE-manager</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#love-producer">1.1.3. LOVE-producer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#love-simulator">1.1.4. LOVE-simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-csc">1.1.4. LOVE-CSC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-commander">1.1.5. LOVE-commander</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#love-simulator">1.1.6. LOVE-simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database">1.1.7. Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#channels-layer">1.1.8. Channels Layer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#love-components-interaction">1.2. LOVE Components interaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#love-architecture">1.2. LOVE Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#love-deployment">1.3. LOVE Deployment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">2. LOVE-integration-tools instructions</a></li>
@@ -182,22 +187,42 @@ For more details check the <a class="reference external" href="https://lsst-ts.g
 <div class="section" id="love-producer">
 <h3>1.1.3. LOVE-producer<a class="headerlink" href="#love-producer" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-producer">LOVE-producer</a> is a backend application that acts as middleware between the LOVE-manager and SAL.
-It is built as a Python module that uses salobj and websockets to produce messages between SAL and the LOVE-manager. “Messages” can be understood without distinction as events, telemetries or commands parameters and their acknowledgements.
-It is built using ReactJS to generate the static content (html, css and javascript files) of the LOVE web application.
+It is built as a Python module that uses salobj and websockets to produce messages between SAL and the LOVE-manager. “Messages” can be understood without distinction as events or telemetries .
 For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-producer/html/index.html">LOVE-producer docs</a>.</p>
 </div>
+<div class="section" id="love-csc">
+<h3>1.1.4. LOVE-CSC<a class="headerlink" href="#love-csc" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-producer/tree/develop/producer/love_csc">LOVE-CSC</a> is defined in the <code class="code docutils literal notranslate"><span class="pre">LOVE-producer</span></code> repository, it is a <code class="code docutils literal notranslate"><span class="pre">CSC</span></code> that provides an HTTP API to accept requests with observing logs messages and dispatches the observing logs event using <code class="code docutils literal notranslate"><span class="pre">salobj</span></code>.
+For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-producer/html/index.html">LOVE-producer docs</a>.</p>
+</div>
+<div class="section" id="love-commander">
+<h3>1.1.5. LOVE-commander<a class="headerlink" href="#love-commander" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-commander">LOVE-commander</a> is a backend application that acts as middleware between the LOVE-manager and SAL.
+It is built as a Python module that provides and HTTP API to accept command requests and run them using <code class="code docutils literal notranslate"><span class="pre">salobj</span></code>, and provide some SAL information, such as metadata, topics names, among others.
+For more details check the <a class="reference external" href="https://lsst-ts.github.io/LOVE-commander/html/index.html">LOVE-commander docs</a>.</p>
+</div>
 <div class="section" id="love-simulator">
-<h3>1.1.4. LOVE-simulator<a class="headerlink" href="#love-simulator" title="Permalink to this headline">¶</a></h3>
+<h3>1.1.6. LOVE-simulator<a class="headerlink" href="#love-simulator" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference external" href="https://github.com/lsst-ts/LOVE-simulator">LOVE-simulator</a> repository contains different Python modules used to simulate the software components of a real LSST environment interacting with SAL.
 It is meant to be used for development and testing purposes.</p>
 </div>
+<div class="section" id="database">
+<h3>1.1.7. Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">Database</span></code> is used by the <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> to store users, their permissions and access tokens, the UI Framework views, among others. It is currently a <code class="code docutils literal notranslate"><span class="pre">PostgreSQL</span></code> instance.</p>
 </div>
-<div class="section" id="love-components-interaction">
-<h2>1.2. LOVE Components interaction<a class="headerlink" href="#love-components-interaction" title="Permalink to this headline">¶</a></h2>
-<img alt="../_images/LOVE_overview.svg" src="../_images/LOVE_overview.svg" /><p>As shown in the figure above, the LOVE-frontend is executed in the client browser (as it is a web application) while the rest of the components are executed in the LSST Servers.
-The LOVE-frontend communicates with the rest fo the system through the LOVE-manager. The LOVE-frontend sends users credentials to login and then established a websocket connection with the LOVE-manager to receive data from it.</p>
-<p>The LOVE-manager gets the data from the LOVE-Producer through a websocket connection. The LOVE-Producer interacts with the rest of the system through the Software Abstraction Layer (SAL).
-The rest of the system consists on Commandable SAL Components (CSCs) which interact with each other through SAL.</p>
+<div class="section" id="channels-layer">
+<h3>1.1.8. Channels Layer<a class="headerlink" href="#channels-layer" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">Channels</span> <span class="pre">Layer</span></code> is used by the <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> as a message queue for the websockets messages. It is currently a <code class="code docutils literal notranslate"><span class="pre">Redis</span></code> instance.</p>
+</div>
+</div>
+<div class="section" id="love-architecture">
+<h2>1.2. LOVE Architecture<a class="headerlink" href="#love-architecture" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/LOVE_arch.svg" src="../_images/LOVE_arch.svg" /><p>As shown in the figure above, the <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> is executed in the client browser (as it is a web application) while the rest of the components are executed in the LSST Servers.
+The <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> communicates with the rest of the system through the <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code>. The <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> sends users credentials to login and then established a websocket connection with the <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> to receive data from it.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> gets the data from the <code class="code docutils literal notranslate"><span class="pre">LOVE-Producer</span></code> and <code class="code docutils literal notranslate"><span class="pre">LOVE-Commander</span></code> through a websocket and HTTP. The <code class="code docutils literal notranslate"><span class="pre">LOVE-Producer</span></code> and <code class="code docutils literal notranslate"><span class="pre">LOVE-Commander</span></code> interacts with the rest of the system through the Software Abstraction Layer (<code class="code docutils literal notranslate"><span class="pre">SAL</span></code>).
+The rest of the system consists on Commandable SAL Components (<code class="code docutils literal notranslate"><span class="pre">CSCs</span></code>) which interact with each other through <code class="code docutils literal notranslate"><span class="pre">SAL</span></code>.</p>
+<p>Additionally, observing logs are sent from the <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> to the <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> and from there to the <code class="code docutils literal notranslate"><span class="pre">LOVE-CSC</span></code> thorugh websockets. The <code class="code docutils literal notranslate"><span class="pre">LOVE-CSC</span></code> dispatches an event with the observing log message using <code class="code docutils literal notranslate"><span class="pre">salobj</span></code>.
+The event then arrives to the <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> through the same path as any other event, though the <code class="code docutils literal notranslate"><span class="pre">LOVE-producer</span></code> and <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code>,</p>
 <p>CSCs communication consists in 4 types:</p>
 <ul class="simple">
 <li><p>Telemetries: values that represent a software or hardware measurement in the real world</p></li>
@@ -205,7 +230,15 @@ The rest of the system consists on Commandable SAL Components (CSCs) which inter
 <li><p>Commands: instructions for another CSC to execute an action.</p></li>
 <li><p>Command Acknowledgements: acknowledgements of sucessful command executions, sent for the CSC that sent the command.</p></li>
 </ul>
-<p>We also developed the LOVE-simulator, for development and testing purposes, which acts as a “fake” CSC that sends data and commands to SAL, replicating the behavior of some defined CSCs.</p>
+<p>We also developed the <code class="code docutils literal notranslate"><span class="pre">LOVE-simulator</span></code>, for development and testing purposes, which acts as a “fake” <code class="code docutils literal notranslate"><span class="pre">CSC</span></code> that sends data and commands to <code class="code docutils literal notranslate"><span class="pre">SAL</span></code>, replicating the behavior of some defined <code class="code docutils literal notranslate"><span class="pre">CSCs</span></code>.</p>
+</div>
+<div class="section" id="love-deployment">
+<h2>1.3. LOVE Deployment<a class="headerlink" href="#love-deployment" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/LOVE_deployment.svg" src="../_images/LOVE_deployment.svg" /><p>The figure above shows how the LOVE components are currently being deployed. They are all orquestrated with <code class="code docutils literal notranslate"><span class="pre">docker-compose</span></code> and are present in the <code class="code docutils literal notranslate"><span class="pre">Docker</span></code> network.
+Additionally, the components that interact with the <code class="code docutils literal notranslate"><span class="pre">SAL/DDS</span></code> are also part of the DDS Network. This way they can interact with other <code class="code docutils literal notranslate"><span class="pre">CSC</span></code> outside the <code class="code docutils literal notranslate"><span class="pre">Docker</span></code> network.</p>
+<p>It is worth to mention that different instances of the <code class="code docutils literal notranslate"><span class="pre">LOVE-producer</span></code> are deployed, each of them takins care of different message, namely: telemetries, events, heartbeats, ScriptQueue state.
+For more deatils about this please refere to the <a class="reference external" href="https://lsst-ts.github.io/LOVE-producer/html/index.html">LOVE-producer docs</a>.</p>
+<p>The user interacts with the LOVE system through a <code class="code docutils literal notranslate"><span class="pre">Nginx</span></code> instance, that acts as load balancer and URL router. Routing requests to the <code class="code docutils literal notranslate"><span class="pre">LOVE-frontend</span></code> and <code class="code docutils literal notranslate"><span class="pre">LOVE-manager</span></code> accordingly.</p>
 </div>
 </div>
 
