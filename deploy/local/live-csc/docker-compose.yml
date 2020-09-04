@@ -1,0 +1,412 @@
+
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_DOMAIN: ${LSST_DDS_DOMAIN}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+version: "3.7"
+
+services:
+  base-producer: &base-producer
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-dev
+    image: love-producer-image-mount
+    environment:
+      <<: *base-producer-environment
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+      - ./config:/usr/src/love/producer/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - nginx
+
+  #----- LOVE PRODUCER --------------
+  test1:
+    <<: *base-producer
+    container_name: producer-test1-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Test.1
+  test2:
+    <<: *base-producer
+    container_name: producer-test2-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Test.2
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome.0
+      
+  # LOVE
+  love:
+    build:
+      context: ${DOCKERFILE_PATH_PRODUCER}
+      dockerfile: Dockerfile-lovecsc-dev
+    image: love_csc
+    container_name: love_csc
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
+    ports:
+      - 9999:9999
+    depends_on:
+      - nginx
+
+  #----- simulators -------
+  testcsc-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-testcsc
+    container_name: testcsc-sim-build
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  atdome-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-atdome
+    container_name: atdome-sim-build
+    entrypoint: ["/home/saluser/atdome-setup.sh"]
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  atmcs-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-atmcs
+    container_name: atmcs-sim-build
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    entrypoint: ["/home/saluser/atmcs-setup.sh"]
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  scriptqueue-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-scriptqueue
+    container_name: scriptqueue-sim-build
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/home/saluser/config/
+      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  watcher-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-watcher
+    container_name: watcher-sim-build
+    entrypoint: ["/home/saluser/watcher-setup.sh"]
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  gencam-sim:
+    image: lsstts/gencam:latest
+    container_name: gencam-sim
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    # restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - 5013:5013
+
+  environment-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-environment
+    container_name: environment-sim-build
+    entrypoint: ["/home/saluser/environment-setup.sh"]
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  # simulator:
+  #   container_name: love-simulator-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-simulator-image-mount
+  #   depends_on:
+  #     - scriptqueue-sim
+  #     - atdome-sim
+  #     - testcsc-sim
+  #     - gencam-sim
+  #     - environment-sim
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
+  #     - ./config:/usr/src/love/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+
+  jupyter:
+    container_name: love-jupyter
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-jupyter
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - JUPYTER_PASS=${JUPYTER_PASS}
+    network_mode: ${NETWORK_NAME}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ${JUPYTER_PATH}:/home/saluser/notebooks
+    ports:
+      - 1234:1234
+
+  #----- LOVE COMMANDER ---------
+  commander:
+    container_name: love-commander-mount
+    build:
+      context: ${DOCKERFILE_PATH_COMMANDER}
+      dockerfile: Dockerfile-dev
+    image: love-commander-image-mount
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+  
+  #----- LOVE MANAGER --------------
+
+  redis:
+    container_name: redis
+    image: redis:5.0.3
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "6379:6379"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  database:
+    container_name: love-database
+    image: postgres:12.0
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  manager:
+    container_name: love-manager-mount
+    build:
+      context: ${DOCKERFILE_PATH_MANAGER}
+      dockerfile: Dockerfile-dev
+    image: love-manager-image-mount
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander-mount
+      - COMMANDER_PORT=5000
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  #----- LOVE FRONTEND --------------
+  frontend:
+    container_name: love-frontend-mount
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    depends_on:
+      - manager
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+      - /usr/src/love/love/node_modules
+    environment:
+      CI: "true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  styleguide:
+    container_name: love-styleguide-mount
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    command: yarn guide:start --disable-host-check
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "3001:3001"
+    volumes:
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+      - /usr/src/love/love/node_modules
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  nginx:
+    container_name: love-nginx-mount
+    image: nginx:1.13.1
+    depends_on:
+      - manager
+      - frontend
+      # - styleguide
+      - gencam-sim
+      # - commander
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./media:/usr/src/love-manager/media
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
