@@ -1,24 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: frontend-deployment
+  name: frontend-job
 spec:
-  selector:
-    matchLabels:
-      app: love
-  replicas: 1
   template:
-    metadata:
-      labels:
-        app: love
     spec:
       containers:
       - name: frontend
         image: lsstts/love-frontend:develop
-        command: [ "/bin/sh","-c", "cp -R /usr/src/love-build/. /usr/src/love-frontend" ]
+        command: [ "/bin/sh","-c", "cp -R /usr/src/love-build/ /usr/src/love-frontend" ]
         volumeMounts:
           - mountPath: "/usr/src"
             name: love-pv-storage
+      restartPolicy: Never
       volumes:
         - name: love-pv-storage
           persistentVolumeClaim:
