@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    server {
+      listen 80;
+      server_name localhost;
+      location / {
+        root   /usr/src/love-frontend;
+        try_files $uri$args $uri$args/ $uri/ /index.html;
+      }
+      location /manager/static {
+        alias /usr/src/love-manager/static;
+      }
+      location /manager/media {
+        alias /usr/src/love-manager/media;
+      }
+    }
