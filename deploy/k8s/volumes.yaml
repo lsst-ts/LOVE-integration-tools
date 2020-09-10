@@ -5,7 +5,6 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
   capacity:
     storage: 1Gi
   accessModes:
@@ -18,9 +17,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: love-pv-claim
 spec:
-  storageClassName: manual
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
