@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: love
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: love
+    spec:
+      containers:
+      - name: frontend
+        image: lsstts/love-frontend:develop
+        command: [ "/bin/sh","-c", "cp -R /usr/src/love-build/. /usr/src/love-frontend" ]
+        volumeMounts:
+          - mountPath: "/usr/src"
+            name: love-pv-storage
+      volumes:
+        - name: love-pv-storage
+          persistentVolumeClaim:
+            claimName: love-pv-claim
