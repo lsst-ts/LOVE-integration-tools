@@ -11,6 +11,14 @@ data:
         root   /usr/src/frontend/love-frontend;
         try_files $uri$args $uri$args/ $uri/ /index.html;
       }
+      location /manager {
+          proxy_pass http://manager-deployment:8000;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header Host $host;
+          proxy_redirect off;
+      }
       location /manager/static {
         alias /usr/src/manager/love-manager/static;
       }
@@ -18,3 +26,24 @@ data:
         alias /usr/src/manager/love-manager/media;
       }
     }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-env
+data:
+  MANAGER_SECRET_KEY: "tbder3gzppu)kl%(u3awhhg^^zuj&!ceh@$n&v0d38sjx43s8."
+  REDIS_HOST: "redis"
+  DB_ENGINE: "postgresql"
+  DB_NAME: "postgres"
+  DB_USER: "postgres"
+  DB_HOST: "love-database"
+  DB_PORT: "5432"
+  PROCESS_CONNECTION_PASS: "my_dev_password"
+  REDIS_PASS: "admin123"
+  DB_PASS: "postgres"
+  ADMIN_USER_PASS: "test"
+  USER_USER_PASS: "test"
+  CMD_USER_PASS: "test"
+  SERVER_URL: "*"
+  LOVE_PRODUCER_WEBSOCKET_HOST: "love-nginx/manager/ws/subscription"
