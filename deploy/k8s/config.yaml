@@ -8,13 +8,13 @@ data:
       listen 80;
       server_name localhost;
       location / {
-        root   /usr/src/love-frontend;
+        root   /usr/src/frontend/love-frontend;
         try_files $uri$args $uri$args/ $uri/ /index.html;
       }
       location /manager/static {
-        alias /usr/src/love-manager/static;
+        alias /usr/src/manager/love-manager/static;
       }
       location /manager/media {
-        alias /usr/src/love-manager/media;
+        alias /usr/src/manager/love-manager/media;
       }
     }

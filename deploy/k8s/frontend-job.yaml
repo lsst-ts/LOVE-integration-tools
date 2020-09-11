@@ -8,7 +8,7 @@ spec:
       containers:
       - name: frontend
         image: lsstts/love-frontend:develop
-        command: [ "/bin/sh","-c", "cp -R /usr/src/love-build/ /usr/src/love-frontend" ]
+        command: [ "/bin/sh","-c", "cp -R /usr/src/love/ /usr/src/love-frontend" ]
         volumeMounts:
           - mountPath: "/usr/src"
             name: love-pv-storage

@@ -21,8 +21,10 @@ spec:
           - mountPath: /etc/nginx/conf.d # mount nginx.conf
             readOnly: true
             name: nginx-conf
-          - mountPath: "/usr/src"
+          - mountPath: "/usr/src/frontend"
             name: love-pv-storage
+          - mountPath: "/usr/src/manager"
+            name: love-manager-pv-storage
       volumes:
         - name: nginx-conf
           configMap:
@@ -33,6 +35,9 @@ spec:
         - name: love-pv-storage
           persistentVolumeClaim:
             claimName: love-pv-claim
+        - name: love-manager-pv-storage
+          persistentVolumeClaim:
+            claimName: love-manager-pv-claim
 ---
 apiVersion: v1
 kind: Service

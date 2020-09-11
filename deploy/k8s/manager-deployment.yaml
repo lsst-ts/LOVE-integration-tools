@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-deployment
+spec:
+  selector:
+    matchLabels:
+      app: love
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: love
+    spec:
+      containers:
+      - name: manager
+        image: lsstts/love-manager:develop
+        ports:
+        - containerPort: 8080
+        command: [ "/bin/bash","-c", "cp -R /usr/src/love/manager/ /usr/src/love/manager-volume/love-manager && /usr/src/love/manager/runserver.sh" ]
+        volumeMounts:
+          - mountPath: "/usr/src/love/manager-volume"
+            name: love-manager-pv-storage
+      volumes:
+        - name: love-manager-pv-storage
+          persistentVolumeClaim:
+            claimName: love-manager-pv-claim 
