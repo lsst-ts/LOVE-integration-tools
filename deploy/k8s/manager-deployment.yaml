@@ -5,25 +5,27 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: love
+      app: manager-deployment
   replicas: 1
   template:
     metadata:
       labels:
-        app: love
+        app: manager-deployment
     spec:
       containers:
       - name: manager
         image: lsstts/love-manager:develop
         ports:
         - containerPort: 8000
-        command: [ "/bin/bash","-c", "cp -R /usr/src/love/manager/ /usr/src/love/manager-volume/love-manager && /usr/src/love/manager/runserver.sh" ]
+        command: [ "/bin/bash","-c", "cp -R /usr/src/love/manager/ /usr/src/love/manager-volume/love-manager && /usr/src/love/manager/runserver-dev.sh" ]
         volumeMounts:
           - mountPath: "/usr/src/love/manager-volume"
             name: love-manager-pv-storage
         envFrom:
           - configMapRef:
-              name: love-env
+              name: love-manager-env
+          - configMapRef:
+              name: love-manager-db-env
       volumes:
         - name: love-manager-pv-storage
           persistentVolumeClaim:
@@ -32,13 +34,53 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: manager-deployment
+  name: manager-service
   labels:
-    app: manager-deployment
+    app: manager-service
 spec:
   ports:
   - port: 8000
     targetPort: 8000
     protocol: TCP
   selector:
-    app: manager-deployment
+    app: manager-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-database-deployment
+spec:
+  selector:
+    matchLabels:
+      app: manager-database-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: manager-database-service
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:12.0
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: "/var/lib/postgresql/data"
+            name: love-database-pv-storage
+        envFrom:
+          - configMapRef:
+              name: love-manager-db-env
+      volumes:
+        - name: love-database-pv-storage
+          persistentVolumeClaim:
+            claimName: love-database-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manager-database-service
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: manager-database-service

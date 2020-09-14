@@ -27,6 +27,20 @@ spec:
     path: "/mnt/manager-data"
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: love-database-pv-volume
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/database-data"
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: love-pv-claim
@@ -47,3 +61,14 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: love-database-pv-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
