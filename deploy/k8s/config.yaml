@@ -30,10 +30,64 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: love-backend-conf
+data:
+  config.json: |
+    {
+      "ATDome": [{ "index": 0, "source": "" }],
+      "ScriptQueue": [
+        { "index": 1, "source": "" },
+        { "index": 2, "source": "" }
+      ],
+      "ATMCS": [{ "index": 0, "source": "" }],
+      "ATPtg": [{ "index": 0, "source": "" }],
+      "ATDomeTrajectory": [{ "index": 0, "source": "" }],
+      "ATMonochromator": [{ "index": 0, "source": "" }],
+      "FiberSpectrograph": [{ "index": 0, "source": "" }],
+      "Electrometer": [
+        { "index": 1, "source": "" },
+        { "index": 2, "source": "" }
+      ],
+      "ATCamera": [{ "index": 0, "source": "" }],
+      "ATSpectrograph": [{ "index": 0, "source": "" }],
+      "Environment": [{ "index": 1, "source": "" }],
+      "DIMM": [
+        { "index": 1, "source": "" }, 
+        { "index": 2, "source": "" }
+      ],
+      "ATAOS": [{ "index": 0, "source": "" }],
+      "ATPneumatics": [{ "index": 0, "source": "" }],
+      "ATHexapod": [{ "index": 0, "source": "" }],
+      "Watcher": [{ "index": 0, "source": "" }],
+      "LOVE": [{ "index": 0, "source": "" }],
+      "ATHeaderService": [{ "index": 0, "source": "" }],
+      "ATArchiver": [{ "index": 0, "source": "" }]
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-conf
+data:
+  love.json: |
+    {
+      "alarms": {
+        "minSeveritySound": "serious",
+        "minSeverityNotification": "warning"
+      },
+      "camFeeds": {
+        "generic": "/gencam",
+        "allSky": "/gencam"
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: love-manager-env
 data:
-  MANAGER_SECRET_KEY: "tbder3gzppu)kl%(u3awhhg^^zuj&!ceh@$n&v0d38sjx43s8."
-  REDIS_HOST: "redis"
+  SECRET_KEY: "tbder3gzppu)kl%(u3awhhg^^zuj&!ceh@$n&v0d38sjx43s8."
+  REDIS_HOST: "manager-redis-service"
   PROCESS_CONNECTION_PASS: "my_dev_password"
   REDIS_PASS: "admin123"
   ADMIN_USER_PASS: "test"
@@ -41,6 +95,8 @@ data:
   CMD_USER_PASS: "test"
   SERVER_URL: "*"
   LOVE_PRODUCER_WEBSOCKET_HOST: "love-nginx/manager/ws/subscription"
+  COMMANDER_HOSTNAME: love-commander
+  COMMANDER_PORT: 5000
 ---
 apiVersion: v1
 kind: ConfigMap
