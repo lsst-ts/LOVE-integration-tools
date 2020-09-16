@@ -20,10 +20,9 @@ spec:
         command: [ "/bin/bash","-c" ]
         args:
           - cp -R /usr/src/love/manager/ /usr/src/love/manager-volume/love-manager;
-            sleep 8888;
+            /usr/src/love/manager-volume/love-manager/runserver.sh;
         volumeMounts:
           - mountPath: /usr/src/love/manager/config # mount love.json
-            readOnly: true
             name: love-conf
           - mountPath: "/usr/src/love/manager-volume"
             name: love-manager-pv-storage
@@ -112,7 +111,6 @@ spec:
       containers:
       - name: redis
         image: redis:5.0.3
-        # command: [ "sleep", "9999" ]
         command: [ "redis-server", "--appendonly", "yes", "--requirepass", "$(REDIS_PASS)" ] 
         ports:
           - containerPort: 6379
