@@ -94,7 +94,7 @@ data:
   USER_USER_PASS: "test"
   CMD_USER_PASS: "test"
   SERVER_URL: "*"
-  LOVE_PRODUCER_WEBSOCKET_HOST: "love-nginx/manager/ws/subscription"
+  LOVE_PRODUCER_WEBSOCKET_HOST: "love-service/manager/ws/subscription"
   COMMANDER_HOSTNAME: "commander-service"
   COMMANDER_PORT: "5000"
 ---
@@ -116,3 +116,75 @@ metadata:
   name: love-commander-env
 data:
   LSST_DDS_DOMAIN: "lsatmcs"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-producer-env
+data:
+  LSST_DDS_DOMAIN: "lsatmcs"
+  WEBSOCKET_HOST: "love-service/manager/ws/subscription"
+  PROCESS_CONNECTION_PASS: "my_dev_password"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ospl
+data:
+  ospl.xml: |
+    <OpenSplice>
+      <Domain>
+          <Name>ospl_sp_ddsi</Name>
+          <Id>0</Id>
+          <SingleProcess>true</SingleProcess>
+          <Description>Stand-alone 'single-process' deployment and standard DDSI networking.</Description>
+          <Service name="ddsi2">
+              <Command>ddsi2</Command>
+          </Service>
+          <Service name="durability">
+              <Command>durability</Command>
+          </Service>
+          <Service enabled="false" name="cmsoap">
+              <Command>cmsoap</Command>
+          </Service>
+      </Domain>
+      <DDSI2Service name="ddsi2">
+          <General>
+              <NetworkInterfaceAddress>bond0</NetworkInterfaceAddress>
+              <AllowMulticast>true</AllowMulticast>
+              <EnableMulticastLoopback>true</EnableMulticastLoopback>
+              <CoexistWithNativeNetworking>false</CoexistWithNativeNetworking>
+          </General>
+          <Compatibility>
+              <!-- see the release notes and/or the OpenSplice configurator on DDSI interoperability -->
+              <StandardsConformance>lax</StandardsConformance>
+              <!-- the following one is necessary only for TwinOaks CoreDX DDS compatibility -->
+              <!-- <ExplicitlyPublishQosSetToDefault>true</ExplicitlyPublishQosSetToDefault> -->
+          </Compatibility>
+      </DDSI2Service>
+      <DurabilityService name="durability">
+          <Network>
+              <Alignment>
+                  <TimeAlignment>false</TimeAlignment>
+                  <RequestCombinePeriod>
+                      <Initial>2.5</Initial>
+                      <Operational>0.1</Operational>
+                  </RequestCombinePeriod>
+              </Alignment>
+              <WaitForAttachment maxWaitCount="100">
+                  <ServiceName>ddsi2</ServiceName>
+              </WaitForAttachment>
+          </Network>
+          <NameSpaces>
+              <NameSpace name="defaultNamespace">
+                  <Partition>*</Partition>
+              </NameSpace>
+              <Policy alignee="Initial" aligner="true" durability="Durable" nameSpace="defaultNamespace"/>
+          </NameSpaces>
+      </DurabilityService>
+      <TunerService name="cmsoap">
+          <Server>
+              <PortNr>Auto</PortNr>
+          </Server>
+      </TunerService>
+    </OpenSplice>
