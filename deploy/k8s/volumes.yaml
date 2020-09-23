@@ -40,6 +40,20 @@ spec:
   hostPath:
     path: "/mnt/database-data"
 ---
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: love-jupyter-pv-volume
+    labels:
+      type: local
+  spec:
+    capacity:
+      storage: 1Gi
+    accessModes:
+      - ReadWriteOnce
+    hostPath:
+      path: "/mnt/jupyter-data"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -72,3 +86,14 @@ spec:
   resources:
     requests:
       storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: love-jupyter-pv-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
