@@ -3,29 +3,30 @@
 The LOVE-integration-tools repository provides scripts and tools to integrate the applications from the different development repositories, in order to be used for development and deployment purposes.
 See the full documentation here: https://lsst-ts.github.io/LOVE-integration-tools/html/index.html
 
-## Expected folder structure
+## Directory tree
 
-The LOVE repositories are expected to be at the same level under the same parent folder, for example:
+```
+.
+├── deploy              # Config scripts for all of the deployment environments
+│   ├── linode            # Monolith configuration with simulators and LOVE stack
+│   ├── local             # Monolith config for local configurations
+│   │   ├── build           # Uses locally built docker images
+│   │   ├── lite            # Uses local frontend and a remote backend
+│   │   ├── live            # Local frontend, backend and simulators
+│   │   ├── live-csc        # As live, but backend is split by CSC instead of message type
+│   ├── summit           # Monolith config for the deployment at the Summit lba
+│   └── tucson           # Monolith config for the deployment at the Tucson lab
+├── docs               # Built docs files to be served as a static page
+├── docsrc             # Source files of the docs
+├── jupyter            # Jupyter notebooks to send SAL commands for manual tests
+└── tests              # Integration and load tests and similar
+```
 
-- LOVE
-  - LOVE-frontent
-  - LOVE-manager
-  - LOVE-producer
-  - LOVE-commander
-  - LOVE-integration-tools
-  - LOVE-simulator
-  - ts_standardscripts (for `linode` and `local/live` environments only)
-  - ts_externalscripts (for `linode` and `local/live` environments only)
----
-
-
-## Content
-
-### Deploy directory
+## The `deploy` folder
 
 This directory contains different the files needed for deployment environments. Each environment is enclosed in a directory, with the possibility of having sub-environments in nested sub-directories, following a tree structure.
 
-#### Environment content
+### Environment content
 
 Each environment contains the following types of files:
 
@@ -39,7 +40,7 @@ Each environment contains the following types of files:
 
 `## (Dummy) secrets, make sure to replace them in real production environments!`
 
-#### Environments
+### Environments
 
 The `deploy` directory is structured as follows:
 
@@ -51,7 +52,7 @@ The `deploy` directory is structured as follows:
   - **live**: contains the files for deploying the system by building development docker images from local repositories. These images work by mounting the source code of their corresponding repositories as a volume, rather than copying it. They also use development or "live" modes for running some of the applications, Manager and Frontend.
 - **tucson**: corresponds to the deployment in the machines in Tucson. The configuration is different in the network configuration, in order to connect to the SAL components.
 
-### Jenkinsfile
+## Jenkinsfile
 
 Defines the jobs to be executed by a Jenkins machine when changes are committed in this repository. These jobs include:
 
@@ -60,11 +61,25 @@ Defines the jobs to be executed by a Jenkins machine when changes are committed 
 
 ---
 
-## Run the project
+## Running the project
 
 ### Building from local repositories
 
-For this you will need local clones of all the repositories in the same parent level as this repository (as explained in the "Expected folder structure" section above). In order to run the application follow these instructions:
+
+For this you need to have the following tree structure:
+```
+.
+├── LOVE-commander
+├── LOVE-frontend
+├── LOVE-integration-tools
+├── LOVE-manager
+├── LOVE-producer
+├── LOVE-simulator
+├── ts_externalscripts      # for `linode` and `local/live` environments only
+└── ts_standardscripts      # for `linode` and `local/live` environments only
+---
+
+You can run a locally-built version of the application as
 
 ```
 cd LOVE-integration-tools/deploy/local/build
