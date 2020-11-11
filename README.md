@@ -77,7 +77,7 @@ For this you need to have the following tree structure:
 ├── LOVE-simulator
 ├── ts_externalscripts      # for `linode` and `local/live` environments only
 └── ts_standardscripts      # for `linode` and `local/live` environments only
----
+```
 
 You can run a locally-built version of the application as
 
