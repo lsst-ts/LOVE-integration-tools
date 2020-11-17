@@ -1,0 +1,10 @@
+{
+  "alarms": {
+    "minSeveritySound": "serious",
+    "minSeverityNotification": "warning"
+  },
+  "camFeeds": {
+    "generic": "/gencam",
+    "allSky": "/gencam"
+  }
+}
