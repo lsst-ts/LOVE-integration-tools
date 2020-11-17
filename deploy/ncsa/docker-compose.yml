@@ -33,7 +33,7 @@ services:
       - nginx
     volumes:
       - /tmp/docker_tmp/:/tmp/
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
+      - ${OSPL_CONFIG_PATH}:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
   #----- LOVE PRODUCER --------------
   producer:
     <<: *service
@@ -53,7 +53,7 @@ services:
     volumes:
       - /tmp/docker_tmp/:/tmp/
       - ./config:/usr/src/love/producer/config/
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
+      - ${OSPL_CONFIG_PATH}:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -75,7 +75,7 @@ services:
         max-size: "10m"
     volumes:
       - /tmp/docker_tmp/:/tmp/
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
+      - ${OSPL_CONFIG_PATH}:/opt/OpenSpliceDDS/V6.10.4/HDE/x86_64.linux/etc/config/ospl.xml
 
   # #----- LOVE MANAGER --------------
   redis:
