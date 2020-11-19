@@ -1,10 +1,10 @@
 <OpenSplice>
     <Domain>
         <Name>ospl_sp_ddsi</Name>
-        <Id>0</Id>
+        <Id>${LSST_DDS_DOMAIN_ID:-0}</Id>
         <Description>Federated deployment using shared-memory and standard DDSI networking.</Description>
         <Database>
-            <Size>504857600</Size>
+            <Size>104857600</Size>
         </Database>
         <Service name="ddsi2">
             <Command>ddsi2</Command>
@@ -70,16 +70,13 @@
     </Domain>
     <DDSI2Service name="ddsi2">
         <General>
-            <NetworkInterfaceAddress>AUTO</NetworkInterfaceAddress>
+            <NetworkInterfaceAddress>${LSST_DDS_INTERFACE:-AUTO}</NetworkInterfaceAddress>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
             <CoexistWithNativeNetworking>false</CoexistWithNativeNetworking>
         </General>
         <Compatibility>
-            <!-- see the release notes and/or the OpenSplice configurator on DDSI interoperability -->
             <StandardsConformance>lax</StandardsConformance>
-            <!-- the following one is necessary only for TwinOaks CoreDX DDS compatibility -->
-            <!-- <ExplicitlyPublishQosSetToDefault>true</ExplicitlyPublishQosSetToDefault> -->
         </Compatibility>
         <Discovery>
             <ParticipantIndex>none</ParticipantIndex>
@@ -94,7 +91,6 @@
         </Internal>
     </DDSI2Service>
     <DurabilityService name="durability">
-        <!-- <ClientDurability enabled="true"/> -->
         <Network>
             <Alignment>
                 <TimeAlignment>false</TimeAlignment>
@@ -108,14 +104,14 @@
             </WaitForAttachment>
         </Network>
         <NameSpaces>
-          <NameSpace name="defaultNamespace">
-              <Partition>${LSST_DDS_PARTITION_PREFIX}*</Partition>
-          </NameSpace>
-          <Policy alignee="Initial"
-                  aligner="true"
-                  durability="Durable"
-                  masterPriority="${OSPL_MASTER_PRIORITY:-1}"
-                  nameSpace="defaultNamespace"/>
+            <NameSpace name="defaultNamespace">
+                <Partition>${LSST_DDS_PARTITION_PREFIX}*</Partition>
+            </NameSpace>
+            <Policy alignee="${LSST_DDS_ALIGNEE:-Initial}"
+                    aligner="true"
+                    durability="Durable"
+                    masterPriority="${OSPL_MASTER_PRIORITY:-1}"
+                    nameSpace="defaultNamespace"/>
         </NameSpaces>
     </DurabilityService>
     <TunerService name="cmsoap">
