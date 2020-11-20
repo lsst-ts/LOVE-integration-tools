@@ -4,7 +4,7 @@
         <Id>${LSST_DDS_DOMAIN_ID:-0}</Id>
         <Description>Federated deployment using shared-memory and standard DDSI networking.</Description>
         <Database>
-            <Size>104857600</Size>
+            <Size>504857600</Size>
         </Database>
         <Service name="ddsi2">
             <Command>ddsi2</Command>
