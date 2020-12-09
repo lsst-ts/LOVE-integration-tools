@@ -26,7 +26,7 @@ services:
     ipc: host
     pid: host
     networks:
-      control-network:
+      dds-network:
         ipv4_address: "139.229.167.193"
       love:
     depends_on:
@@ -46,7 +46,7 @@ services:
     ipc: host
     pid: host
     networks:
-      control-network:
+      dds-network:
         ipv4_address: "139.229.167.192"
       love:
     restart: always
@@ -64,7 +64,7 @@ services:
     ipc: host
     pid: host
     networks:
-      control-network:
+      dds-network:
         ipv4_address: "139.229.167.194"
       love:
     restart: always
@@ -159,7 +159,7 @@ services:
       - manager
       - frontend
     # networks:
-    #   control-network:
+    #   dds-network:
     #     ipv4_address: "139.229.167.196"
     networks:
       - love
@@ -179,8 +179,8 @@ volumes:
 networks:
   default:
     external:
-      name: control-network
-  control-network:
+      name: dds-network
+  dds-network:
     external: true
   love:
     external: true
