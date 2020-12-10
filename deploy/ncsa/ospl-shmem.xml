@@ -85,9 +85,11 @@
         <Internal>
             <Watermarks>
                 <WhcHigh>8MB</WhcHigh>
+                <WhcAdaptive>false</WhcAdaptive>
             </Watermarks>
             <DeliveryQueueMaxSamples>10000</DeliveryQueueMaxSamples>
             <SquashParticipants>true</SquashParticipants>
+            <ResponsivenessTimeout>${LSST_DDS_RESPONSIVENESS_TIMEOUT:-inf}</ResponsivenessTimeout>
         </Internal>
     </DDSI2Service>
     <DurabilityService name="durability">
