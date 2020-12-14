@@ -85,6 +85,7 @@
         <Internal>
             <Watermarks>
                 <WhcHigh>8MB</WhcHigh>
+                <WhcHighInit>8MB</WhcHighInit>
                 <WhcAdaptive>false</WhcAdaptive>
             </Watermarks>
             <DeliveryQueueMaxSamples>10000</DeliveryQueueMaxSamples>
