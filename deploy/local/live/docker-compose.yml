@@ -5,6 +5,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-lovecsc-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love_csc
     container_name: love_csc
     environment:
@@ -24,6 +26,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-testcsc
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: testcsc-sim-build
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -41,6 +45,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atdome
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: atdome-sim-build
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
@@ -61,6 +67,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atmcs
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: atmcs-sim-build
     environment:
       - OSPL_URI=${OSPL_URI}
@@ -80,6 +88,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-scriptqueue
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: scriptqueue-sim-build
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -99,6 +109,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-watcher
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
@@ -138,6 +150,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-environment
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: environment-sim-build
     entrypoint: ["/home/saluser/environment-setup.sh"]
     environment:
@@ -184,6 +198,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-jupyter
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
@@ -204,6 +220,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_COMMANDER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-commander-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -223,6 +241,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -247,6 +267,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -271,6 +293,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -295,6 +319,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-producer-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
