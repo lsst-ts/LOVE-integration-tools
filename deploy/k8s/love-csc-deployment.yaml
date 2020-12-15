@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: love-csc-deployment
+spec:
+  selector:
+    matchLabels:
+      app: love-csc-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: love-csc-service
+    spec:
+      containers:
+      - name: love-csc
+        image: lsstts/love-csc:develop
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always
+        envFrom:
+          - configMapRef:
+              name: love-producer-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: love-csc-service
+  labels:
+    app: love-csc-service
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: love-csc-service
