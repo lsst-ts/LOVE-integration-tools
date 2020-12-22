@@ -168,7 +168,6 @@ services:
     volumes:
       - ${JUPYTER_PATH}:/home/saluser/notebooks
       - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     ports:
       - 1234:1234
 
