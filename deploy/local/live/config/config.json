@@ -8,5 +8,5 @@
   "ATAOS": [{"index": 0, "source": "command_sim"}],
   "ATSpectrograph": [{"index": 0, "source": "emitter"}],
   "ATCamera": [{"index": 0, "source": "emitter"}],
-  "Environment": [{ "index": 1, "source": "command_sim" }]
+  "WeatherStation": [{ "index": 1, "source": "command_sim" }]
 }
