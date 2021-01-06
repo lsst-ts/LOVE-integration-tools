@@ -208,6 +208,7 @@ services:
       dockerfile: Dockerfile-jupyter
       args:
         LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+    user: root
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
