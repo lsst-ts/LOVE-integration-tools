@@ -75,10 +75,10 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  environment-sim:
-    image: lsstts/love-environment-sim:develop
-    container_name: environment-sim
-    entrypoint: ["/home/saluser/environment-setup.sh"]
+  weatherstation-sim:
+    image: lsstts/love-weatherstation-sim:develop
+    container_name: weatherstation-sim
+    entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}

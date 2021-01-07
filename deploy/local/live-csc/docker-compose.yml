@@ -232,12 +232,12 @@ services:
     ports:
       - 5013:5013
 
-  environment-sim:
+  weatherstation-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-environment
-    container_name: environment-sim-build
-    entrypoint: ["/home/saluser/environment-setup.sh"]
+    container_name: weatherstation-sim-build
+    entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -263,7 +263,7 @@ services:
   #     - atdome-sim
   #     - testcsc-sim
   #     - gencam-sim
-  #     - environment-sim
+  #     - weatherstation-sim
   #   environment:
   #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
   #   network_mode: ${NETWORK_NAME}

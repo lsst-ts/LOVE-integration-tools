@@ -187,7 +187,7 @@ services:
   #     - atdome-sim
   #     - testcsc-sim
   #     - gencam-sim
-  #     - environment-sim
+  #     - weatherstation-sim
   #   environment:
   #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
   #   network_mode: ${NETWORK_NAME}
