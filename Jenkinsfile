@@ -1,11 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      alwaysPull true
-      image 'lsstts/develop-env:develop'
-      args "-u root --entrypoint=''"
-    }
-  }
+  agent any
   environment {
     registryCredential = "dockerhub-inriachile"
     user_ci = credentials('lsst-io')
@@ -15,6 +9,13 @@ pipeline {
 
   stages {
     stage("Deploy documentation") {
+      agent {
+        docker {
+          alwaysPull true
+          image 'lsstts/develop-env:develop'
+          args "-u root --entrypoint=''"
+        }
+      }
       when {
         anyOf {
           changeset "docs/*"
