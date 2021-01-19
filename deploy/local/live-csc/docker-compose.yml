@@ -16,6 +16,8 @@ x-base-producer: &base-producer
   build:
     context: ${DOCKERFILE_PATH_PRODUCER}
     dockerfile: Dockerfile-dev
+    args:
+      LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
   image: love-producer-image-mount
   environment:
     <<: *base-producer-environment
@@ -24,6 +26,7 @@ x-base-producer: &base-producer
   volumes:
     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
     - ./config:/usr/src/love/producer/config/
+    - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
   logging:
     driver: "json-file"
     options:
@@ -103,6 +106,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
       dockerfile: Dockerfile-lovecsc-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love_csc
     container_name: love_csc
     environment:
@@ -122,6 +127,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-testcsc
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: testcsc-sim-build
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -129,6 +136,7 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -139,6 +147,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atdome
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: atdome-sim-build
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
@@ -149,6 +159,7 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -159,6 +170,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atmcs
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: atmcs-sim-build
     environment:
       - OSPL_URI=${OSPL_URI}
@@ -167,6 +180,7 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
@@ -178,6 +192,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-scriptqueue
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: scriptqueue-sim-build
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -187,6 +203,7 @@ services:
       - ./config:/home/saluser/config/
       - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
       - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -197,6 +214,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-watcher
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
@@ -207,6 +226,7 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -224,6 +244,7 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -235,7 +256,9 @@ services:
   weatherstation-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-environment
+      dockerfile: Dockerfile-weatherstation
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     container_name: weatherstation-sim-build
     entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
@@ -246,6 +269,7 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -282,6 +306,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-jupyter
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
@@ -293,6 +319,7 @@ services:
         max-size: "10m"
     volumes:
       - ${JUPYTER_PATH}:/home/saluser/notebooks
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     ports:
       - 1234:1234
 
@@ -302,6 +329,8 @@ services:
     build:
       context: ${DOCKERFILE_PATH_COMMANDER}
       dockerfile: Dockerfile-dev
+      args:
+        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
     image: love-commander-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -309,6 +338,7 @@ services:
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
+      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
