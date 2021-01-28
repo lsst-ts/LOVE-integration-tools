@@ -12,6 +12,32 @@ x-service: &service
       max-file: "5"
       max-size: "10m"
 
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: ts-dockerhub.lsst.org/love-producer:c0017
+  environment:
+    <<: *base-producer-environment
+  networks:
+    love:
+  ipc: host
+  pid: host
+  volumes:
+    - /tmp/docker_tmp/:/tmp/
+    - ./config:/usr/src/love/producer/config/
+    - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
@@ -26,8 +52,6 @@ services:
     ipc: host
     pid: host
     networks:
-      dds-network:
-        ipv4_address: "141.142.238.101"
       love:
     depends_on:
       - nginx
@@ -35,26 +59,24 @@ services:
       - /tmp/docker_tmp/:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   #----- LOVE PRODUCER --------------
-  producer:
-    <<: *service
-    container_name: love-producer
-    image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher-image-mount
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    ipc: host
-    pid: host
-    networks:
-      dds-network:
-        ipv4_address: "141.142.238.102"
-      love:
-    restart: always
-    volumes:
-      - /tmp/docker_tmp/:/tmp/
-      - ./config:/usr/src/love/producer/config/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  ScriptQueue:
+    <<: *base-producer
+    container_name: producer-scriptqueue-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
@@ -64,8 +86,6 @@ services:
     ipc: host
     pid: host
     networks:
-      dds-network:
-        ipv4_address: "141.142.238.103"
       love:
     restart: always
     logging:
