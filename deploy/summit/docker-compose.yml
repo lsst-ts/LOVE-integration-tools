@@ -18,46 +18,55 @@ services:
   love-csc:
     <<: *service
     container_name: love-csc
-    image: lsstts/love-csc:develop
+    image: ts-dockerhub.lsst.org/love-csc:${cycle}
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    ipc: host
+    pid: host
     networks:
-      control-network:
-        ipv4_address: "139.229.167.193"
+      dds-network:
+        ipv4_address: "139.229.170.39"
       love:
     depends_on:
       - nginx
     volumes:
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   #----- LOVE PRODUCER --------------
   producer:
     <<: *service
     container_name: love-producer
-    image: lsstts/love-producer:develop
+    image: ts-dockerhub.lsst.org/love-producer:${cycle}
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    ipc: host
+    pid: host
     networks:
-      control-network:
-        ipv4_address: "139.229.167.192"
+      dds-network:
+        ipv4_address: "139.229.170.40"
       love:
     restart: always
     volumes:
+      - /tmp/docker_tmp/:/tmp/
       - ./config:/usr/src/love/producer/config/
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
-    image: lsstts/love-commander:develop
+    image: ts-dockerhub.lsst.org/love-commander:${cycle}
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+    ipc: host
+    pid: host
     networks:
-      control-network:
-        ipv4_address: "139.229.167.194"
+      dds-network:
+        ipv4_address: "139.229.170.41"
+      love:
     restart: always
     logging:
       driver: "json-file"
@@ -65,7 +74,8 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - ./ospl.xml:/opt/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/^Cc/config/ospl.xml
+      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
   redis:
@@ -74,7 +84,7 @@ services:
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     networks:
-      love:
+      - love
     ports:
       - "6379:6379"
     restart: always
@@ -88,7 +98,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
     networks:
-      love:
+      - love
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
@@ -107,7 +117,6 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
@@ -119,9 +128,8 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
-
     networks:
-      love:
+      - love
     ports:
       - "8000:8000"
     restart: always
@@ -140,6 +148,8 @@ services:
     volumes:
       - frontend-volume:/usr/src/love
     tty: true
+    networks:
+      - love
 
   nginx:
     <<: *service
@@ -149,10 +159,10 @@ services:
       - manager
       - frontend
     # networks:
-    #   control-network:
+    #   dds-network:
     #     ipv4_address: "139.229.167.196"
     networks:
-      love:
+      - love
     ports:
       - 80:80
     restart: always
@@ -169,7 +179,8 @@ volumes:
 networks:
   default:
     external:
-      name: control-network
-  control-network:
+      name: dds-network
+  dds-network:
     external: true
   love:
+    external: true

@@ -26,7 +26,7 @@ services:
     ipc: host
     pid: host
     networks:
-      test-stand-network:
+      dds-network:
         ipv4_address: "141.142.238.101"
       love:
     depends_on:
@@ -46,7 +46,7 @@ services:
     ipc: host
     pid: host
     networks:
-      test-stand-network:
+      dds-network:
         ipv4_address: "141.142.238.102"
       love:
     restart: always
@@ -64,7 +64,7 @@ services:
     ipc: host
     pid: host
     networks:
-      test-stand-network:
+      dds-network:
         ipv4_address: "141.142.238.103"
       love:
     restart: always
@@ -179,8 +179,8 @@ volumes:
 networks:
   default:
     external:
-      name: test-stand-network
-  test-stand-network:
+      name: dds-network
+  dds-network:
     external: true
   love:
     external: true
