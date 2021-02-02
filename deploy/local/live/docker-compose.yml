@@ -16,7 +16,6 @@ services:
     network_mode: ${NETWORK_NAME}
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     ports:
       - 9999:9999
     depends_on:
@@ -36,7 +35,6 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -59,7 +57,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -80,7 +77,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
@@ -103,7 +99,6 @@ services:
       - ./config:/home/saluser/config/
       - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
       - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -126,7 +121,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -144,7 +138,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -169,7 +162,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -220,7 +212,6 @@ services:
         max-size: "10m"
     volumes:
       - ${JUPYTER_PATH}:/home/saluser/notebooks
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     ports:
       - 1234:1234
 
@@ -239,7 +230,6 @@ services:
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -265,7 +255,6 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -292,7 +281,6 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -319,7 +307,6 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -346,7 +333,6 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
