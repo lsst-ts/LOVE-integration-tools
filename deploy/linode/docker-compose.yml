@@ -11,7 +11,6 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -30,7 +29,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -49,7 +47,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -68,7 +65,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -87,7 +83,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -105,7 +100,6 @@ services:
       - ./config:/home/saluser/config/
       - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
       - ./scripts:/home/saluser/repos/ts_scriptqueue/tests/data/external/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -123,7 +117,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -146,7 +139,6 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -167,7 +159,6 @@ services:
         max-size: "10m"
     volumes:
       - ${JUPYTER_PATH}:/home/saluser/notebooks
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     ports:
       - 1234:1234
 
@@ -181,8 +172,6 @@ services:
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: ${NETWORK_NAME}
-    volumes:
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     depends_on:
       - nginx
 
@@ -198,7 +187,6 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -219,7 +207,6 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -240,7 +227,6 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -261,7 +247,6 @@ services:
     restart: always
     volumes:
       - ./config:/usr/src/love/producer/config/
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
@@ -278,8 +263,6 @@ services:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
     restart: always
-    volumes:
-      - ${SALSUBSYSTEMS_XML_PATH}:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     logging:
       driver: "json-file"
       options:
