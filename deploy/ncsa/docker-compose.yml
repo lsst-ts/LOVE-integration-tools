@@ -19,7 +19,7 @@ x-base-producer-env: &base-producer-environment
   LOVE_CSC_PRODUCER: Test.1
 
 x-base-producer: &base-producer
-  image: ts-dockerhub.lsst.org/love-producer:c0017
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
   networks:
