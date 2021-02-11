@@ -30,6 +30,7 @@ x-base-producer: &base-producer
     - /tmp/docker_tmp/:/tmp/
     - ./config:/usr/src/love/producer/config/
     - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}    
   logging:
     driver: "json-file"
     options:
