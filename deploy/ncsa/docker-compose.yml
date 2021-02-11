@@ -199,8 +199,6 @@ volumes:
 networks:
   default:
     external:
-      name: dds-network
-  dds-network:
-    external: true
+      name: love
   love:
     external: true
