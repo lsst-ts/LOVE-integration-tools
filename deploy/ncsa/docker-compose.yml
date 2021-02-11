@@ -72,6 +72,156 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  MTMount:
+    <<: *base-producer
+    container_name: producer-MTMount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-MTPtg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg
+  MTAOS:
+    <<: *base-producer
+    container_name: producer-MTAOS
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTAOS
+  MTM1M3:
+    <<: *base-producer
+    container_name: producer-MTM1M3
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM1M3
+  MTM2:
+    <<: *base-producer
+    container_name: producer-MTM2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2
+  CamHexapod:
+    <<: *base-producer
+    container_name: producer-CamHexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-M2Hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-MTRotator
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator
+  MTDome:
+    <<: *base-producer
+    container_name: producer-MTDome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-MTDomeTrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory
+  CCCamera:
+    <<: *base-producer
+    container_name: producer-CCCamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCCamera
+  CCHeaderService:
+    <<: *base-producer
+    container_name: producer-CCHeaderService
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCHeaderService
+  CCArchiver:
+    <<: *base-producer
+    container_name: producer-CCArchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCArchiver
+  ATScriptQueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS
+  ATPtg:
+    <<: *base-producer
+    container_name: producer-atptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPtg
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS
+  ATPneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPneumatics
+  ATHexapod:
+    <<: *base-producer
+    container_name: producer-athexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHexapod
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome
+  ATDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-atdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDomeTrajectory
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph
+  ATHeaderService:
+    <<: *base-producer
+    container_name: producer-atheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHeaderService
+  ATArchiver:
+    <<: *base-producer
+    container_name: producer-atarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATArchiver
   LOVE:
     <<: *base-producer
     container_name: producer-love-image-mount
