@@ -12,48 +12,126 @@ x-service: &service
       max-file: "5"
       max-size: "10m"
 
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  environment:
+    <<: *base-producer-environment
+  ipc: host
+  pid: host
+  volumes:
+    - /deploy-lsstts/docker_tmp/:/tmp/
+    - ./config:/usr/src/love/producer/config/
+    - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
-  love-csc:
-    <<: *service
-    container_name: love-csc
-    image: ts-dockerhub.lsst.org/love-csc:${cycle}
-    environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    ipc: host
-    pid: host
-    networks:
-      dds-network:
-        ipv4_address: "139.229.170.39"
-      love:
-    depends_on:
-      - nginx
-    volumes:
-      - /tmp/docker_tmp/:/tmp/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
   #----- LOVE PRODUCER --------------
-  producer:
-    <<: *service
-    container_name: love-producer
-    image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher-image-mount
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    ipc: host
-    pid: host
-    networks:
-      dds-network:
-        ipv4_address: "139.229.170.40"
-      love:
-    restart: always
-    volumes:
-      - /tmp/docker_tmp/:/tmp/
-      - ./config:/usr/src/love/producer/config/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  ScriptQueue:
+    <<: *base-producer
+    container_name: producer-scriptqueue-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  ATScriptQueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  ATPtg:
+    <<: *base-producer
+    container_name: producer-atptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPtg:0
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATPneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPneumatics:0
+  ATHexapod:
+    <<: *base-producer
+    container_name: producer-athexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHexapod:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-atdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDomeTrajectory:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATHeaderService:
+    <<: *base-producer
+    container_name: producer-atheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHeaderService:0
+  ATArchiver:
+    <<: *base-producer
+    container_name: producer-atarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATArchiver:0
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -63,10 +141,6 @@ services:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     ipc: host
     pid: host
-    networks:
-      dds-network:
-        ipv4_address: "139.229.170.41"
-      love:
     restart: always
     logging:
       driver: "json-file"
@@ -74,7 +148,7 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - /deploy-lsstts/docker_tmp/:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
@@ -83,8 +157,6 @@ services:
     container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    networks:
-      - love
     ports:
       - "6379:6379"
     restart: always
@@ -97,8 +169,6 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
-    networks:
-      - love
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
@@ -128,8 +198,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
-    networks:
-      - love
+
     ports:
       - "8000:8000"
     restart: always
@@ -158,11 +227,6 @@ services:
     depends_on:
       - manager
       - frontend
-    # networks:
-    #   dds-network:
-    #     ipv4_address: "139.229.167.196"
-    networks:
-      - love
     ports:
       - 80:80
     restart: always
@@ -175,12 +239,3 @@ services:
 volumes:
   frontend-volume:
   manager-static:
-
-networks:
-  default:
-    external:
-      name: dds-network
-  dds-network:
-    external: true
-  love:
-    external: true
