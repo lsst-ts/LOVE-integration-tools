@@ -32,7 +32,7 @@ services:
     depends_on:
       - nginx
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   #----- LOVE PRODUCER --------------
   producer:
@@ -51,7 +51,7 @@ services:
       love:
     restart: always
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ./config:/usr/src/love/producer/config/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
@@ -74,7 +74,7 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
