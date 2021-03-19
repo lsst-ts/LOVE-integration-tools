@@ -124,27 +124,28 @@ services:
         max-size: "10m"
     ports:
       - 5013:5013
-  simulator:
-    container_name: love-simulator
-    image: lsstts/love-simulator:develop
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
-      - gencam-sim
-      - atmcs-sim
-      - weatherstation-sim
-      - watcher-sim
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+
+  # simulator:
+  #   container_name: love-simulator
+  #   image: lsstts/love-simulator:develop
+  #   depends_on:
+  #     - scriptqueue-sim
+  #     - atdome-sim
+  #     - gencam-sim
+  #     - atmcs-sim
+  #     - weatherstation-sim
+  #     - watcher-sim
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ./config:/usr/src/love/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
@@ -359,9 +360,7 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
       - frontend
-      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
