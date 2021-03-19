@@ -79,7 +79,7 @@ pipeline {
           triggeredBy "UpstreamCause"
           triggeredBy "UserIdCause"
         }
-        branch "develop"
+        branch "master"
       }
       steps {
         script {
