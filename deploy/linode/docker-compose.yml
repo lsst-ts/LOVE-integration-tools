@@ -2,20 +2,20 @@ version: "3.7"
 
 services:
   #----- simulators -------
-  testcsc-sim:
-    image: lsstts/love-testcsc-sim:develop
-    container_name: testcsc-sim-build
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # testcsc-sim:
+  #   image: lsstts/love-testcsc-sim:develop
+  #   container_name: testcsc-sim-build
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   atdome-sim:
     image: lsstts/love-atdome-sim:develop
@@ -130,9 +130,10 @@ services:
     depends_on:
       - scriptqueue-sim
       - atdome-sim
-      - testcsc-sim
       - gencam-sim
       - atmcs-sim
+      - weatherstation-sim
+      - watcher-sim
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
