@@ -17,7 +17,7 @@ x-base-producer: &base-producer
     context: ${DOCKERFILE_PATH_PRODUCER}
     dockerfile: Dockerfile-dev
     args:
-      LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+      dev_cycle: "${dev_cycle}"
   image: love-producer-image-mount
   environment:
     <<: *base-producer-environment
@@ -94,59 +94,59 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATCamera:0
-  Environment:
+  WeatherStation1:
     <<: *base-producer
-    container_name: producer-environment-image-mount
+    container_name: producer-weatherstation1-image-mount
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: Environment:1
+      LOVE_CSC_PRODUCER: WeatherStation:1
   # LOVE
-  love:
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-lovecsc-dev
-      args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
-    image: love_csc
-    container_name: love_csc
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
-    ports:
-      - 9999:9999
-    depends_on:
-      - nginx
+  # love:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_PRODUCER}
+  #     dockerfile: Dockerfile-lovecsc-dev
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   image: love_csc
+  #   container_name: love_csc
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #   network_mode: ${NETWORK_NAME}
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
+  #   ports:
+  #     - 9999:9999
+  #   depends_on:
+  #     - nginx
 
   #----- simulators -------
-  testcsc-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-testcsc
-      args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
-    container_name: testcsc-sim-build
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # testcsc-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: Dockerfile-testcsc
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   container_name: testcsc-sim-build
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   atdome-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atdome
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     container_name: atdome-sim-build
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
@@ -168,7 +168,7 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-atmcs
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     container_name: atmcs-sim-build
     environment:
       - OSPL_URI=${OSPL_URI}
@@ -189,7 +189,7 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-scriptqueue
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     container_name: scriptqueue-sim-build
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -210,7 +210,7 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-watcher
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
@@ -251,7 +251,7 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-weatherstation
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     container_name: weatherstation-sim-build
     entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
@@ -299,7 +299,7 @@ services:
       context: ${DOCKERFILE_PATH_SIMULATOR}
       dockerfile: Dockerfile-jupyter
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
@@ -321,7 +321,7 @@ services:
       context: ${DOCKERFILE_PATH_COMMANDER}
       dockerfile: Dockerfile-dev
       args:
-        LSSTTS_DEV_VERSION: "${LSSTTS_DEV_VERSION}"
+        dev_cycle: "${dev_cycle}"
     image: love-commander-image-mount
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -372,7 +372,7 @@ services:
     container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     image: love-manager-image-mount
     depends_on:
       - redis
@@ -456,11 +456,7 @@ services:
     container_name: love-nginx-mount
     image: nginx:1.13.1
     depends_on:
-      - manager
       - frontend
-      # - styleguide
-      - gencam-sim
-      # - commander
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
