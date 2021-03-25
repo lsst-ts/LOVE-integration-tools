@@ -29,7 +29,6 @@ x-base-producer: &base-producer
   volumes:
     - /tmp/docker_tmp/:/tmp/
     - ./config:/usr/src/love/producer/config/
-    - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   logging:
     driver: "json-file"
@@ -62,13 +61,13 @@ services:
   #----- LOVE PRODUCER --------------
   Watcher:
     <<: *base-producer
-    container_name: producer-watcher-image-mount
+    container_name: producer-watcher
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
   ScriptQueue:
     <<: *base-producer
-    container_name: producer-scriptqueue-image-mount
+    container_name: producer-scriptqueue
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
@@ -224,7 +223,7 @@ services:
       LOVE_CSC_PRODUCER: ATArchiver:0
   LOVE:
     <<: *base-producer
-    container_name: producer-love-image-mount
+    container_name: producer-love
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
