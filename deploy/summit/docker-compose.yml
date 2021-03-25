@@ -71,7 +71,8 @@ services:
     container_name: producer-dimm2
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: DIMM:2  ATScriptQueue:
+      LOVE_CSC_PRODUCER: DIMM:2
+  ATScriptQueue:
     <<: *base-producer
     container_name: producer-atscriptqueue
     environment:
