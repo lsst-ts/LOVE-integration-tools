@@ -44,31 +44,31 @@ services:
   #----- LOVE PRODUCER --------------
   Watcher:
     <<: *base-producer
-    container_name: producer-watcher-image-mount
+    container_name: producer-watcher
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
   ScriptQueue:
     <<: *base-producer
-    container_name: producer-scriptqueue-image-mount
+    container_name: producer-scriptqueue
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
   WeatherStation1:
     <<: *base-producer
-    container_name: producer-weatherstation1-image-mount
+    container_name: producer-weatherstation1
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
   DIMM1:
     <<: *base-producer
-    container_name: producer-dimm1-image-mount
+    container_name: producer-dimm1
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: DIMM:1
   DIMM2:
     <<: *base-producer
-    container_name: producer-dimm2-image-mount
+    container_name: producer-dimm2
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: DIMM:2  ATScriptQueue:
@@ -145,7 +145,7 @@ services:
       LOVE_CSC_PRODUCER: ATArchiver:0
   LOVE:
     <<: *base-producer
-    container_name: producer-love-image-mount
+    container_name: producer-love
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
