@@ -54,7 +54,24 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  ATScriptQueue:
+  WeatherStation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: WeatherStation:1
+  DIMM1:
+    <<: *base-producer
+    container_name: producer-dimm1-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DIMM:1
+  DIMM2:
+    <<: *base-producer
+    container_name: producer-dimm2-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DIMM:2  ATScriptQueue:
     <<: *base-producer
     container_name: producer-atscriptqueue
     environment:
@@ -187,6 +204,7 @@ services:
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
@@ -217,8 +235,6 @@ services:
     volumes:
       - frontend-volume:/usr/src/love
     tty: true
-    networks:
-      - love
 
   nginx:
     <<: *service
