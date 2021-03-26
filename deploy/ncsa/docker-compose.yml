@@ -121,7 +121,7 @@ services:
       LOVE_CSC_PRODUCER: MTRotator:0
   MTDome:
     <<: *base-producer
-    container_name: producer-MTDome
+    container_name: producer-mtdome
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTDome:0
@@ -227,6 +227,18 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
+  DSM1:
+    <<: *base-producer
+    container_name: producer-dsm1
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:1
+  DSM2:
+    <<: *base-producer
+    container_name: producer-dsm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:2
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
