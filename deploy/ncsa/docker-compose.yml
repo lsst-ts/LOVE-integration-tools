@@ -65,9 +65,9 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
-  ScriptQueue:
+  MTScriptQueue:
     <<: *base-producer
-    container_name: producer-scriptqueue
+    container_name: producer-mtscriptqueue
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
@@ -239,6 +239,18 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: DSM:2
+  MTScheduler:
+    <<: *base-producer
+    container_name: producer-mtscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:1
+  ATScheduler:
+    <<: *base-producer
+    container_name: producer-atscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:2
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
