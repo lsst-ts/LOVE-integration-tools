@@ -1,25 +1,125 @@
+
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_DOMAIN: ${LSST_DDS_DOMAIN}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  build:
+    context: ${DOCKERFILE_PATH_PRODUCER}
+    dockerfile: Dockerfile-dev
+    args:
+      dev_cycle: "${dev_cycle}"
+  image: love-producer-image-mount
+  environment:
+    <<: *base-producer-environment
+  network_mode: ${NETWORK_NAME}
+  restart: always
+  volumes:
+    - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
+    - ./config:/usr/src/love/producer/config/
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
-  love:
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-lovecsc-dev
-      args:
-        dev_cycle: "${dev_cycle}"
-    image: love_csc
-    container_name: love_csc
+
+
+  #----- LOVE PRODUCERS --------------
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
-    ports:
-      - 9999:9999
-    depends_on:
-      - nginx
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  GenericCamera:
+    <<: *base-producer
+    container_name: producer-generic-camera-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: GenericCamera:0
+  ScriptQueue:
+    <<: *base-producer
+    container_name: producer-scriptqueue-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  WeatherStation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: WeatherStation:1
+  # LOVE
+  # love:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_PRODUCER}
+  #     dockerfile: Dockerfile-lovecsc-dev
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   image: love_csc
+  #   container_name: love_csc
+  #   environment:
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+  #   network_mode: ${NETWORK_NAME}
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
+  #   ports:
+  #     - 9999:9999
+  #   depends_on:
+  #     - nginx
 
   #----- simulators -------
   # testcsc-sim:
@@ -200,7 +300,6 @@ services:
       dockerfile: Dockerfile-jupyter
       args:
         dev_cycle: "${dev_cycle}"
-    user: root
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
@@ -235,111 +334,7 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-  #----- LOVE PRODUCER --------------
-
-  events:
-    container_name: love-events_producer-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-      args:
-        dev_cycle: "${dev_cycle}"
-    image: love-producer-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=EVENTS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  telemetries:
-    container_name: love-telemetries_producer-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-      args:
-        dev_cycle: "${dev_cycle}"
-    image: love-producer-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=TELEMETRIES
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  scriptqueue:
-    container_name: love-scriptqueue-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-      args:
-        dev_cycle: "${dev_cycle}"
-    image: love-producer-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=SCRIPTQUEUE
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  heartbeats:
-    container_name: love-heartbeat_producers-mount
-    build:
-      context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
-      args:
-        dev_cycle: "${dev_cycle}"
-    image: love-producer-image-mount
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=CSC_HEARTBEATS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
+  
   #----- LOVE MANAGER --------------
 
   redis:
@@ -377,7 +372,7 @@ services:
     container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     image: love-manager-image-mount
     depends_on:
       - redis

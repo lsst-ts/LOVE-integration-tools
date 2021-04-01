@@ -13,6 +13,8 @@ services:
     volumes:
       - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
       - /usr/src/love/love/node_modules
+    environment:
+      CI: "true"
     logging:
       driver: "json-file"
       options:

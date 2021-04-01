@@ -1,9 +1,9 @@
 # available ips
-# 139.229.167.192
-# 139.229.167.193
-# 139.229.167.194
-# 139.229.167.195
-# 139.229.167.196
+# 141.142.238.101
+# 141.142.238.102
+# 141.142.238.103
+# 141.142.238.104
+# 141.142.238.105
 
 x-service: &service
   logging:
@@ -27,7 +27,7 @@ services:
     pid: host
     networks:
       dds-network:
-        ipv4_address: "139.229.170.39"
+        ipv4_address: "141.142.238.101"
       love:
     depends_on:
       - nginx
@@ -47,7 +47,7 @@ services:
     pid: host
     networks:
       dds-network:
-        ipv4_address: "139.229.170.40"
+        ipv4_address: "141.142.238.102"
       love:
     restart: always
     volumes:
@@ -65,7 +65,7 @@ services:
     pid: host
     networks:
       dds-network:
-        ipv4_address: "139.229.170.41"
+        ipv4_address: "141.142.238.103"
       love:
     restart: always
     logging:
@@ -159,7 +159,7 @@ services:
       - manager
       - frontend
     # networks:
-    #   dds-network:
+    #   control-network:
     #     ipv4_address: "139.229.167.196"
     networks:
       - love

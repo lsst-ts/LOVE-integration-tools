@@ -1,0 +1,11 @@
+apiVersion: v1
+name: love-chart
+version: 0.0.1
+description: Helm chart for the LOVE project.
+sources:
+  - https://github.com/lsst-ts/LOVE-frontend
+    https://github.com/lsst-ts/LOVE-manager
+    https://github.com/lsst-ts/LOVE-producer
+    https://github.com/lsst-ts/LOVE-simulator
+    https://github.com/lsst-ts/LOVE-commander
+    https://github.com/lsst-ts/LOVE-integration-tools

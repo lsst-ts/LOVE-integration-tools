@@ -2,9 +2,37 @@ pipeline {
   agent any
   environment {
     registryCredential = "dockerhub-inriachile"
+    user_ci = credentials('lsst-io')
+    LTD_USERNAME="${user_ci_USR}"
+    LTD_PASSWORD="${user_ci_PSW}"
   }
 
   stages {
+    stage("Deploy documentation") {
+      agent {
+        docker {
+          alwaysPull true
+          image 'lsstts/develop-env:develop'
+          args "-u root --entrypoint=''"
+        }
+      }
+      when {
+        anyOf {
+          changeset "docs/*"
+        }
+      }
+      steps {
+        script {
+          sh "pwd"
+          sh """
+            source /home/saluser/.setup_dev.sh
+            pip install ltd-conveyor
+            ltd upload --product love-integration-tools --git-ref ${GIT_BRANCH} --dir ./docs
+          """
+        }
+      }
+    }
+
     stage("Deploy Linode develop version") {
       when {
         anyOf {
@@ -33,7 +61,6 @@ pipeline {
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@dev.love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
-            sh 'scp -o StrictHostKeyChecking=no -r jupyter love@dev.love.inria.cl:.'
             sh 'ssh love@dev.love.inria.cl "./run.sh"'
           }
         }
@@ -52,7 +79,7 @@ pipeline {
           triggeredBy "UpstreamCause"
           triggeredBy "UserIdCause"
         }
-        branch "develop"
+        branch "master"
       }
       steps {
         script {
