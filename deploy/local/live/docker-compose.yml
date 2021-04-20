@@ -462,6 +462,7 @@ services:
     image: nginx:1.13.1
     depends_on:
       - frontend
+      - styleguide
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
