@@ -89,12 +89,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTAOS:0
-  MTM1M3:
-    <<: *base-producer
-    container_name: producer-mtm1m3
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTM1M3:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
   MTM2:
     <<: *base-producer
     container_name: producer-mtm2
