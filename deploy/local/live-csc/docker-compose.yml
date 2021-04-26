@@ -331,6 +331,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander-mount
       - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=True
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
