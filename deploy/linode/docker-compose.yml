@@ -1,22 +1,36 @@
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_DOMAIN: ${LSST_DDS_DOMAIN}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: lsstts/love-producer:develop
+  environment:
+    <<: *base-producer-environment
+  network_mode: ${NETWORK_NAME}
+  restart: always
+  volumes:
+    - ./config:/usr/src/love/producer/config/
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
   #----- simulators -------
-  # testcsc-sim:
-  #   image: lsstts/love-testcsc-sim:develop
-  #   container_name: testcsc-sim-build
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
   atdome-sim:
     image: lsstts/love-atdome-sim:develop
     container_name: atdome-sim
@@ -125,28 +139,6 @@ services:
     ports:
       - 5013:5013
 
-  # simulator:
-  #   container_name: love-simulator
-  #   image: lsstts/love-simulator:develop
-  #   depends_on:
-  #     - scriptqueue-sim
-  #     - atdome-sim
-  #     - gencam-sim
-  #     - atmcs-sim
-  #     - weatherstation-sim
-  #     - watcher-sim
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/usr/src/love/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
   jupyter:
     container_name: love-jupyter
     image: lsstts/love-jupyter:develop
@@ -165,99 +157,44 @@ services:
       - 1234:1234
 
   #----- LOVE PRODUCER --------------
-
-  love:
-    image: lsstts/love-csc:develop
-    container_name: love_csc
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    depends_on:
-      - nginx
-
-  events:
-    container_name: love-events-producer
-    image: lsstts/love-producer:develop
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  ScriptQueue:
+    <<: *base-producer
+    container_name: producer-scriptqueue
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=EVENTS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  telemetries:
-    container_name: love-telemetries-producer
-    image: lsstts/love-producer:develop
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  WeatherStation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=TELEMETRIES
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  scriptqueue:
-    container_name: love-scriptqueue-producer
-    image: lsstts/love-producer:develop
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: WeatherStation:1
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=SCRIPTQUEUE
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  heartbeats:
-    container_name: love-heartbeats
-    image: lsstts/love-producer:develop
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=CSC_HEARTBEATS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
 
-    #-----LOVE COMMANDER -----------
+  #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
     image: lsstts/love-commander:develop
@@ -327,6 +264,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=True
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
