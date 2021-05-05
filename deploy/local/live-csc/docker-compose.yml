@@ -39,7 +39,13 @@ version: "3.7"
 services:
 
 
-  #----- LOVE PRODUCERS --------------
+  # -------------- LOVE PRODUCERS --------------
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
   ATDome:
     <<: *base-producer
     container_name: producer-atdome-image-mount
@@ -58,89 +64,44 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
-  GenericCamera:
-    <<: *base-producer
-    container_name: producer-generic-camera-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: GenericCamera:0
+  # GenericCamera:
+  #   <<: *base-producer
+  #   container_name: producer-generic-camera-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: GenericCamera:0
   ScriptQueue:
     <<: *base-producer
     container_name: producer-scriptqueue-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  LOVE:
-    <<: *base-producer
-    container_name: producer-love-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: LOVE:0
-  ATAOS:
-    <<: *base-producer
-    container_name: producer-ataos-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATAOS:0
-  ATSpectrograph:
-    <<: *base-producer
-    container_name: producer-atspectrograph-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATSpectrograph:0
-  ATCamera:
-    <<: *base-producer
-    container_name: producer-atcamera-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATCamera:0
+  # ATAOS:
+  #   <<: *base-producer
+  #   container_name: producer-ataos-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATAOS:0
+  # ATSpectrograph:
+  #   <<: *base-producer
+  #   container_name: producer-atspectrograph-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATSpectrograph:0
+  # ATCamera:
+  #   <<: *base-producer
+  #   container_name: producer-atcamera-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATCamera:0
   WeatherStation1:
     <<: *base-producer
     container_name: producer-weatherstation1-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
-  # LOVE
-  # love:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_PRODUCER}
-  #     dockerfile: Dockerfile-lovecsc-dev
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   image: love_csc
-  #   container_name: love_csc
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #     - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-  #     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-  #   network_mode: ${NETWORK_NAME}
-  #   volumes:
-  #     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love/
-  #   ports:
-  #     - 9999:9999
-  #   depends_on:
-  #     - nginx
 
-  #----- simulators -------
-  # testcsc-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: Dockerfile-testcsc
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: testcsc-sim-build
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
+  # -------------- simulators --------------
   atdome-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
@@ -227,25 +188,6 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  gencam-sim:
-    image: lsstts/gencam:latest
-    container_name: gencam-sim
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    ports:
-      - 5013:5013
-
   weatherstation-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
@@ -268,30 +210,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  # simulator:
-  #   container_name: love-simulator-mount
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: Dockerfile-dev
-  #   image: love-simulator-image-mount
-  #   depends_on:
-  #     - scriptqueue-sim
-  #     - atdome-sim
-  #     - testcsc-sim
-  #     - gencam-sim
-  #     - weatherstation-sim
+  # gencam-sim:
+  #   image: lsstts/gencam:latest
+  #   container_name: gencam-sim
   #   environment:
+  #     - OSPL_URI=${OSPL_URI}
   #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
   #   network_mode: ${NETWORK_NAME}
-  #   restart: always
+  #   # restart: always
   #   volumes:
-  #     - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
-  #     - ./config:/usr/src/love/config/
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
   #   logging:
   #     driver: "json-file"
   #     options:
   #       max-file: "5"
   #       max-size: "10m"
+  #   ports:
+  #     - 5013:5013
 
   jupyter:
     container_name: love-jupyter
@@ -372,12 +308,11 @@ services:
     container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     image: love-manager-image-mount
     depends_on:
       - redis
       - database
-      - commander
     environment:
       - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
@@ -396,6 +331,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander-mount
       - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=True
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
@@ -457,6 +393,7 @@ services:
     image: nginx:1.13.1
     depends_on:
       - frontend
+      - styleguide
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"

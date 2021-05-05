@@ -12,6 +12,32 @@ x-service: &service
       max-file: "5"
       max-size: "10m"
 
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  environment:
+    <<: *base-producer-environment
+  networks:
+    love:
+  ipc: host
+  pid: host
+  volumes:
+    - /tmp/docker_tmp/:/tmp/
+    - ./config:/usr/src/love/producer/config/
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
@@ -26,8 +52,6 @@ services:
     ipc: host
     pid: host
     networks:
-      dds-network:
-        ipv4_address: "141.142.238.101"
       love:
     depends_on:
       - nginx
@@ -35,26 +59,198 @@ services:
       - /tmp/docker_tmp/:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   #----- LOVE PRODUCER --------------
-  producer:
-    <<: *service
-    container_name: love-producer
-    image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    ipc: host
-    pid: host
-    networks:
-      dds-network:
-        ipv4_address: "141.142.238.102"
-      love:
-    restart: always
-    volumes:
-      - /tmp/docker_tmp/:/tmp/
-      - ./config:/usr/src/love/producer/config/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  MTScriptQueue:
+    <<: *base-producer
+    container_name: producer-mtscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-mtptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg:0
+  MTAOS:
+    <<: *base-producer
+    container_name: producer-mtaos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTAOS:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
+  CamHexapod:
+    <<: *base-producer
+    container_name: producer-camhexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:0
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-mtdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  CCCamera:
+    <<: *base-producer
+    container_name: producer-cccamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCCamera:0
+  CCHeaderService:
+    <<: *base-producer
+    container_name: producer-ccheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCHeaderService:0
+  CCArchiver:
+    <<: *base-producer
+    container_name: producer-ccarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCArchiver:0
+  ATScriptQueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  ATPtg:
+    <<: *base-producer
+    container_name: producer-atptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPtg:0
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATPneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPneumatics:0
+  ATHexapod:
+    <<: *base-producer
+    container_name: producer-athexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHexapod:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-atdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDomeTrajectory:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATHeaderService:
+    <<: *base-producer
+    container_name: producer-atheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHeaderService:0
+  ATArchiver:
+    <<: *base-producer
+    container_name: producer-atarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATArchiver:0
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
+  DSM1:
+    <<: *base-producer
+    container_name: producer-dsm1
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:1
+  DSM2:
+    <<: *base-producer
+    container_name: producer-dsm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:2
+  MTScheduler:
+    <<: *base-producer
+    container_name: producer-mtscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:1
+  ATScheduler:
+    <<: *base-producer
+    container_name: producer-atscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:2
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
@@ -64,8 +260,6 @@ services:
     ipc: host
     pid: host
     networks:
-      dds-network:
-        ipv4_address: "141.142.238.103"
       love:
     restart: always
     logging:
@@ -106,7 +300,7 @@ services:
   manager:
     <<: *service
     container_name: love-manager
-    image: lsstts/love-manager:develop
+    image: lsstts/love-manager:${cycle}
     depends_on:
       - redis
       - database
@@ -142,7 +336,7 @@ services:
   frontend:
     <<: *service
     container_name: love-frontend
-    image: lsstts/love-frontend:develop
+    image: lsstts/love-frontend:${cycle}
     # depends_on:
     #   - manager
     volumes:
@@ -179,8 +373,6 @@ volumes:
 networks:
   default:
     external:
-      name: dds-network
-  dds-network:
-    external: true
+      name: love
   love:
     external: true
