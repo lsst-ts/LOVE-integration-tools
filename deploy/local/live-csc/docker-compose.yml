@@ -102,14 +102,14 @@ services:
       LOVE_CSC_PRODUCER: WeatherStation:1
 
   # -------------- simulators --------------
-  atdome-sim:
+  atcs-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atdome
+      dockerfile: Dockerfile-atcs
       args:
         dev_cycle: "${dev_cycle}"
-    container_name: atdome-sim-build
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
+    container_name: atcs-sim-build
+    entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -118,27 +118,6 @@ services:
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-
-  atmcs-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atmcs
-      args:
-        dev_cycle: "${dev_cycle}"
-    container_name: atmcs-sim-build
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ./config:/home/saluser/config/
-    entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
       options:
