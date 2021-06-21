@@ -27,7 +27,7 @@ x-base-producer: &base-producer
   ipc: host
   pid: host
   volumes:
-    - /tmp/docker_tmp/:/tmp/
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   logging:
@@ -56,7 +56,7 @@ services:
     depends_on:
       - nginx
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   #----- LOVE PRODUCER --------------
   Watcher:
@@ -268,7 +268,7 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - /tmp/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
