@@ -300,7 +300,7 @@ services:
   manager:
     <<: *service
     container_name: love-manager
-    image: lsstts/love-manager:${cycle}
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
     depends_on:
       - redis
       - database
@@ -336,7 +336,7 @@ services:
   frontend:
     <<: *service
     container_name: love-frontend
-    image: lsstts/love-frontend:${cycle}
+    image: ts-dockerhub.lsst.org/love-frontend:${cycle}
     # depends_on:
     #   - manager
     volumes:
