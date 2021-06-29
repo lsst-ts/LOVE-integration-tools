@@ -25,7 +25,7 @@ x-base-producer: &base-producer
   ipc: host
   pid: host
   volumes:
-    - /deploy-lsstts/docker_tmp/:/tmp/
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
     - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
@@ -172,7 +172,7 @@ services:
         max-file: "5"
         max-size: "10m"
     volumes:
-      - /deploy-lsstts/docker_tmp/:/tmp/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
@@ -223,7 +223,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
-
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     ports:
       - "8000:8000"
     restart: always
