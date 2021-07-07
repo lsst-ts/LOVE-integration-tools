@@ -42,7 +42,7 @@ pipeline {
           changeset "deploy/linode/docker-compose.yml"
           changeset "deploy/linode/nginx-develop.conf"
           changeset "deploy/linode/run.sh"
-          changeset "jupyter"
+          changeset "jupyter/*"
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
           triggeredBy "UserIdCause"
