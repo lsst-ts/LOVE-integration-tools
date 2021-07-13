@@ -156,6 +156,87 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-mtptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg:0
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomet:0
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-mtdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  MTAOS:
+    <<: *base-producer
+    container_name: producer-mtaos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTAOS:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
+  CameraHexapod:
+    <<: *base-producer
+    container_name: producer-camera-hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2-hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
+  CCCamera:
+    <<: *base-producer
+    container_name: producer-cccamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCCamera:0
+  CCArchiver:
+    <<: *base-producer
+    container_name: producer-ccarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCArchiver:0
+  CCHeaderService:
+    <<: *base-producer
+    container_name: producer-ccheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCHeaderService:0
+
+
+
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -165,7 +246,6 @@ services:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     ipc: host
     pid: host
-    restart: always
     logging:
       driver: "json-file"
       options:
@@ -183,7 +263,6 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     ports:
       - "6379:6379"
-    restart: always
 
   database:
     <<: *service
@@ -193,7 +272,6 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
-    restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
@@ -226,7 +304,6 @@ services:
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     ports:
       - "8000:8000"
-    restart: always
     volumes:
       - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
@@ -252,7 +329,6 @@ services:
       - frontend
     ports:
       - 80:80
-    restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
