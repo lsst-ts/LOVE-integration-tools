@@ -312,6 +312,7 @@ services:
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+      - LOVE_SITE=${LOVE_SITE}
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
