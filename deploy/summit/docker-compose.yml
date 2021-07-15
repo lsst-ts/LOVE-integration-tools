@@ -173,7 +173,7 @@ services:
     container_name: producer-mtdome
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTDomet:0
+      LOVE_CSC_PRODUCER: MTDome:0
   MTDomeTrajectory:
     <<: *base-producer
     container_name: producer-mtdometrajectory
