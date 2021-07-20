@@ -138,6 +138,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  OCPS:
+    <<: *base-producer
+    container_name: producer-ocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:0
   PMD:
     <<: *base-producer
     container_name: producer-pmd
