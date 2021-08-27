@@ -88,6 +88,18 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATCamera:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
   WeatherStation1:
     <<: *base-producer
     container_name: producer-weatherstation1-image-mount
