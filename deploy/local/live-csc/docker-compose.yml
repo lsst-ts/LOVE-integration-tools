@@ -64,36 +64,42 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
-  # GenericCamera:
-  #   <<: *base-producer
-  #   container_name: producer-generic-camera-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: GenericCamera:0
   ScriptQueue:
     <<: *base-producer
     container_name: producer-scriptqueue-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  # ATAOS:
-  #   <<: *base-producer
-  #   container_name: producer-ataos-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATAOS:0
-  # ATSpectrograph:
-  #   <<: *base-producer
-  #   container_name: producer-atspectrograph-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATSpectrograph:0
-  # ATCamera:
-  #   <<: *base-producer
-  #   container_name: producer-atcamera-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATCamera:0
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
   WeatherStation1:
     <<: *base-producer
     container_name: producer-weatherstation1-image-mount
@@ -102,14 +108,14 @@ services:
       LOVE_CSC_PRODUCER: WeatherStation:1
 
   # -------------- simulators --------------
-  atdome-sim:
+  atcs-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atdome
+      dockerfile: Dockerfile-atcs
       args:
         dev_cycle: "${dev_cycle}"
-    container_name: atdome-sim-build
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
+    container_name: atcs-sim-build
+    entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -124,21 +130,22 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  atmcs-sim:
+  mtcs-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atmcs
+      dockerfile: Dockerfile-mtcs
       args:
         dev_cycle: "${dev_cycle}"
-    container_name: atmcs-sim-build
+    container_name: mtcs-sim-build
+    entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
     network_mode: ${NETWORK_NAME}
+    restart: always
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
-    entrypoint: ["/home/saluser/atmcs-setup.sh"]
     logging:
       driver: "json-file"
       options:
@@ -210,17 +217,19 @@ services:
         max-file: "5"
         max-size: "10m"
 
+  # TODO: we should use a public image
   # gencam-sim:
-  #   image: lsstts/gencam:latest
+  #   image: ts-dockerhub.lsst.org/genericcamera:c0020.004
   #   container_name: gencam-sim
   #   environment:
   #     - OSPL_URI=${OSPL_URI}
   #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - RUN_ARG=1
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
   #   network_mode: ${NETWORK_NAME}
   #   # restart: always
   #   volumes:
   #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #     - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
   #   logging:
   #     driver: "json-file"
   #     options:
@@ -239,6 +248,7 @@ services:
     environment:
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
       - JUPYTER_PASS=${JUPYTER_PASS}
+    user: root
     network_mode: ${NETWORK_NAME}
     logging:
       driver: "json-file"
@@ -331,7 +341,6 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander-mount
       - COMMANDER_PORT=5000
-      - LOVE_CSC_PRODUCER=True
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
@@ -353,8 +362,6 @@ services:
       context: ${DOCKERFILE_PATH_FRONTEND}
       dockerfile: Dockerfile-dev
     image: love-frontend-image-mount
-    depends_on:
-      - manager
     network_mode: ${NETWORK_NAME}
     ports:
       - "3000:3000"
@@ -369,31 +376,33 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  styleguide:
-    container_name: love-styleguide-mount
-    build:
-      context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: Dockerfile-dev
-    image: love-frontend-image-mount
-    command: yarn guide:start --disable-host-check
-    network_mode: ${NETWORK_NAME}
-    ports:
-      - "3001:3001"
-    volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      - /usr/src/love/love/node_modules
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # styleguide:
+  #   container_name: love-styleguide-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_FRONTEND}
+  #     dockerfile: Dockerfile-dev
+  #   image: love-frontend-image-mount
+  #   command: yarn guide:start --disable-host-check
+  #   network_mode: ${NETWORK_NAME}
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+  #     - /usr/src/love/love/node_modules
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   nginx:
     container_name: love-nginx-mount
     image: nginx:1.13.1
     depends_on:
       - frontend
-      - styleguide
+      # - styleguide
+      - manager
+      # - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
