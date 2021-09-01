@@ -31,10 +31,10 @@ version: "3.7"
 
 services:
   #----- simulators -------
-  atdome-sim:
-    image: lsstts/love-atdome-sim:develop
-    container_name: atdome-sim
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
+  atcs-sim:
+    image: lsstts/love-atcs-sim:develop
+    container_name: atcs-sim-build
+    entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -49,10 +49,10 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  atmcs-sim:
-    image: lsstts/love-atmcs-sim:develop
-    container_name: atmcs-sim
-    entrypoint: ["/home/saluser/atmcs-setup.sh"]
+  mtcs-sim:
+    image: lsstts/love-mtcs-sim:develop
+    container_name: mtcs-sim-build
+    entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -120,24 +120,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  gencam-sim:
-    image: lsstts/gencam:latest
-    container_name: gencam-sim
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    ports:
-      - 5013:5013
+  # gencam-sim:
+  #   image: lsstts/gencam:latest
+  #   container_name: gencam-sim
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   # restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  #   ports:
+  #     - 5013:5013
 
   jupyter:
     container_name: love-jupyter
@@ -157,42 +157,72 @@ services:
       - 1234:1234
 
   #----- LOVE PRODUCER --------------
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
   Watcher:
     <<: *base-producer
-    container_name: producer-watcher
+    container_name: producer-watcher-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
   ScriptQueue:
     <<: *base-producer
-    container_name: producer-scriptqueue
+    container_name: producer-scriptqueue-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
   WeatherStation1:
     <<: *base-producer
-    container_name: producer-weatherstation1
+    container_name: producer-weatherstation1-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
-  ATMCS:
-    <<: *base-producer
-    container_name: producer-atmcs
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATMCS:0
-  ATDome:
-    <<: *base-producer
-    container_name: producer-atdome
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATDome:0
-  LOVE:
-    <<: *base-producer
-    container_name: producer-love
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: LOVE:0
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -264,7 +294,6 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
-      - LOVE_CSC_PRODUCER=True
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
