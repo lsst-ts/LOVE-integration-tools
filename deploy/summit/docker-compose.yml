@@ -108,6 +108,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:2
+  ATScheduler:
+    <<: *base-producer
+    container_name: producer-atscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:2
   ATSpectrograph:
     <<: *base-producer
     container_name: producer-atspectrograph
@@ -138,6 +144,18 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  MTScheduler:
+    <<: *base-producer
+    container_name: producer-mtscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:1
+  OCPS:
+    <<: *base-producer
+    container_name: producer-ocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:0
   PMD:
     <<: *base-producer
     container_name: producer-pmd
