@@ -126,6 +126,30 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  CameraHexapod:
+    <<: *base-producer
+    container_name: producer-camera-hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  CCArchiver:
+    <<: *base-producer
+    container_name: producer-ccarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCArchiver:0
+  CCCamera:
+    <<: *base-producer
+    container_name: producer-cccamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCCamera:0
+  CCHeaderService:
+    <<: *base-producer
+    container_name: producer-ccheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCHeaderService:0
   CCOCPS:
     <<: *base-producer
     container_name: producer-ccocps
@@ -150,18 +174,72 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
-  MTScriptQueue:
+  M2Hexapod:
     <<: *base-producer
-    container_name: producer-mtscriptqueue
+    container_name: producer-m2-hexapod
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ScriptQueue:1
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTAOS:
+    <<: *base-producer
+    container_name: producer-mtaos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTAOS:0
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:0
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-mtdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-mtptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
   MTScheduler:
     <<: *base-producer
     container_name: producer-mtscheduler
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Scheduler:1
+  MTScriptQueue:
+    <<: *base-producer
+    container_name: producer-mtscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
   PMD:
     <<: *base-producer
     container_name: producer-pmd
@@ -180,86 +258,6 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
-  MTMount:
-    <<: *base-producer
-    container_name: producer-mtmount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTMount:0
-  MTPtg:
-    <<: *base-producer
-    container_name: producer-mtptg
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTPtg:0
-  MTDome:
-    <<: *base-producer
-    container_name: producer-mtdome
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTDome:0
-  MTDomeTrajectory:
-    <<: *base-producer
-    container_name: producer-mtdometrajectory
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
-  MTAOS:
-    <<: *base-producer
-    container_name: producer-mtaos
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTAOS:0
-  # MTM1M3:
-  #   <<: *base-producer
-  #   container_name: producer-mtm1m3
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: MTM1M3:0
-  MTM2:
-    <<: *base-producer
-    container_name: producer-mtm2
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTM2:0
-  CameraHexapod:
-    <<: *base-producer
-    container_name: producer-camera-hexapod
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTHexapod:1
-  M2Hexapod:
-    <<: *base-producer
-    container_name: producer-m2-hexapod
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTHexapod:2
-  MTRotator:
-    <<: *base-producer
-    container_name: producer-mtrotator
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTRotator:0
-  CCCamera:
-    <<: *base-producer
-    container_name: producer-cccamera
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: CCCamera:0
-  CCArchiver:
-    <<: *base-producer
-    container_name: producer-ccarchiver
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: CCArchiver:0
-  CCHeaderService:
-    <<: *base-producer
-    container_name: producer-ccheaderservice
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: CCHeaderService:0
-
-
 
 
   #-----LOVE COMMANDER -----------
