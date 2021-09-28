@@ -126,6 +126,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  AuxTelESS01:
+    <<: *base-producer
+    container_name: producer-auxtel-ess01
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ESS:201
   CameraHexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
@@ -156,6 +162,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: OCPS:2
+  ComCamESS01:
+    <<: *base-producer
+    container_name: producer-comcam-ess01
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ESS:1
   DIMM1:
     <<: *base-producer
     container_name: producer-dimm1
@@ -168,6 +180,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: DIMM:2
+  HVAC:
+    <<: *base-producer
+    container_name: producer-hvac
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: HVAC:0
   LOVE:
     <<: *base-producer
     container_name: producer-love
@@ -192,6 +210,24 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTDome:0
+  MTDomeESS01:
+    <<: *base-producer
+    container_name: producer-mtdome-ess01
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ESS:101
+  MTDomeESS02:
+    <<: *base-producer
+    container_name: producer-mtdome-ess02
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ESS:102
+  MTDomeESS03:
+    <<: *base-producer
+    container_name: producer-mtdome-ess03
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ESS:103
   MTDomeTrajectory:
     <<: *base-producer
     container_name: producer-mtdometrajectory
