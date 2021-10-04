@@ -1,44 +1,288 @@
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  environment:
+    <<: *base-producer-environment
+  networks:
+    love:
+  ipc: host
+  pid: host
+  volumes:
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+    - ./config:/usr/src/love/producer/config/
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
-  #----- LOVE PRODUCER --------------
-  producer:
-    container_name: love-producer
-    image: lsstts/love-producer:develop
+  love-csc:
+    <<: *service
+    container_name: love-csc
+    image: ts-dockerhub.lsst.org/love-csc:${cycle}
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    ipc: host
+    pid: host
     networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.209"
-    restart: always
+      love:
+    depends_on:
+      - nginx
     volumes:
-      - ./config:/usr/src/love/producer/config/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #----- LOVE PRODUCER --------------
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATArchiver:
+    <<: *base-producer
+    container_name: producer-atarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATArchiver:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-atdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDomeTrajectory:0
+  ATHeaderService:
+    <<: *base-producer
+    container_name: producer-atheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHeaderService:0
+  ATHexapod:
+    <<: *base-producer
+    container_name: producer-athexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHexapod:0
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  ATPneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPneumatics:0
+  ATPtg:
+    <<: *base-producer
+    container_name: producer-atptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPtg:0
+  ATScheduler:
+    <<: *base-producer
+    container_name: producer-atscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:2
+  ATScriptQueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  CamHexapod:
+    <<: *base-producer
+    container_name: producer-camhexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  CCArchiver:
+    <<: *base-producer
+    container_name: producer-ccarchiver
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCArchiver:0
+  CCCamera:
+    <<: *base-producer
+    container_name: producer-cccamera
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCCamera:0
+  CCHeaderService:
+    <<: *base-producer
+    container_name: producer-ccheaderservice
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: CCHeaderService:0
+  DSM1:
+    <<: *base-producer
+    container_name: producer-dsm1
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:1
+  DSM2:
+    <<: *base-producer
+    container_name: producer-dsm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: DSM:2
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2hexapod
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTAOS:
+    <<: *base-producer
+    container_name: producer-mtaos
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTAOS:0
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:0
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-mtdometrajectory
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-mtptg
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
+  MTScheduler:
+    <<: *base-producer
+    container_name: producer-mtscheduler
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Scheduler:1
+  MTScriptQueue:
+    <<: *base-producer
+    container_name: producer-mtscriptqueue
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  OCPS:
+    <<: *base-producer
+    container_name: producer-ocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:0
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+
+  #-----LOVE COMMANDER -----------
+  commander:
+    container_name: love-commander
+    image: ts-dockerhub.lsst.org/love-commander:${cycle}
+    environment:
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+    ipc: host
+    pid: host
+    networks:
+      love:
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
+    volumes:
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
-  #----- LOVE MANAGER --------------
+  # #----- LOVE MANAGER --------------
   redis:
-    container_name: love-redis
+    <<: *service
+    container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.210"
+      - love
     ports:
-      - "${REDIS_PORT}:6379"
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+      - "6379:6379"
 
   database:
+    <<: *service
     container_name: love-database
     image: postgres:12.0
     environment:
@@ -46,31 +290,24 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
     networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.211"
-    restart: always
+      - love
     volumes:
       - ./db_data:/var/lib/postgresql/data
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
 
   manager:
+    <<: *service
     container_name: love-manager
-    image: lsstts/love-manager:develop
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
     depends_on:
       - redis
       - database
+      - commander
     environment:
       - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASS=${REDIS_PASS}
       - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
@@ -81,59 +318,48 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.212"
+      - love
     ports:
       - "8000:8000"
-    restart: always
     volumes:
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
-      - manager-static:/usr/src/love/manager/static
-
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
 
   #----- LOVE FRONTEND --------------
   frontend:
+    <<: *service
     container_name: love-frontend
-    image: lsstts/love-frontend:develop
-    depends_on:
-      - manager
+    image: ts-dockerhub.lsst.org/love-frontend:${cycle}
+    # depends_on:
+    #   - manager
     volumes:
       - frontend-volume:/usr/src/love
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+    tty: true
+    networks:
+      - love
 
   nginx:
+    <<: *service
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
       - manager
       - frontend
+    # networks:
+    #   control-network:
+    #     ipv4_address: "139.229.167.196"
     networks:
-      lab-priv-network:
-        ipv4_address: "10.0.100.213"
+      - love
     ports:
-      - "80:80"
-    restart: always
+      - 80:80
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - ./media:/usr/src/love-manager/media
-      - manager-static:/usr/src/love-manager/static
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
 
 volumes:
   frontend-volume:
@@ -142,6 +368,6 @@ volumes:
 networks:
   default:
     external:
-      name: lab-priv-network
-  lab-priv-network:
+      name: love
+  love:
     external: true
