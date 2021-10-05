@@ -15,8 +15,8 @@ x-base-producer: &base-producer
   image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
-  networks:
-    love:
+  # networks:
+  #   love:
   ipc: host
   pid: host
   volumes:
@@ -44,8 +44,8 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     ipc: host
     pid: host
-    networks:
-      love:
+    # networks:
+    #   love:
     depends_on:
       - nginx
     volumes:
@@ -259,8 +259,8 @@ services:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     ipc: host
     pid: host
-    networks:
-      love:
+    # networks:
+    #   love:
     logging:
       driver: "json-file"
       options:
@@ -276,8 +276,8 @@ services:
     container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    networks:
-      - love
+    # networks:
+    #   - love
     ports:
       - "6379:6379"
 
@@ -289,8 +289,8 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
-    networks:
-      - love
+    # networks:
+    #   - love
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
@@ -322,8 +322,8 @@ services:
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
-    networks:
-      - love
+    # networks:
+    #   - love
     ports:
       - "8000:8000"
     volumes:
@@ -340,8 +340,8 @@ services:
     volumes:
       - frontend-volume:/usr/src/love
     tty: true
-    networks:
-      - love
+    # networks:
+    #   - love
 
   nginx:
     <<: *service
@@ -350,8 +350,8 @@ services:
     depends_on:
       - manager
       - frontend
-    networks:
-      - love
+    # networks:
+    #   - love
     ports:
       - 80:80
     volumes:
@@ -363,9 +363,9 @@ volumes:
   frontend-volume:
   manager-static:
 
-networks:
-  default:
-    external:
-      name: love
-  love:
-    external: true
+# networks:
+#   default:
+#     external:
+#       name: love
+#   love:
+#     external: true
