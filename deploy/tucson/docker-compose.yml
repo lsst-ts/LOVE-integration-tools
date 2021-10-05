@@ -350,9 +350,6 @@ services:
     depends_on:
       - manager
       - frontend
-    # networks:
-    #   control-network:
-    #     ipv4_address: "139.229.167.196"
     networks:
       - love
     ports:
