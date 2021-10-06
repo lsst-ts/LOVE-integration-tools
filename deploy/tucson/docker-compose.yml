@@ -100,6 +100,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATMCS:0
+  ATOCPS:
+    <<: *base-producer
+    container_name: producer-atocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:1
   ATPneumatics:
     <<: *base-producer
     container_name: producer-atpneumatics
@@ -214,6 +220,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTMount:0
+  MTOCPS:
+    <<: *base-producer
+    container_name: producer-mtocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:2
   MTPtg:
     <<: *base-producer
     container_name: producer-mtptg
@@ -238,12 +250,6 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  OCPS:
-    <<: *base-producer
-    container_name: producer-ocps
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: OCPS:0
   Watcher:
     <<: *base-producer
     container_name: producer-watcher
