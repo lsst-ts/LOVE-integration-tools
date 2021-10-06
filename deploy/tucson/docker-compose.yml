@@ -15,8 +15,8 @@ x-base-producer: &base-producer
   image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
-  networks:
-    - dds-network
+  # networks:
+  #   - dds-network
   ipc: host
   pid: host
   volumes:
@@ -44,8 +44,8 @@ services:
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     ipc: host
     pid: host
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
     depends_on:
       - nginx
     volumes:
@@ -265,8 +265,8 @@ services:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     ipc: host
     pid: host
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
     logging:
       driver: "json-file"
       options:
@@ -282,8 +282,9 @@ services:
     container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
+    network_mode: host
     ports:
       - "6379:6379"
 
@@ -295,8 +296,9 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
+    network_mode: host
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
@@ -328,8 +330,9 @@ services:
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
+    network_mode: host
     ports:
       - "8000:8000"
     volumes:
@@ -343,11 +346,12 @@ services:
     image: ts-dockerhub.lsst.org/love-frontend:${cycle}
     # depends_on:
     #   - manager
+    network_mode: host
     volumes:
       - frontend-volume:/usr/src/love
     tty: true
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
 
   nginx:
     <<: *service
@@ -356,8 +360,9 @@ services:
     depends_on:
       - manager
       - frontend
-    networks:
-      - dds-network
+    # networks:
+    #   - dds-network
+    network_mode: host
     ports:
       - 80:80
     volumes:
@@ -369,9 +374,9 @@ volumes:
   frontend-volume:
   manager-static:
 
-networks:
-  default:
-    external:
-      name: dds-network
-  dds-network:
-    external: true
+# networks:
+#   default:
+#     external:
+#       name: dds-network
+#   dds-network:
+#     external: true
