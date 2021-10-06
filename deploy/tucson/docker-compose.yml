@@ -284,7 +284,7 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
     # networks:
     #   - dds-network
-    network_mode: host
+    # network_mode: host
     ports:
       - "6379:6379"
 
@@ -298,7 +298,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     # networks:
     #   - dds-network
-    network_mode: host
+    # network_mode: host
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
@@ -332,7 +332,7 @@ services:
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     # networks:
     #   - dds-network
-    network_mode: host
+    # network_mode: host
     ports:
       - "8000:8000"
     volumes:
@@ -362,7 +362,7 @@ services:
       - frontend
     # networks:
     #   - dds-network
-    network_mode: host
+    # network_mode: host
     ports:
       - 80:80
     volumes:
