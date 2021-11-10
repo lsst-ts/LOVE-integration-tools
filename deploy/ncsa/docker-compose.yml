@@ -137,6 +137,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATOCPS:
+    <<: *base-producer
+    container_name: producer-atocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:1
   CamHexapod:
     <<: *base-producer
     container_name: producer-camhexapod
@@ -161,6 +167,12 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: CCHeaderService:0
+  CCOCPS:
+    <<: *base-producer
+    container_name: producer-ccocps
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: OCPS:2
   DSM1:
     <<: *base-producer
     container_name: producer-dsm1
@@ -245,12 +257,6 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  OCPS:
-    <<: *base-producer
-    container_name: producer-ocps
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: OCPS:0
   Watcher:
     <<: *base-producer
     container_name: producer-watcher
