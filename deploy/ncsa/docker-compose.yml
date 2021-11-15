@@ -274,13 +274,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeTrajectory}
       LOVE_CSC_PRODUCER: MTDomeTrajectory:0
-  # MTM1M3:
-  #   <<: *base-producer
-  #   container_name: producer-mtm1m3
-  #   environment:
-  #     <<: *base-producer-environment
-  #     WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3}
-  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM1M3:
+    <<: *base-producer
+    container_name: producer-mtm1m3
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3}
+      LOVE_CSC_PRODUCER: MTM1M3:0
   MTM2:
     <<: *base-producer
     container_name: producer-mtm2
@@ -374,7 +374,7 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
- manager:
+  manager:
     container_name: love-manager
     <<: *manager-service
 
