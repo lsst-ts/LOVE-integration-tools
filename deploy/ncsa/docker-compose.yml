@@ -148,6 +148,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMCS}
       LOVE_CSC_PRODUCER: ATMCS:0
+  ATOCPS:
+    <<: *base-producer
+    container_name: producer-atocps
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOCPS}
+      LOVE_CSC_PRODUCER: OCPS:1
   ATPneumatics:
     <<: *base-producer
     container_name: producer-atpneumatics
@@ -183,13 +190,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATSpectrograph}
       LOVE_CSC_PRODUCER: ATSpectrograph:0
-  ATOCPS:
-    <<: *base-producer
-    container_name: producer-atocps
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOCPS}
-      LOVE_CSC_PRODUCER: OCPS:1
   CamHexapod:
     <<: *base-producer
     container_name: producer-camhexapod
