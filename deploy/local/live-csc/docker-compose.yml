@@ -339,6 +339,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -382,24 +383,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  # styleguide:
-  #   container_name: love-styleguide-mount
-  #   build:
-  #     context: ${DOCKERFILE_PATH_FRONTEND}
-  #     dockerfile: Dockerfile-dev
-  #   image: love-frontend-image-mount
-  #   command: yarn guide:start --disable-host-check
-  #   network_mode: ${NETWORK_NAME}
-  #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-  #     - /usr/src/love/love/node_modules
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  styleguide:
+    container_name: love-styleguide-mount
+    build:
+      context: ${DOCKERFILE_PATH_FRONTEND}
+      dockerfile: Dockerfile-dev
+    image: love-frontend-image-mount
+    command: yarn guide:start --disable-host-check
+    network_mode: ${NETWORK_NAME}
+    ports:
+      - "3001:3001"
+    volumes:
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+      - /usr/src/love/love/node_modules
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   nginx:
     container_name: love-nginx-mount
