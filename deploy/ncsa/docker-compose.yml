@@ -225,6 +225,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
       LOVE_CSC_PRODUCER: OCPS:2
+  DIMM1:
+    <<: *base-producer
+    container_name: producer-dimm1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DIMM1}
+      LOVE_CSC_PRODUCER: DIMM:1
+  DIMM2:
+    <<: *base-producer
+    container_name: producer-dimm2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DIMM2}
+      LOVE_CSC_PRODUCER: DIMM:2
   DSM1:
     <<: *base-producer
     container_name: producer-dsm1
@@ -330,6 +344,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Watcher}
       LOVE_CSC_PRODUCER: Watcher:0
+  WeatherStation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
+      LOVE_CSC_PRODUCER: WeatherStation:1
 
   #-----LOVE COMMANDER -----------
   commander:
