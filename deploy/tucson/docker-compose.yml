@@ -404,7 +404,6 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
-    image: ts-dockerhub.lsst.org/love-manager:${cycle}
     <<: *manager-service
 
   manager_comcam:
@@ -447,6 +446,10 @@ services:
     image: nginx:1.13.1
     depends_on:
       - manager
+      - manager_auxtel
+      - manager_maintel
+      - manager_obssys
+      - manager_m1m3
       - frontend
     # networks:
     #   - dds-network
