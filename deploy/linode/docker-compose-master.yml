@@ -1,26 +1,40 @@
+x-service: &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_DOMAIN: ${LSST_DDS_DOMAIN}
+  WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: lsstts/love-producer:master
+  environment:
+    <<: *base-producer-environment
+  network_mode: ${NETWORK_NAME}
+  restart: always
+  volumes:
+    - ./config:/usr/src/love/producer/config/
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
+
 version: "3.7"
 
 services:
   #----- simulators -------
-  testcsc-sim:
-    image: lsstts/love-testcsc-sim:master
-    container_name: testcsc-sim-build
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-
-  atdome-sim:
-    image: lsstts/love-atdome-sim:master
-    container_name: atdome-sim
-    entrypoint: ["/home/saluser/atdome-setup.sh"]
+  atcs-sim:
+    image: lsstts/love-atcs-sim:master
+    container_name: atcs-sim-build
+    entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -35,10 +49,10 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  atmcs-sim:
-    image: lsstts/love-atmcs-sim:master
-    container_name: atmcs-sim
-    entrypoint: ["/home/saluser/atmcs-setup.sh"]
+  mtcs-sim:
+    image: lsstts/love-mtcs-sim:master
+    container_name: mtcs-sim-build
+    entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
@@ -71,6 +85,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
+  weatherstation-sim:
+    image: lsstts/love-weatherstation-sim:master
+    container_name: weatherstation-sim
+    entrypoint: ["/home/saluser/weatherstation-setup.sh"]
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
   scriptqueue-sim:
     image: lsstts/love-scriptqueue-sim:master
     container_name: scriptqueue-sim
@@ -80,50 +112,32 @@ services:
     restart: always
     volumes:
       - ./config:/home/saluser/config/
+      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+      - ./scripts:/home/saluser/repos/ts_scriptqueue/tests/data/external/
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
 
-  gencam-sim:
-    image: lsstts/gencam:latest
-    container_name: gencam-sim
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    ports:
-      - 5013:5013
-  simulator:
-    container_name: love-simulator
-    image: lsstts/love-simulator:master
-    depends_on:
-      - scriptqueue-sim
-      - atdome-sim
-      - testcsc-sim
-      - gencam-sim
-      - atmcs-sim
-    environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # gencam-sim:
+  #   image: lsstts/gencam:latest
+  #   container_name: gencam-sim
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   # restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ./simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  #   ports:
+  #     - 5013:5013
 
   jupyter:
     container_name: love-jupyter
@@ -143,99 +157,74 @@ services:
       - 1234:1234
 
   #----- LOVE PRODUCER --------------
-
-  love:
-    image: lsstts/love-csc:master
-    container_name: love_csc
+  LOVE:
+    <<: *base-producer
+    container_name: producer-love-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    network_mode: ${NETWORK_NAME}
-    depends_on:
-      - nginx
-
-  events:
-    container_name: love-events-producer
-    image: lsstts/love-producer:master
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: LOVE:0
+  ATDome:
+    <<: *base-producer
+    container_name: producer-atdome-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=EVENTS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  telemetries:
-    container_name: love-telemetries-producer
-    image: lsstts/love-producer:master
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDome:0
+  ATMCS:
+    <<: *base-producer
+    container_name: producer-atmcs-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=TELEMETRIES
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  scriptqueue:
-    container_name: love-scriptqueue-producer
-    image: lsstts/love-producer:master
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATMCS:0
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=SCRIPTQUEUE
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
-
-  heartbeats:
-    container_name: love-heartbeats
-    image: lsstts/love-producer:master
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
+  ScriptQueue:
+    <<: *base-producer
+    container_name: producer-scriptqueue-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - LOVE_PRODUCERS=CSC_HEARTBEATS
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/usr/src/love/producer/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    depends_on:
-      - nginx
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  ATAOS:
+    <<: *base-producer
+    container_name: producer-ataos-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATAOS:0
+  ATSpectrograph:
+    <<: *base-producer
+    container_name: producer-atspectrograph-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATSpectrograph:0
+  ATCamera:
+    <<: *base-producer
+    container_name: producer-atcamera-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATCamera:0
+  MTMount:
+    <<: *base-producer
+    container_name: producer-mtmount-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTMount:0
+  MTRotator:
+    <<: *base-producer
+    container_name: producer-mtrotator-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTRotator:0
+  WeatherStation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: WeatherStation:1
 
-    #-----LOVE COMMANDER -----------
+  #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
     image: lsstts/love-commander:master
@@ -297,6 +286,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -310,7 +300,6 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - manager-static:/usr/src/love/manager/static
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
     logging:
@@ -338,9 +327,7 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
       - frontend
-      - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
@@ -348,7 +335,6 @@ services:
     volumes:
       - ./nginx-master.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
-      - manager-static:/usr/src/love-manager/static
       - ./media:/usr/src/love-manager/media
     logging:
       driver: "json-file"
