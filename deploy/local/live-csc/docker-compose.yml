@@ -37,8 +37,6 @@ x-base-producer: &base-producer
 version: "3.7"
 
 services:
-
-
   # -------------- LOVE PRODUCERS --------------
   LOVE:
     <<: *base-producer
@@ -49,12 +47,16 @@ services:
   ATDome:
     <<: *base-producer
     container_name: producer-atdome-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATDome:0
   ATMCS:
     <<: *base-producer
     container_name: producer-atmcs-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATMCS:0
@@ -329,6 +331,7 @@ services:
     depends_on:
       - redis
       - database
+      - commander
     environment:
       - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
@@ -407,8 +410,8 @@ services:
     image: nginx:1.13.1
     depends_on:
       - frontend
-      # - styleguide
       - manager
+      # - styleguide
       # - gencam-sim
     network_mode: ${NETWORK_NAME}
     ports:
