@@ -22,24 +22,24 @@ services:
       - nginx
 
   #----- simulators -------
-  # testcsc-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: Dockerfile-testcsc
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: testcsc-sim-build
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  testcsc-sim:
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-testcsc
+      args:
+        dev_cycle: "${dev_cycle}"
+    container_name: testcsc-sim-build
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   atdome-sim:
     build:
@@ -127,24 +127,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  gencam-sim:
-    image: lsstts/gencam:latest
-    container_name: gencam-sim
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-    network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    ports:
-      - 5013:5013
+  # gencam-sim:
+  #   image: lsstts/gencam:latest
+  #   container_name: gencam-sim
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #   network_mode: ${NETWORK_NAME}
+  #   # restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ${DOCKERFILE_PATH_SIMULATOR}/simulator/gencam/simulatorcamera.py:/home/saluser/repos/ts_GenericCamera/python/lsst/ts/GenericCamera/driver/simulatorcamera.py
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  #   ports:
+  #     - 5013:5013
 
   weatherstation-sim:
     build:
@@ -168,30 +168,30 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  # simulator:
-  #   container_name: love-simulator-mount
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: Dockerfile-dev
-  #   image: love-simulator-image-mount
-  #   depends_on:
-  #     - scriptqueue-sim
-  #     - atdome-sim
-  #     - testcsc-sim
-  #     - gencam-sim
-  #     - weatherstation-sim
-  #   environment:
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
-  #     - ./config:/usr/src/love/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
+  simulator:
+    container_name: love-simulator-mount
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: Dockerfile-dev
+    image: love-simulator-image-mount
+    depends_on:
+      - scriptqueue-sim
+      - atdome-sim
+      - testcsc-sim
+      - gencam-sim
+      - weatherstation-sim
+    environment:
+      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ${DOCKERFILE_PATH_SIMULATOR}:/usr/src/love/
+      - ./config:/usr/src/love/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   jupyter:
     container_name: love-jupyter
@@ -393,6 +393,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -401,6 +402,7 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander-mount
       - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
