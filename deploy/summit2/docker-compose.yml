@@ -393,6 +393,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -403,7 +404,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
@@ -427,6 +427,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -437,7 +438,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
   
@@ -461,6 +461,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -471,7 +472,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
@@ -495,6 +495,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -505,7 +506,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
@@ -529,6 +529,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -539,7 +540,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
@@ -563,6 +563,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -573,7 +574,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
 
@@ -597,6 +597,7 @@ services:
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
       - USER_USER_PASS=${USER_USER_PASS}
       - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
       - DB_ENGINE=${DB_ENGINE}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -607,7 +608,6 @@ services:
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     volumes:
-      - manager-static:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
       
@@ -634,7 +634,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
-      - manager-static:/usr/src/love-manager/static
       - ./media:/usr/src/love-manager/media
 
 volumes:
