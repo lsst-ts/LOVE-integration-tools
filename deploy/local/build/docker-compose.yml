@@ -8,7 +8,7 @@ services:
     container_name: love-csc-build
     image: love_csc
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     network_mode: ${NETWORK_NAME}
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile-testcsc
     container_name: testcsc-sim-build
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -40,7 +40,7 @@ services:
     entrypoint: ["/home/saluser/atdome-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -59,7 +59,7 @@ services:
     container_name: atmcs-sim-build
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     volumes:
       - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
@@ -77,7 +77,7 @@ services:
       dockerfile: Dockerfile-scriptqueue
     container_name: scriptqueue-sim-build
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -96,7 +96,7 @@ services:
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -113,7 +113,7 @@ services:
     container_name: gencam-sim
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     # restart: always
     volumes:
@@ -138,7 +138,7 @@ services:
       - atdome-sim
       - testcsc-sim
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -157,7 +157,7 @@ services:
       dockerfile: Dockerfile
     image: love-producer-image
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LOVE_PRODUCERS=EVENTS
@@ -178,7 +178,7 @@ services:
       dockerfile: Dockerfile
     image: love-producer-image
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LOVE_PRODUCERS=TELEMETRIES
@@ -199,7 +199,7 @@ services:
       dockerfile: Dockerfile
     image: love-producer-image
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LOVE_PRODUCERS=SCRIPTQUEUE
@@ -220,7 +220,7 @@ services:
       dockerfile: Dockerfile
     image: love-producer-image
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - LOVE_PRODUCERS=CSC_HEARTBEATS
@@ -243,7 +243,7 @@ services:
       dockerfile: Dockerfile
     image: love-commander-image
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     logging:
@@ -311,6 +311,8 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+      - LOVE_SITE=${LOVE_SITE}
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
