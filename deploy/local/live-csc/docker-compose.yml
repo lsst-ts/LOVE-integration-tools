@@ -7,7 +7,7 @@ x-service: &service
       max-size: "10m"
 
 x-base-producer-env: &base-producer-environment
-  LSST_DDS_DOMAIN: ${LSST_DDS_DOMAIN}
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
@@ -126,7 +126,7 @@ services:
     entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -148,7 +148,7 @@ services:
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -168,7 +168,7 @@ services:
         dev_cycle: "${dev_cycle}"
     container_name: scriptqueue-sim-build
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -191,7 +191,7 @@ services:
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -213,7 +213,7 @@ services:
     entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
       - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -231,7 +231,7 @@ services:
   #   container_name: gencam-sim
   #   environment:
   #     - OSPL_URI=${OSPL_URI}
-  #     - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
   #     - RUN_ARG=1
   #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
   #   network_mode: ${NETWORK_NAME}
@@ -254,7 +254,7 @@ services:
       args:
         dev_cycle: "${dev_cycle}"
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - JUPYTER_PASS=${JUPYTER_PASS}
     user: root
     network_mode: ${NETWORK_NAME}
@@ -278,7 +278,7 @@ services:
         dev_cycle: "${dev_cycle}"
     image: love-commander-image-mount
     environment:
-      - LSST_DDS_DOMAIN=${LSST_DDS_DOMAIN}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
