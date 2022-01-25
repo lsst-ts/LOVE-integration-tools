@@ -134,7 +134,6 @@ services:
 
 volumes:
   frontend-volume:
-  manager-static:
 
 networks:
   default:
