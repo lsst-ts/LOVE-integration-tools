@@ -43,6 +43,7 @@ x-manager-service: &manager-service
   volumes:
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media 
+    - manager-static:/usr/src/love/manager/static
     
 x-base-producer-env: &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
@@ -471,6 +472,8 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - ./media:/usr/src/love-manager/media
+      - manager-static:/usr/src/love-manager/static
 
 volumes:
   frontend-volume:
+  manager-static:
