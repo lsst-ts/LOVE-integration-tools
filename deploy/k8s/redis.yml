@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-redis-deployment
+spec:
+  selector:
+    matchLabels:
+      app: manager-redis-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: manager-redis-service
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0.3
+        command: [ "redis-server", "--appendonly", "yes", "--requirepass", "$(REDIS_PASS)" ]
+        ports:
+          - containerPort: 6379
+        envFrom:
+          - configMapRef:
+              name: love-manager-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manager-redis-service
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: manager-redis-service
