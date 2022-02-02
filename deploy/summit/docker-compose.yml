@@ -42,9 +42,9 @@ x-manager-service: &manager-service
     - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
   volumes:
     - ./config:/usr/src/love/manager/config
-    - ./media:/usr/src/love/manager/media 
+    - ./media:/usr/src/love/manager/media
     - manager-static:/usr/src/love/manager/static
-    
+
 x-base-producer-env: &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
@@ -366,7 +366,7 @@ services:
     container_name: producer-weatherstation1
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}      
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
       LOVE_CSC_PRODUCER: WeatherStation:1
 
   #-----LOVE COMMANDER -----------
@@ -413,7 +413,7 @@ services:
   manager_auxtel:
     container_name: love-manager-auxtel
     <<: *manager-service
-  
+
   manager_latiss:
     container_name: love-manager-latiss
     <<: *manager-service
@@ -426,23 +426,23 @@ services:
   manager_comcam:
     container_name: love-manager-comcam
     <<: *manager-service
-  
-  manager_ess:
-    container_name: love-manager-ess
+
+  manager_eas:
+    container_name: love-manager-eas
     <<: *manager-service
 
   manager_obssys:
     container_name: love-manager-obssys
     <<: *manager-service
-  
+
   manager_m1m3:
     container_name: love-manager-m1m3
     <<: *manager-service
-  
+
   manager_m2:
     <<: *manager-service
     container_name: love-manager-m2
-   
+
 
   #----- LOVE FRONTEND --------------
   frontend:
