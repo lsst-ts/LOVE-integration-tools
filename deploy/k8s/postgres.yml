@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-database-deployment
+spec:
+  selector:
+    matchLabels:
+      app: manager-database-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: manager-database-service
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:12.0
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: "/var/lib/postgresql/db-files/"
+            name: love-database-pv-storage
+        envFrom:
+          - configMapRef:
+              name: love-manager-db-env
+      volumes:
+        - name: love-database-pv-storage
+          persistentVolumeClaim:
+            claimName: love-database-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manager-database-service
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: manager-database-service

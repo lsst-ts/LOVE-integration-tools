@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: love
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: love
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        resources:
+          limits:
+            cpu: 512m
+            memory: 128Mi
+          requests:
+            cpu: 512m
+            memory: 128Mi
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d # mount nginx.conf
+            readOnly: true
+            name: nginx-conf
+          - mountPath: "/usr/src/frontend"
+            name: love-pv-storage
+          - mountPath: "/usr/src/manager"
+            name: love-manager-pv-storage
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: love-pv-storage
+          persistentVolumeClaim:
+            claimName: love-pv-claim
+        - name: love-manager-pv-storage
+          persistentVolumeClaim:
+            claimName: love-manager-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: love-service
+spec:
+  selector:
+    app: love
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
+

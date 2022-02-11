@@ -1,0 +1,190 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    server {
+      listen 80;
+      server_name localhost;
+      location / {
+        root   /usr/src/frontend/love-frontend;
+        try_files $uri$args $uri$args/ $uri/ /index.html;
+      }
+      location /manager {
+          proxy_pass http://manager-service:8000;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header Host $host;
+          proxy_redirect off;
+      }
+      location /media {
+          alias /usr/src/manager/media;
+      }
+
+      location /manager/media {
+          alias /usr/src/manager/media;
+      }
+
+      location /manager/static {
+          alias /usr/src/manager/static;
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-backend-conf
+data:
+  config.json: |
+    {
+      "ScriptQueue": [
+        { "index": 1, "source": "command_sim" },
+        { "index": 2, "source": "command_sim" }
+      ],
+      "Test": [
+        { "index": 1, "source": "command_sim" },
+        { "index": 2, "source": "command_sim" }
+      ],
+      "WeatherStation": [
+        { "index": 1, "source": "command_sim" }
+      ]
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-conf
+data:
+  love.json: |
+    {
+      "alarms": {
+        "minSeveritySound": "serious",
+        "minSeverityNotification": "warning"
+      },
+      "camFeeds": {
+        "generic": "/gencam",
+        "allSky": "/gencam"
+      },
+      "efd": {
+        "defaultEfdInstance": "inria_efd"
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-manager-env
+data:
+  SECRET_KEY: "tbder3gzppu)kl%(u3awhhg^^zuj&!ceh@$n&v0d38sjx43s8."
+  REDIS_HOST: "manager-redis-service"
+  PROCESS_CONNECTION_PASS: "my_dev_password"
+  REDIS_PASS: "admin123"
+  ADMIN_USER_PASS: "test"
+  USER_USER_PASS: "test"
+  CMD_USER_PASS: "test"
+  AUTHLIST_USER_PASS: "test"
+  SERVER_URL: "*"
+  LOVE_PRODUCER_WEBSOCKET_HOST: "love-service/manager/ws/subscription"
+  COMMANDER_HOSTNAME: "commander-service"
+  COMMANDER_PORT: "5000"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-manager-db-env
+data:
+  DB_ENGINE: "postgresql"
+  DB_NAME: "postgres"
+  DB_USER: "postgres"
+  DB_HOST: "manager-database-service"
+  DB_PORT: "5432"
+  DB_PASS: "postgres"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-commander-env
+data:
+  LSST_DDS_PARTITION_PREFIX: "lsstts"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-producer-env
+data:
+  LSST_DDS_PARTITION_PREFIX: "lsstts"
+  WEBSOCKET_HOST: "love-service/manager/ws/subscription"
+  PROCESS_CONNECTION_PASS: "my_dev_password"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: love-simulator-env
+data:
+  LSST_DDS_PARTITION_PREFIX: "lsstts"
+  OSPL_URI: "file:///home/ospl/ospl.xml"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ospl
+data:
+  ospl.xml: |
+    <OpenSplice>
+      <Domain>
+          <Name>ospl_sp_ddsi</Name>
+          <Id>0</Id>
+          <SingleProcess>true</SingleProcess>
+          <Description>Stand-alone 'single-process' deployment and standard DDSI networking.</Description>
+          <Service name="ddsi2">
+              <Command>ddsi2</Command>
+          </Service>
+          <Service name="durability">
+              <Command>durability</Command>
+          </Service>
+          <Service enabled="false" name="cmsoap">
+              <Command>cmsoap</Command>
+          </Service>
+      </Domain>
+      <DDSI2Service name="ddsi2">
+          <General>
+              <NetworkInterfaceAddress>auto</NetworkInterfaceAddress>
+              <AllowMulticast>true</AllowMulticast>
+              <EnableMulticastLoopback>true</EnableMulticastLoopback>
+              <CoexistWithNativeNetworking>false</CoexistWithNativeNetworking>
+          </General>
+          <Compatibility>
+              <!-- see the release notes and/or the OpenSplice configurator on DDSI interoperability -->
+              <StandardsConformance>lax</StandardsConformance>
+              <!-- the following one is necessary only for TwinOaks CoreDX DDS compatibility -->
+              <!-- <ExplicitlyPublishQosSetToDefault>true</ExplicitlyPublishQosSetToDefault> -->
+          </Compatibility>
+      </DDSI2Service>
+      <DurabilityService name="durability">
+          <Network>
+              <Alignment>
+                  <TimeAlignment>false</TimeAlignment>
+                  <RequestCombinePeriod>
+                      <Initial>2.5</Initial>
+                      <Operational>0.1</Operational>
+                  </RequestCombinePeriod>
+              </Alignment>
+              <WaitForAttachment maxWaitCount="100">
+                  <ServiceName>ddsi2</ServiceName>
+              </WaitForAttachment>
+          </Network>
+          <NameSpaces>
+              <NameSpace name="defaultNamespace">
+                  <Partition>*</Partition>
+              </NameSpace>
+              <Policy alignee="Initial" aligner="true" durability="Durable" nameSpace="defaultNamespace"/>
+          </NameSpaces>
+      </DurabilityService>
+      <TunerService name="cmsoap">
+          <Server>
+              <PortNr>Auto</PortNr>
+          </Server>
+      </TunerService>
+    </OpenSplice>

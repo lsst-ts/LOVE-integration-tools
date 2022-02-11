@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commander-deployment
+spec:
+  selector:
+    matchLabels:
+      app: commander-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: commander-service
+    spec:
+      containers:
+      - name: commander
+        image: lsstts/love-commander:develop
+        ports:
+        - containerPort: 5000
+        envFrom:
+          - configMapRef:
+              name: love-commander-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: commander-service
+  labels:
+    app: commander-service
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: commander-service
