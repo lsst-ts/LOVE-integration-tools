@@ -30,4 +30,4 @@ spec:
               name: love-producer-env
         env:
           - name: LOVE_CSC_PRODUCER
-            value: "ATPtg:1"
+            value: "ATPtg:0"
