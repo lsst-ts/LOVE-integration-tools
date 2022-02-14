@@ -67,7 +67,7 @@ pipeline {
       }
     }
 
-    stage("Deploy Linode master version") {
+    stage("Deploy Linode main version") {
       when {
         anyOf {
           changeset "deploy/linode/config/*"
@@ -79,7 +79,7 @@ pipeline {
           triggeredBy "UpstreamCause"
           triggeredBy "UserIdCause"
         }
-        branch "master"
+        branch "main"
       }
       steps {
         script {
