@@ -73,8 +73,8 @@ pipeline {
           changeset "deploy/linode/config/*"
           changeset "deploy/linode/.env"
           changeset "deploy/linode/ospl.xml"
-          changeset "deploy/linode/docker-compose-master.yml"
-          changeset "deploy/linode/nginx-master.conf"
+          changeset "deploy/linode/docker-compose-main.yml"
+          changeset "deploy/linode/nginx-main.conf"
           changeset "Jenkinsfile"
           triggeredBy "UpstreamCause"
           triggeredBy "UserIdCause"
@@ -84,10 +84,10 @@ pipeline {
       steps {
         script {
           sshagent(credentials: ['love-ssh-key-2']) {
-            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-master.yml love@love.inria.cl:./docker-compose.yml'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/docker-compose-main.yml love@love.inria.cl:./docker-compose.yml'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/.env love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no deploy/linode/ospl.xml love@love.inria.cl:.'
-            sh 'scp -o StrictHostKeyChecking=no deploy/linode/nginx-master.conf love@love.inria.cl:.'
+            sh 'scp -o StrictHostKeyChecking=no deploy/linode/nginx-main.conf love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/config love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r deploy/linode/simulatorcamera.py love@love.inria.cl:.'
             sh 'scp -o StrictHostKeyChecking=no -r jupyter love@love.inria.cl:.'
