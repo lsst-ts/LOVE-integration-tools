@@ -163,30 +163,54 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
+  ATPtg:
+    <<: *base-producer
+    container_name: producer-atptg-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPtg:0
+  ATArchiver:
+    <<: *base-producer
+    container_name: producer-atarchiver-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATArchiver:0
+  ATHeaderService:
+    <<: *base-producer
+    container_name: producer-atheaderservice-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATHeaderService:0
   ATDome:
     <<: *base-producer
     container_name: producer-atdome-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATDome:0
+  ATDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-atdometrajectory-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATDomeTrajectory:0
+  ATPneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ATPneumatics:0
   ATMCS:
     <<: *base-producer
     container_name: producer-atmcs-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATMCS:0
-  Watcher:
+  ATHexapod:
     <<: *base-producer
-    container_name: producer-watcher-image-mount
+    container_name: producer-athexapod-image-mount
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: Watcher:0
-  ScriptQueue:
-    <<: *base-producer
-    container_name: producer-scriptqueue-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ScriptQueue:1
+      LOVE_CSC_PRODUCER: ATHexapod:0
   ATAOS:
     <<: *base-producer
     container_name: producer-ataos-image-mount
@@ -205,18 +229,84 @@ services:
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATCamera:0
+  ATScriptQueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+  CameraHexapod:
+    <<: *base-producer
+    container_name: producer-camerahexapod-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2hexapod-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTHeaderService:
+    <<: *base-producer
+    container_name: producer-mtheaderservice-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHeaderService:0
+  MTPtg:
+    <<: *base-producer
+    container_name: producer-mtptg-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTPtg:0
   MTMount:
     <<: *base-producer
     container_name: producer-mtmount-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTMount:0
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:0
+  MTDomeTrajectory:
+    <<: *base-producer
+    container_name: producer-mtdome-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDomeTrajectory:0
   MTRotator:
     <<: *base-producer
     container_name: producer-mtrotator-image-mount
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTRotator:0
+  MTM1M3:
+    <<: *base-producer
+    container_name: producer-mtm1m3-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
+  MTScriptQueue:
+    <<: *base-producer
+    container_name: producer-mtscriptqueue-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: ScriptQueue:1
+  Watcher:
+    <<: *base-producer
+    container_name: producer-watcher-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: Watcher:0
   WeatherStation1:
     <<: *base-producer
     container_name: producer-weatherstation1-image-mount
