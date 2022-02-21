@@ -166,150 +166,200 @@ services:
   ATPtg:
     <<: *base-producer
     container_name: producer-atptg-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATPtg:0
   ATArchiver:
     <<: *base-producer
     container_name: producer-atarchiver-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATArchiver:0
   ATHeaderService:
     <<: *base-producer
     container_name: producer-atheaderservice-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATHeaderService:0
   ATDome:
     <<: *base-producer
     container_name: producer-atdome-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATDome:0
   ATDomeTrajectory:
     <<: *base-producer
     container_name: producer-atdometrajectory-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATDomeTrajectory:0
   ATPneumatics:
     <<: *base-producer
     container_name: producer-atpneumatics-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATPneumatics:0
   ATMCS:
     <<: *base-producer
     container_name: producer-atmcs-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATMCS:0
   ATHexapod:
     <<: *base-producer
     container_name: producer-athexapod-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATHexapod:0
   ATAOS:
     <<: *base-producer
     container_name: producer-ataos-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATAOS:0
   ATSpectrograph:
     <<: *base-producer
     container_name: producer-atspectrograph-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATSpectrograph:0
   ATCamera:
     <<: *base-producer
     container_name: producer-atcamera-image-mount
+    depends_on:
+      - atcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ATCamera:0
   ATScriptQueue:
     <<: *base-producer
     container_name: producer-atscriptqueue-image-mount
+    depends_on:
+      - scriptqueue-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:2
   CameraHexapod:
     <<: *base-producer
     container_name: producer-camerahexapod-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTHexapod:1
   M2Hexapod:
     <<: *base-producer
     container_name: producer-m2hexapod-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTHexapod:2
   MTHeaderService:
     <<: *base-producer
     container_name: producer-mtheaderservice-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTHeaderService:0
   MTPtg:
     <<: *base-producer
     container_name: producer-mtptg-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTPtg:0
   MTMount:
     <<: *base-producer
     container_name: producer-mtmount-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTMount:0
   MTDome:
     <<: *base-producer
     container_name: producer-mtdome-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTDome:0
   MTDomeTrajectory:
     <<: *base-producer
-    container_name: producer-mtdome-image-mount
+    container_name: producer-mtdometrajectory-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTDomeTrajectory:0
   MTRotator:
     <<: *base-producer
     container_name: producer-mtrotator-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTRotator:0
   MTM1M3:
     <<: *base-producer
     container_name: producer-mtm1m3-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTM1M3:0
   MTM2:
     <<: *base-producer
     container_name: producer-mtm2-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTM2:0
   MTScriptQueue:
     <<: *base-producer
     container_name: producer-mtscriptqueue-image-mount
+    depends_on:
+      - scriptqueue-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: ScriptQueue:1
   Watcher:
     <<: *base-producer
     container_name: producer-watcher-image-mount
+    depends_on:
+      - watcher-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: Watcher:0
   WeatherStation1:
     <<: *base-producer
     container_name: producer-weatherstation1-image-mount
+    depends_on:
+      - weatherstation-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: WeatherStation:1
@@ -366,6 +416,7 @@ services:
     depends_on:
       - redis
       - database
+      - commander
     environment:
       - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
@@ -403,8 +454,6 @@ services:
   frontend:
     container_name: love-frontend
     image: lsstts/love-frontend:develop
-    depends_on:
-      - manager
     network_mode: ${NETWORK_NAME}
     volumes:
       - frontend-volume:/usr/src/love
@@ -419,6 +468,7 @@ services:
     image: nginx:1.13.1
     depends_on:
       - frontend
+      - manager
     network_mode: ${NETWORK_NAME}
     ports:
       - "80:80"
