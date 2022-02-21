@@ -5,7 +5,7 @@ services:
     container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-frontend-image-mount
     # network_mode: ${NETWORK_NAME}
     ports:
@@ -25,7 +25,7 @@ services:
     container_name: love-styleguide-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-frontend-image-mount
     command: yarn guide:start
     # network_mode: ${NETWORK_NAME}
