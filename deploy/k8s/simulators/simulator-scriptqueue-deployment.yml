@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator-scriptqueue-deployment
+spec:
+  selector:
+    matchLabels:
+      app: simulator-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simulator-service
+    spec:
+      containers:
+      - name: simulator-scriptqueue
+        image: lsstts/love-scriptqueue-sim:develop
+        imagePullPolicy: Always
+        command: [ "/bin/bash","-c"] 
+        args:
+          - /home/saluser/scriptqueue-setup.sh
+        volumeMounts:
+          - mountPath: /home/ospl/
+            name: ospl-conf
+          - mountPath: /home/saluser/config/
+            name: love-backend-conf
+        envFrom:
+          - configMapRef:
+              name: love-simulator-env
+      volumes:
+        - name: ospl-conf
+          configMap:
+            name: ospl
+            items:
+              - key: ospl.xml
+                path: ospl.xml
+        - name: love-backend-conf
+          configMap:
+            name: love-backend-conf
+            items:
+              - key: config.json
+                path: config.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simulator-service
+  labels:
+    app: simulator-service
+spec:
+  ports:
+  - port: 8001
+  selector:
+    app: simulator-service
+

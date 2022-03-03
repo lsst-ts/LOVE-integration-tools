@@ -4,7 +4,7 @@ services:
   love:
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-lovecsc-dev
+      dockerfile: docker/Dockerfile-lovecsc-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love_csc
@@ -25,7 +25,7 @@ services:
   testcsc-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-testcsc
+      dockerfile: docker/Dockerfile-testcsc
       args:
         dev_cycle: "${dev_cycle}"
     container_name: testcsc-sim-build
@@ -44,7 +44,7 @@ services:
   atdome-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atdome
+      dockerfile: docker/Dockerfile-atdome
       args:
         dev_cycle: "${dev_cycle}"
     container_name: atdome-sim-build
@@ -66,7 +66,7 @@ services:
   atmcs-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-atmcs
+      dockerfile: docker/Dockerfile-atmcs
       args:
         dev_cycle: "${dev_cycle}"
     container_name: atmcs-sim-build
@@ -87,7 +87,7 @@ services:
   scriptqueue-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-scriptqueue
+      dockerfile: docker/Dockerfile-scriptqueue
       args:
         dev_cycle: "${dev_cycle}"
     container_name: scriptqueue-sim-build
@@ -108,7 +108,7 @@ services:
   watcher-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-watcher
+      dockerfile: docker/Dockerfile-watcher
       args:
         dev_cycle: "${dev_cycle}"
     container_name: watcher-sim-build
@@ -149,7 +149,7 @@ services:
   weatherstation-sim:
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-weatherstation
+      dockerfile: docker/Dockerfile-weatherstation
       args:
         dev_cycle: "${dev_cycle}"
     container_name: weatherstation-sim-build
@@ -172,7 +172,7 @@ services:
     container_name: love-simulator-mount
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-simulator-image-mount
     depends_on:
       - scriptqueue-sim
@@ -197,7 +197,7 @@ services:
     container_name: love-jupyter
     build:
       context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: Dockerfile-jupyter
+      dockerfile: docker/Dockerfile-jupyter
       args:
         dev_cycle: "${dev_cycle}"
     user: root
@@ -220,7 +220,7 @@ services:
     container_name: love-commander-mount
     build:
       context: ${DOCKERFILE_PATH_COMMANDER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love-commander-image-mount
@@ -241,7 +241,7 @@ services:
     container_name: love-events_producer-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love-producer-image-mount
@@ -267,7 +267,7 @@ services:
     container_name: love-telemetries_producer-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love-producer-image-mount
@@ -293,7 +293,7 @@ services:
     container_name: love-scriptqueue-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love-producer-image-mount
@@ -319,7 +319,7 @@ services:
     container_name: love-heartbeat_producers-mount
     build:
       context: ${DOCKERFILE_PATH_PRODUCER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
     image: love-producer-image-mount
@@ -377,7 +377,7 @@ services:
     container_name: love-manager-mount
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-manager-image-mount
     depends_on:
       - redis
@@ -422,7 +422,7 @@ services:
     container_name: love-frontend-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-frontend-image-mount
     depends_on:
       - manager
@@ -444,7 +444,7 @@ services:
     container_name: love-styleguide-mount
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: Dockerfile-dev
+      dockerfile: docker/Dockerfile-dev
     image: love-frontend-image-mount
     command: yarn guide:start --disable-host-check
     network_mode: ${NETWORK_NAME}

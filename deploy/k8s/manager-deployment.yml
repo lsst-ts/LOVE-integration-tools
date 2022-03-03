@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-deployment
+spec:
+  selector:
+    matchLabels:
+      app: manager-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: manager-service
+    spec:
+      initContainers:
+      - name: init-postgres
+        image: busybox:1.31
+        command: ['sh', '-c', 'while ! telnet manager-database-service 5432; do sleep 1; printf "-"; done;']
+      - name: init-redis
+        image: busybox:1.31
+        command: ['sh', '-c', 'while ! telnet manager-redis-service 6379; do sleep 1; printf "-"; done;']
+      containers:
+      - name: manager
+        image: lsstts/love-manager:develop
+        ports:
+        - containerPort: 8000
+        command: [ "/bin/bash","-c" ]
+        args:
+          - cp -R /usr/src/love/manager/ /usr/src/love/manager-volume/love-manager;
+            /usr/src/love/manager-volume/love-manager/runserver.sh;
+        volumeMounts:
+          - mountPath: "/usr/src/love/manager/config"
+            name: love-conf
+          - mountPath: "/usr/src/love/manager-volume"
+            name: love-manager-pv-storage
+        envFrom:
+          - configMapRef:
+              name: love-manager-env
+          - configMapRef:
+              name: love-manager-db-env
+      volumes:
+        - name: love-conf
+          configMap:
+            name: love-conf
+            items:
+              - key: love.json
+                path: love.json
+        - name: love-manager-pv-storage
+          persistentVolumeClaim:
+            claimName: love-manager-pv-claim 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manager-service
+  labels:
+    app: manager-service
+spec:
+  ports:
+  - port: 8000
+  selector:
+    app: manager-service

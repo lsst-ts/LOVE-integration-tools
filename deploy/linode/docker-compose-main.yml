@@ -12,7 +12,7 @@ x-base-producer-env: &base-producer-environment
   LOVE_CSC_PRODUCER: Test.1
 
 x-base-producer: &base-producer
-  image: lsstts/love-producer:develop
+  image: lsstts/love-producer:main
   environment:
     <<: *base-producer-environment
   network_mode: ${NETWORK_NAME}
@@ -32,7 +32,7 @@ version: "3.7"
 services:
   #----- simulators -------
   atcs-sim:
-    image: lsstts/love-atcs-sim:develop
+    image: lsstts/love-atcs-sim:main
     container_name: atcs-sim-build
     entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
@@ -50,7 +50,7 @@ services:
         max-size: "10m"
 
   mtcs-sim:
-    image: lsstts/love-mtcs-sim:develop
+    image: lsstts/love-mtcs-sim:main
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
@@ -68,7 +68,7 @@ services:
         max-size: "10m"
 
   watcher-sim:
-    image: lsstts/love-watcher-sim:develop
+    image: lsstts/love-watcher-sim:main
     container_name: watcher-sim
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
@@ -86,7 +86,7 @@ services:
         max-size: "10m"
 
   weatherstation-sim:
-    image: lsstts/love-weatherstation-sim:develop
+    image: lsstts/love-weatherstation-sim:main
     container_name: weatherstation-sim
     entrypoint: ["/home/saluser/weatherstation-setup.sh"]
     environment:
@@ -104,7 +104,7 @@ services:
         max-size: "10m"
 
   scriptqueue-sim:
-    image: lsstts/love-scriptqueue-sim:develop
+    image: lsstts/love-scriptqueue-sim:main
     container_name: scriptqueue-sim
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
@@ -141,7 +141,7 @@ services:
 
   jupyter:
     container_name: love-jupyter
-    image: lsstts/love-jupyter:develop
+    image: lsstts/love-jupyter:main
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - JUPYTER_PASS=${JUPYTER_PASS}
@@ -367,7 +367,7 @@ services:
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
-    image: lsstts/love-commander:develop
+    image: lsstts/love-commander:main
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
@@ -412,7 +412,7 @@ services:
 
   manager:
     container_name: love-manager
-    image: lsstts/love-manager:develop
+    image: lsstts/love-manager:main
     depends_on:
       - redis
       - database
@@ -453,7 +453,7 @@ services:
   #----- LOVE FRONTEND --------------
   frontend:
     container_name: love-frontend
-    image: lsstts/love-frontend:develop
+    image: lsstts/love-frontend:main
     network_mode: ${NETWORK_NAME}
     volumes:
       - frontend-volume:/usr/src/love
@@ -474,7 +474,7 @@ services:
       - "80:80"
     restart: always
     volumes:
-      - ./nginx-develop.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx-main.conf:/etc/nginx/conf.d/default.conf
       - frontend-volume:/usr/src/love-frontend
       - ./media:/usr/src/love-manager/media
       - manager-static:/usr/src/love-manager/static

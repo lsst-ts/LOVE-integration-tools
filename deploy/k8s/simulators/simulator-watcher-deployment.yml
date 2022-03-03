@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator-watcher-deployment
+spec:
+  selector:
+    matchLabels:
+      app: simulator-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simulator-service
+    spec:
+      containers:
+      - name: simulator-watcher
+        image: lsstts/love-watcher-sim:develop
+        command: [ "/bin/bash","-c" ]
+        args:
+          - /home/saluser/watcher-setup.sh
+        volumeMounts:
+          - mountPath: /home/ospl/
+            name: ospl-conf
+        envFrom:
+          - configMapRef:
+              name: love-simulator-env
+      volumes:
+        - name: ospl-conf
+          configMap:
+            name: ospl
+            items:
+              - key: ospl.xml
+                path: ospl.xml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simulator-service
+  labels:
+    app: simulator-service
+spec:
+  ports:
+  - port: 8001
+  selector:
+    app: simulator-service
+
