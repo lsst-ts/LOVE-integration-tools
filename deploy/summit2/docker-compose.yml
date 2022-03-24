@@ -23,6 +23,7 @@ x-base-producer: &base-producer
     <<: *base-producer-environment
   ipc: host
   pid: host
+  restart: always
   volumes:
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
@@ -124,7 +125,7 @@ services:
     environment:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScriptQueue}
-      LOVE_CSC_PRODUCER: ScriptQueue:2
+      LOVE_CSC_PRODUCER: ScriptQueue:2 --log-level 10
   atscheduler:
     <<: *base-producer
     container_name: producer-atscheduler
