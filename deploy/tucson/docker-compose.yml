@@ -51,6 +51,7 @@ x-base-producer: &base-producer
   #   - dds-network
   ipc: host
   pid: host
+  restart: always
   volumes:
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
