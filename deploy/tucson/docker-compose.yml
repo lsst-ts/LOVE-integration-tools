@@ -24,6 +24,7 @@ x-manager-service: &manager-service
     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
     - USER_USER_PASS=${USER_USER_PASS}
     - CMD_USER_PASS=${CMD_USER_PASS}
+    - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
     - DB_ENGINE=${DB_ENGINE}
     - DB_NAME=${DB_NAME}
     - DB_USER=${DB_USER}
