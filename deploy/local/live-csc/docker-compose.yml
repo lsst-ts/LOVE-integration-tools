@@ -95,7 +95,23 @@ services:
     container_name: producer-mtrotator-image-mount
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTRotator:0 
+      LOVE_CSC_PRODUCER: MTRotator:0
+  CameraHexapod:
+    <<: *base-producer
+    container_name: producer-camerahexapod-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2hexapod-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2 
   Watcher:
     <<: *base-producer
     container_name: producer-watcher-image-mount
