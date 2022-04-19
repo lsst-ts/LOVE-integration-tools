@@ -36,7 +36,7 @@ x-manager-service: &manager-service
     - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     - LOVE_SITE=${LOVE_SITE}
   volumes:
-    - manager-static:/usr/src/love/manager
+    - manager-static:/usr/src/love/manager/static
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
 
