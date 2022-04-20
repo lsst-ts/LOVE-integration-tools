@@ -83,13 +83,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATAOS}
       LOVE_CSC_PRODUCER: ATAOS:0
-  atarchiver:
-    <<: *base-producer
-    container_name: producer-atarchiver
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATArchiver}
-      LOVE_CSC_PRODUCER: ATArchiver:0
   atcamera:
     <<: *base-producer
     container_name: producer-atcamera
@@ -139,6 +132,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOCPS}
       LOVE_CSC_PRODUCER: OCPS:1
+  atoods:
+    <<: *base-producer
+    container_name: producer-atoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOODS}
+      LOVE_CSC_PRODUCER: ATOODS:0
   atpneumatics:
     <<: *base-producer
     container_name: producer-atpneumatics
@@ -188,13 +188,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  ccarchiver:
-    <<: *base-producer
-    container_name: producer-ccarchiver
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCArchiver}
-      LOVE_CSC_PRODUCER: CCArchiver:0
   cccamera:
     <<: *base-producer
     container_name: producer-cccamera
@@ -216,6 +209,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
       LOVE_CSC_PRODUCER: OCPS:2
+  ccoods:
+    <<: *base-producer
+    container_name: producer-ccoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
+      LOVE_CSC_PRODUCER: CCOODS:0
   comcamess01:
     <<: *base-producer
     container_name: producer-comcam-ess01
