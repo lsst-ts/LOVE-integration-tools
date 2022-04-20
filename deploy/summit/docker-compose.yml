@@ -436,8 +436,8 @@ services:
     container_name: love-manager-comcam
     <<: *manager-service
 
-  manager_ess:
-    container_name: love-manager-ess
+  manager_eas:
+    container_name: love-manager-eas
     <<: *manager-service
 
   manager_obssys:
