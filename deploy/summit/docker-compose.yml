@@ -258,6 +258,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2Hexapod}
       LOVE_CSC_PRODUCER: MTHexapod:2
+  mtaircompressor1:
+    <<: *base-producer
+    container_name: producer-mtaircompressor1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
+      LOVE_CSC_PRODUCER: MTAirCompressor:1
+  mtaircompressor2:
+    <<: *base-producer
+    container_name: producer-mtaircompressor2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
+      LOVE_CSC_PRODUCER: MTAirCompressor:2
   mtaos:
     <<: *base-producer
     container_name: producer-mtaos
