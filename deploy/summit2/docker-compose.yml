@@ -154,6 +154,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
+  camhexrotess01:
+    <<: *base-producer
+    container_name: producer-camhexrot-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CamHexRotESS01}
+      LOVE_CSC_PRODUCER: ESS:1
   cccamera:
     <<: *base-producer
     container_name: producer-cccamera
@@ -182,13 +189,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
       LOVE_CSC_PRODUCER: CCOODS:0
-  comcamess01:
-    <<: *base-producer
-    container_name: producer-comcam-ess01
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ComCamESS01}
-      LOVE_CSC_PRODUCER: ESS:1
   dimm1:
     <<: *base-producer
     container_name: producer-dimm1
