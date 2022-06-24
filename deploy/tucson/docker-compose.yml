@@ -24,6 +24,7 @@ x-manager-service: &manager-service
     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
     - USER_USER_PASS=${USER_USER_PASS}
     - CMD_USER_PASS=${CMD_USER_PASS}
+    - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
     - DB_ENGINE=${DB_ENGINE}
     - DB_NAME=${DB_NAME}
     - DB_USER=${DB_USER}
@@ -33,8 +34,9 @@ x-manager-service: &manager-service
     - COMMANDER_HOSTNAME=love-commander
     - COMMANDER_PORT=5000
     - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    - LOVE_SITE=${LOVE_SITE}
   volumes:
-    - manager-static:/usr/src/love/manager
+    - manager-static:/usr/src/love/manager/static
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
 
@@ -51,6 +53,7 @@ x-base-producer: &base-producer
   #   - dds-network
   ipc: host
   pid: host
+  restart: always
   volumes:
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
@@ -92,13 +95,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATAOS}
       LOVE_CSC_PRODUCER: ATAOS:0
-  atarchiver:
-    <<: *base-producer
-    container_name: producer-atarchiver
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATArchiver}
-      LOVE_CSC_PRODUCER: ATArchiver:0
   atcamera:
     <<: *base-producer
     container_name: producer-atcamera
@@ -148,6 +144,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOCPS}
       LOVE_CSC_PRODUCER: OCPS:1
+  atoods:
+    <<: *base-producer
+    container_name: producer-atoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATOODS}
+      LOVE_CSC_PRODUCER: ATOODS:0
   atpneumatics:
     <<: *base-producer
     container_name: producer-atpneumatics
@@ -190,13 +193,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  ccarchiver:
-    <<: *base-producer
-    container_name: producer-ccarchiver
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCArchiver}
-      LOVE_CSC_PRODUCER: CCArchiver:0
   cccamera:
     <<: *base-producer
     container_name: producer-cccamera
@@ -218,6 +214,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
       LOVE_CSC_PRODUCER: OCPS:2
+  ccoods:
+    <<: *base-producer
+    container_name: producer-ccoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
+      LOVE_CSC_PRODUCER: CCOODS:0
   dimm1:
     <<: *base-producer
     container_name: producer-dimm1
