@@ -185,6 +185,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS01}
       LOVE_CSC_PRODUCER: ESS:201
+  auxteless02:
+    <<: *base-producer
+    container_name: producer-auxtel-ess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS02}
+      LOVE_CSC_PRODUCER: ESS:202
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
