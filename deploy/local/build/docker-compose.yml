@@ -284,10 +284,12 @@ services:
     image: love-commander-image-mount
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_DDS_INTERFACE=wlp2s0
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
+      - ${OSPL_STD}:${OSPL_LOC}
     logging:
       driver: "json-file"
       options:
@@ -365,6 +367,7 @@ services:
       - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager
     logging:
       driver: "json-file"
       options:
@@ -379,11 +382,12 @@ services:
       dockerfile: docker/Dockerfile
     image: love-frontend-image-mount
     network_mode: ${NETWORK_NAME}
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      - /usr/src/love/love/node_modules
+      - frontend-volume:/usr/src/love
+      # - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
+      # - /usr/src/love/love/node_modules
     environment:
       CI: "true"
     logging:
@@ -426,8 +430,14 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./media:/usr/src/love-manager/media
+      - frontend-volume:/usr/src/love-frontend
+      - manager-static:/usr/src/love-manager/static
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
+
+volumes:
+  frontend-volume:
+  manager-static:
