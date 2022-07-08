@@ -11,6 +11,7 @@ x-base-producer-env: &base-producer-environment
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
+  LSST_DDS_INTERFACE: wlp2s0
 
 x-base-producer: &base-producer
   build:
@@ -26,6 +27,7 @@ x-base-producer: &base-producer
   volumes:
     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
     - ./config:/usr/src/love/producer/config/
+    - ${OSPL_STD}:${OSPL_LOC}
   logging:
     driver: "json-file"
     options:
@@ -96,12 +98,12 @@ services:
   #   environment:
   #     <<: *base-producer-environment
   #     LOVE_CSC_PRODUCER: MTRotator:0 
-  Watcher:
-    <<: *base-producer
-    container_name: producer-watcher-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: Watcher:0
+  # Watcher:
+  #   <<: *base-producer
+  #   container_name: producer-watcher-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: Watcher:0
   # ScriptQueue:
   #   <<: *base-producer
   #   container_name: producer-scriptqueue-image-mount
