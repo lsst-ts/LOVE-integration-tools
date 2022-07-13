@@ -357,7 +357,7 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-      - COMMANDER_HOSTNAME=love-commander-mount
+      - COMMANDER_HOSTNAME=localhost
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
       - LOVE_SITE=${LOVE_SITE}
