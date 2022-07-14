@@ -244,6 +244,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DIMM2}
       LOVE_CSC_PRODUCER: DIMM:2
+  electrometer1:
+    <<: *base-producer
+    container_name: producer-electrometer1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      LOVE_CSC_PRODUCER: Electrometer:1
   hvac:
     <<: *base-producer
     container_name: producer-hvac
