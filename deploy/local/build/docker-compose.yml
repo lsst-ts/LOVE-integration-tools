@@ -12,6 +12,8 @@ x-base-producer-env: &base-producer-environment
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
   LSST_DDS_INTERFACE: ${LSST_DDS_INTERFACE}
+  LSST_DDS_DOMAIN_ID: ${LSST_DDS_DOMAIN_ID}
+  LSST_DDS_DOMAIN_NAME: ${LSST_DDS_DOMAIN_NAME}
 
 x-base-producer: &base-producer
   build:
@@ -29,7 +31,7 @@ x-base-producer: &base-producer
     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
     - ./config:/usr/src/love/producer/config/
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
-    - ${OSPL_CONFIG}:${OSPL_LOC}
+    - ${OSPL_SHMEM_CONFIG}:${OSPL_LOC}
   logging:
     driver: "json-file"
     options:
@@ -295,12 +297,16 @@ services:
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - LSST_DDS_INTERFACE=${LSST_DDS_INTERFACE}
+      - LSST_DDS_DOMAIN_ID=${LSST_DDS_DOMAIN_ID}
+      - LSST_DDS_DOMAIN_NAME=${LSST_DDS_DOMAIN_NAME}
     network_mode: ${NETWORK_NAME}
+    # entrypoint: ["/home/saluser/.setup_dev.sh"]
+    # tty: true
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
       - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
-      - ${OSPL_CONFIG}:${OSPL_LOC}
+      - ${OSPL_SHMEM_CONFIG}:${OSPL_LOC}
     logging:
       driver: "json-file"
       options:
