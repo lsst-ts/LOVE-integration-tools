@@ -11,7 +11,7 @@ x-base-producer-env: &base-producer-environment
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
-  LSST_DDS_INTERFACE: wlp2s0
+  LSST_DDS_INTERFACE: ${LSST_DDS_INTERFACE}
 
 x-base-producer: &base-producer
   build:
@@ -19,6 +19,7 @@ x-base-producer: &base-producer
     dockerfile: docker/Dockerfile
     args:
       dev_cycle: "${dev_cycle}"
+      docker_registry: "${docker_registry}"
   image: love-producer-image-mount
   environment:
     <<: *base-producer-environment
@@ -27,7 +28,8 @@ x-base-producer: &base-producer
   volumes:
     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
     - ./config:/usr/src/love/producer/config/
-    - ${OSPL_STD}:${OSPL_LOC}
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+    - ${OSPL_CONFIG}:${OSPL_LOC}
   logging:
     driver: "json-file"
     options:
@@ -116,13 +118,18 @@ services:
   #   environment:
   #     <<: *base-producer-environment
   #     LOVE_CSC_PRODUCER: WeatherStation:1
-  GenericCamera4:
+  GenericCamera1:
     <<: *base-producer
-    container_name: producer-genericcamera4-image-mount
+    container_name: producer-genericcamera1-image-mount
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: GenericCamera:4
-  
+      LOVE_CSC_PRODUCER: GenericCamera:1
+  GenericCamera301:
+    <<: *base-producer
+    container_name: producer-genericcamera301-image-mount
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: GenericCamera:301
   # -------------- simulators --------------
   # atcs-sim:
   #   build:
@@ -283,15 +290,17 @@ services:
       dockerfile: docker/Dockerfile
       args:
         dev_cycle: "${dev_cycle}"
+        docker_registry: "${docker_registry}"
     image: love-commander-image-mount
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - LSST_DDS_INTERFACE=wlp2s0
+      - LSST_DDS_INTERFACE=${LSST_DDS_INTERFACE}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
-      - ${OSPL_STD}:${OSPL_LOC}
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+      - ${OSPL_CONFIG}:${OSPL_LOC}
     logging:
       driver: "json-file"
       options:
