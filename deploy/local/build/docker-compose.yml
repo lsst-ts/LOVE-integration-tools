@@ -11,7 +11,6 @@ x-base-producer-env: &base-producer-environment
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
-  LSST_DDS_INTERFACE: ${LSST_DDS_INTERFACE}
   LSST_DDS_DOMAIN_ID: ${LSST_DDS_DOMAIN_ID}
   LSST_DDS_DOMAIN_NAME: ${LSST_DDS_DOMAIN_NAME}
 
@@ -22,18 +21,19 @@ x-base-producer: &base-producer
     args:
       dev_cycle: "${dev_cycle}"
       docker_registry: "${docker_registry}"
-  image: love-producer-image-mount
+  image: love-producer
   environment:
     <<: *base-producer-environment
-  network_mode: ${NETWORK_NAME}
+  networks:
+    - love
   entrypoint: ["/home/saluser/run_producer.sh"]
   restart: always
   tty: true
   ipc: host
   pid: host
   volumes:
-    - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
-    - ./config:/usr/src/love/producer/config/
+    - ${DOCKERFILE_PATH_PRODUCER}:/home/saluser/love-producer
+    - ./config:/home/saluser/love-producer/config/
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ${OSPL_SHMEM_CONFIG}:${OSPL_LOC}
     - ./run_producer.sh:/home/saluser/run_producer.sh
@@ -42,269 +42,46 @@ x-base-producer: &base-producer
     options:
       max-file: "5"
       max-size: "10m"
-  depends_on:
-    - nginx
 
 version: "3.7"
 
 services:
   # -------------- producers --------------
-  LOVE:
+  love:
     <<: *base-producer
-    container_name: producer-love-image-mount
+    container_name: producer-love
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: LOVE:0
-  # ATDome:
-  #   <<: *base-producer
-  #   container_name: producer-atdome-image-mount
-  #   depends_on:
-  #     - atcs-sim
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATDome:0
-  # ATMCS:
-  #   <<: *base-producer
-  #   container_name: producer-atmcs-image-mount
-  #   depends_on:
-  #     - atcs-sim
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATMCS:0
-  # ATAOS:
-  #   <<: *base-producer
-  #   container_name: producer-ataos-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATAOS:0
-  # ATSpectrograph:
-  #   <<: *base-producer
-  #   container_name: producer-atspectrograph-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATSpectrograph:0
-  # ATCamera:
-  #   <<: *base-producer
-  #   container_name: producer-atcamera-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ATCamera:0
-  # MTM1M3:
-  #   <<: *base-producer
-  #   container_name: producer-mtm1m3-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: MTM1M3:0
-  # MTMount:
-  #   <<: *base-producer
-  #   container_name: producer-mtmount-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: MTMount:0
-  # MTRotator:
-  #   <<: *base-producer
-  #   container_name: producer-mtrotator-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: MTRotator:0 
-  # Watcher:
-  #   <<: *base-producer
-  #   container_name: producer-watcher-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: Watcher:0
-  # ScriptQueue:
-  #   <<: *base-producer
-  #   container_name: producer-scriptqueue-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: ScriptQueue:1
-  # WeatherStation1:
-  #   <<: *base-producer
-  #   container_name: producer-weatherstation1-image-mount
-  #   environment:
-  #     <<: *base-producer-environment
-  #     LOVE_CSC_PRODUCER: WeatherStation:1
-  GenericCamera1:
+  genericcamera1:
     <<: *base-producer
-    container_name: producer-genericcamera1-image-mount
+    container_name: producer-genericcamera1
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: GenericCamera:1
-  GenericCamera301:
+  genericcamera301:
     <<: *base-producer
-    container_name: producer-genericcamera301-image-mount
+    container_name: producer-genericcamera301
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: GenericCamera:301
-  # -------------- simulators --------------
-  # atcs-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: docker/Dockerfile-atcs
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: atcs-sim-build
-  #   entrypoint: ["/home/saluser/atcs-setup.sh"]
-  #   environment:
-  #     - OSPL_URI=${OSPL_URI}
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
-  # mtcs-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: docker/Dockerfile-mtcs
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: mtcs-sim-build
-  #   entrypoint: ["/home/saluser/mtcs-setup.sh"]
-  #   environment:
-  #     - OSPL_URI=${OSPL_URI}
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
-  # scriptqueue-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: docker/Dockerfile-scriptqueue
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: scriptqueue-sim-build
-  #   environment:
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ./config:/home/saluser/config/
-  #     - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
-  #     - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
-  # watcher-sim:
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: docker/Dockerfile-watcher
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   container_name: watcher-sim-build
-  #   entrypoint: ["/home/saluser/watcher-setup.sh"]
-  #   environment:
-  #     - OSPL_URI=${OSPL_URI}
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   restart: always
-  #   volumes:
-  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #     - ./config:/home/saluser/config/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
-  #weatherstation-sim:
-  #  build:
-  #    context: ${DOCKERFILE_PATH_SIMULATOR}
-  #    dockerfile: docker/Dockerfile-weatherstation
-  #    args:
-  #      dev_cycle: "${dev_cycle}"
-  #  container_name: weatherstation-sim-build
-  #  entrypoint: ["/home/saluser/weatherstation-setup.sh"]
-  #  environment:
-  #    - OSPL_URI=${OSPL_URI}
-  #    - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #  network_mode: ${NETWORK_NAME}
-  #  restart: always
-  #  volumes:
-  #    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #    - ./config:/home/saluser/config/
-  #  logging:
-  #    driver: "json-file"
-  #    options:
-  #      max-file: "5"
-  #      max-size: "10m"
-
-  # TODO: we should use a public image
-  # gencam-sim:
-  #   image: ts-dockerhub.lsst.org/genericcamera:c0020.004
-  #   container_name: gencam-sim
-  #   environment:
-  #     - OSPL_URI=${OSPL_URI}
-  #     - RUN_ARG=1
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   # restart: always
-  #   volumes:
-  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-  #   ports:
-  #     - 5013:5013
-
-  # jupyter:
-  #   container_name: love-jupyter
-  #   build:
-  #     context: ${DOCKERFILE_PATH_SIMULATOR}
-  #     dockerfile: docker/Dockerfile-jupyter
-  #     args:
-  #       dev_cycle: "${dev_cycle}"
-  #   environment:
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #     - JUPYTER_PASS=${JUPYTER_PASS}
-  #   user: root
-  #   network_mode: ${NETWORK_NAME}
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-  #   volumes:
-  #     - ${JUPYTER_PATH}:/home/saluser/notebooks
-  #   ports:
-  #     - 1234:1234
-
+ 
   #----- LOVE COMMANDER ---------
   commander:
-    container_name: love-commander-mount
+    container_name: love-commander
     build:
       context: ${DOCKERFILE_PATH_COMMANDER}
       dockerfile: docker/Dockerfile
       args:
         dev_cycle: "${dev_cycle}"
         docker_registry: "${docker_registry}"
-    image: love-commander-image-mount
+    image: love-commander
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - LSST_DDS_INTERFACE=${LSST_DDS_INTERFACE}
       - LSST_DDS_DOMAIN_ID=${LSST_DDS_DOMAIN_ID}
       - LSST_DDS_DOMAIN_NAME=${LSST_DDS_DOMAIN_NAME}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      - love
     entrypoint: ["/home/saluser/run_commander.sh"]
     tty: true
     ipc: host
@@ -326,7 +103,8 @@ services:
     container_name: redis
     image: redis:5.0.3
     command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      - love
     ports:
       - "6379:6379"
     restart: always
@@ -343,7 +121,8 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      - love
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
@@ -354,11 +133,11 @@ services:
         max-size: "10m"
 
   manager:
-    container_name: love-manager-mount
+    container_name: love-manager
     build:
       context: ${DOCKERFILE_PATH_MANAGER}
       dockerfile: docker/Dockerfile
-    image: love-manager-image-mount
+    image: love-manager
     depends_on:
       - redis
       - database
@@ -380,19 +159,19 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-      - COMMANDER_HOSTNAME=localhost
+      - COMMANDER_HOSTNAME=love-commander
       - COMMANDER_PORT=5000
       - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
       - LOVE_SITE=${LOVE_SITE}
-    network_mode: ${NETWORK_NAME}
+    networks:
+      - love
     ports:
       - "8000:8000"
     restart: always
     volumes:
-      - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love/manager
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
-      - manager-static:/usr/src/love/manager
     logging:
       driver: "json-file"
       options:
@@ -401,18 +180,18 @@ services:
 
   #----- LOVE FRONTEND --------------
   frontend:
-    container_name: love-frontend-mount
+    container_name: love-frontend
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
       dockerfile: docker/Dockerfile
-    image: love-frontend-image-mount
-    network_mode: ${NETWORK_NAME}
-    # ports:
-    #   - "3000:3000"
+    image: love-frontend
+    networks:
+      - love
+    ports:
+      - "3000:3000"
+    tty: true
     volumes:
-      - frontend-volume:/usr/src/love
-      # - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      # - /usr/src/love/love/node_modules
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love-frontend
     environment:
       CI: "true"
     logging:
@@ -421,48 +200,28 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  # styleguide:
-  #   container_name: love-styleguide-mount
-  #   build:
-  #     context: ${DOCKERFILE_PATH_FRONTEND}
-  #     dockerfile: docker/Dockerfile
-  #   image: love-frontend-image-mount
-  #   command: yarn guide:start --disable-host-check
-  #   network_mode: ${NETWORK_NAME}
-  #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-  #     - /usr/src/love/love/node_modules
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-
   nginx:
-    container_name: love-nginx-mount
+    container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
       - frontend
       - manager
-      # - styleguide
-      # - gencam-sim
-    network_mode: ${NETWORK_NAME}
+    networks:
+      - love
     ports:
       - "80:80"
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./media:/usr/src/love-manager/media
-      - frontend-volume:/usr/src/love-frontend
-      - manager-static:/usr/src/love-manager/static
+      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love-frontend
+      - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love-manager/static
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
 
-volumes:
-  frontend-volume:
-  manager-static:
+networks:
+  love:
+    external: true
