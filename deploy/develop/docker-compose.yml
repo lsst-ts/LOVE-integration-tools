@@ -1,0 +1,214 @@
+version: "3.7"
+
+x-service:
+  &service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-producer-env:
+  &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LSST_DDS_DOMAIN_NAME: ${LSST_DDS_DOMAIN_NAME}
+  LSST_DDS_DOMAIN_ID: ${LSST_DDS_DOMAIN_ID}
+
+x-base-producer:
+  &base-producer
+  image: love-producer-develop:${cycle}
+  build:
+    context: ${LOVE_REPOS_PATH}/LOVE-producer/
+    dockerfile: docker/Dockerfile-dev
+    args:
+      registry: ts-dockerhub.lsst.org
+  networks:
+    love:
+  ipc: host
+  pid: host
+  volumes:
+    - ${LOVE_REPOS_PATH}/LOVE-producer:/home/saluser/LOVE-producer
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+    - ./config:/home/saluser/LOVE-producer/config/
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
+x-base-manager:
+  &base-manager
+  image: love-manager-develop:${cycle}
+  build:
+    context: ${LOVE_REPOS_PATH}/LOVE-manager/
+    dockerfile: docker/Dockerfile-dev
+  depends_on:
+    - redis
+    - database
+    - commander
+  environment:
+    - SERVER_URL=${SERVER_URL}
+    - REDIS_HOST=${REDIS_HOST}
+    - REDIS_PASS=${REDIS_PASS}
+    - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+    - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+    - USER_USER_PASS=${USER_USER_PASS}
+    - CMD_USER_PASS=${CMD_USER_PASS}
+    - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+    - DB_ENGINE=${DB_ENGINE}
+    - DB_NAME=${DB_NAME}
+    - DB_USER=${DB_USER}
+    - DB_PASS=${DB_PASS}
+    - DB_HOST=${DB_HOST}
+    - DB_PORT=${DB_PORT}
+    - COMMANDER_HOSTNAME=love-commander
+    - COMMANDER_PORT=5000
+    - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+  networks:
+    - love
+  volumes:
+    - ${LOVE_REPOS_PATH}/LOVE-manager/manager:/usr/src/love/manager
+    # - manager-static:/usr/src/love/manager
+    - ./config:/usr/src/love/manager/config
+    - ./media:/usr/src/love/manager/media
+
+services:
+
+  #-----LOVE PRODUCER -----------
+  producer-atmcs:
+    <<: *base-producer
+    container_name: producer-atmcs
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATCS}
+      LOVE_CSC_PRODUCER: ATMCS:0
+
+  producer-atpneumatics:
+    <<: *base-producer
+    container_name: producer-atpneumatics
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATCS}
+      LOVE_CSC_PRODUCER: ATPneumatics:0
+
+  producer-ataos:
+    <<: *base-producer
+    container_name: producer-ataos
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATCS}
+      LOVE_CSC_PRODUCER: ATAOS:0
+
+  producer-atqueue:
+    <<: *base-producer
+    container_name: producer-atqueue
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATCS}
+      LOVE_CSC_PRODUCER: ScriptQueue:2
+
+  #-----LOVE COMMANDER -----------
+  commander:
+    container_name: love-commander
+    image: love-commander-develop:${cycle}
+    build:
+      context: ${LOVE_REPOS_PATH}/LOVE-commander/
+      dockerfile: docker/Dockerfile-dev
+      args:
+        registry: ts-dockerhub.lsst.org
+    environment:
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_DDS_DOMAIN_NAME=${LSST_DDS_DOMAIN_NAME}
+      - LSST_DDS_DOMAIN_ID=${LSST_DDS_DOMAIN_ID}
+      - OSPL_INFOFILE=/tmp/ospl-info-commander.log
+      - OSPL_ERRORFILE=/tmp/ospl-error-commander.log
+    ipc: host
+    pid: host
+    networks:
+      love:
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ${LOVE_REPOS_PATH}/LOVE-commander/:/usr/src/love/
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+
+  #----- LOVE MANAGER --------------
+  redis:
+    <<: *service
+    container_name: redis
+    image: redis:5.0.3
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    networks:
+      - love
+    ports:
+      - "6379:6379"
+
+  database:
+    <<: *service
+    container_name: love-database
+    image: postgres:12.0
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    networks:
+      - love
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+
+  manager:
+    container_name: love-manager
+    <<: *base-manager
+
+  manager_atcs:
+    container_name: manager_atcs
+    <<: *base-manager
+
+  #----- LOVE FRONTEND --------------
+  frontend:
+    <<: *service
+    container_name: love-frontend
+    image: love-frontend-develop:${cycle}
+    build:
+      context: ${LOVE_REPOS_PATH}/LOVE-frontend/
+      dockerfile: docker/Dockerfile-dev-nile
+      args:
+        registry: ts-dockerhub.lsst.org
+    depends_on:
+      - manager
+      - manager_atcs
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${LOVE_REPOS_PATH}/LOVE-frontend:/usr/src/LOVE-frontend
+    tty: true
+    networks:
+      - love
+
+  nginx:
+    <<: *service
+    container_name: love-nginx
+    image: nginx:1.13.1
+    depends_on:
+      - manager
+      - frontend
+    networks:
+      - love
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ${LOVE_REPOS_PATH}/LOVE-frontend/:/usr/src/love-frontend
+      - ${LOVE_REPOS_PATH}/LOVE-manager/manager:/usr/src/love-manager/static
+      - ./media:/usr/src/love-manager/media
+
+networks:
+  love:
+    external: true
