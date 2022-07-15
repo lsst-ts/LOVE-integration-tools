@@ -26,12 +26,17 @@ x-base-producer: &base-producer
   environment:
     <<: *base-producer-environment
   network_mode: ${NETWORK_NAME}
+  entrypoint: ["/home/saluser/run_producer.sh"]
   restart: always
+  tty: true
+  ipc: host
+  pid: host
   volumes:
     - ${DOCKERFILE_PATH_PRODUCER}:/usr/src/love
     - ./config:/usr/src/love/producer/config/
     - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ${OSPL_SHMEM_CONFIG}:${OSPL_LOC}
+    - ./run_producer.sh:/home/saluser/run_producer.sh
   logging:
     driver: "json-file"
     options:
@@ -300,13 +305,16 @@ services:
       - LSST_DDS_DOMAIN_ID=${LSST_DDS_DOMAIN_ID}
       - LSST_DDS_DOMAIN_NAME=${LSST_DDS_DOMAIN_NAME}
     network_mode: ${NETWORK_NAME}
-    # entrypoint: ["/home/saluser/.setup_dev.sh"]
-    # tty: true
+    entrypoint: ["/home/saluser/run_commander.sh"]
+    tty: true
+    ipc: host
+    pid: host
     restart: always
     volumes:
       - ${DOCKERFILE_PATH_COMMANDER}:/usr/src/love
       - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
       - ${OSPL_SHMEM_CONFIG}:${OSPL_LOC}
+      - ./run_commander.sh:/home/saluser/run_commander.sh
     logging:
       driver: "json-file"
       options:
