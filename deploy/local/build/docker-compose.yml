@@ -183,7 +183,7 @@ services:
     container_name: love-frontend
     build:
       context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile-dev
     image: love-frontend
     networks:
       - love
@@ -191,7 +191,7 @@ services:
       - "3000:3000"
     tty: true
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love-frontend
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
     environment:
       CI: "true"
     logging:
