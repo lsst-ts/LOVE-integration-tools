@@ -119,7 +119,7 @@ services:
       - mtcs-sim
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTDome:1
+      LOVE_CSC_PRODUCER: MTDome:0
   Watcher:
     <<: *base-producer
     container_name: producer-watcher-image-mount
