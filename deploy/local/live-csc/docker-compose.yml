@@ -81,18 +81,32 @@ services:
   MTM1M3:
     <<: *base-producer
     container_name: producer-mtm1m3-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
   MTMount:
     <<: *base-producer
     container_name: producer-mtmount-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTMount:0
   MTRotator:
     <<: *base-producer
     container_name: producer-mtrotator-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTRotator:0
