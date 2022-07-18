@@ -111,7 +111,15 @@ services:
       - mtcs-sim
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTHexapod:2 
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:1
   Watcher:
     <<: *base-producer
     container_name: producer-watcher-image-mount
