@@ -20,7 +20,7 @@ x-base-producer: &base-producer
     dockerfile: docker/Dockerfile
     args:
       dev_cycle: "${dev_cycle}"
-      docker_registry: "${docker_registry}"
+      registry: "${docker_registry}"
   image: love-producer
   environment:
     <<: *base-producer-environment
@@ -71,10 +71,10 @@ services:
     container_name: love-commander
     build:
       context: ${DOCKERFILE_PATH_COMMANDER}
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
-        docker_registry: "${docker_registry}"
+        registry: "${docker_registry}"
     image: love-commander
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
