@@ -323,6 +323,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTRotator}
       LOVE_CSC_PRODUCER: MTRotator:0
+  mtaircompressor_1:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
+      LOVE_CSC_PRODUCER: MTAirCompressor:1
+  mtaircompressor_2:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
+      LOVE_CSC_PRODUCER: MTAirCompressor:2
+  mtalignment:
+    <<: *base-producer
+    container_name: producer-mtalignment
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAlignment}
+      LOVE_CSC_PRODUCER: MTAlignment:0
   mtscheduler:
     <<: *base-producer
     container_name: producer-mtscheduler
@@ -412,6 +433,10 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
+    <<: *manager-service
+
+  manager_maintel_misc:
+    container_name: love-manager-maintel-misc
     <<: *manager-service
 
   manager_comcam:
