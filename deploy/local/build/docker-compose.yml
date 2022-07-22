@@ -216,6 +216,7 @@ services:
       - ./media:/usr/src/love-manager/media
       - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love-frontend
       - ${DOCKERFILE_PATH_MANAGER}/manager:/usr/src/love-manager/static
+      - ./config/love.json:/usr/src/love-manager/media/configs/default.json
     logging:
       driver: "json-file"
       options:

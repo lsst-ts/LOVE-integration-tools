@@ -5,6 +5,7 @@
   },
   "camFeeds": {
     "generic": "/gencam",
-    "allSky": "/gencam"
+    "allSky": "/gencam",
+    "dsmdev": "/dsmdev"
   }
 }
