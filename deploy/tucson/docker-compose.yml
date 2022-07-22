@@ -190,6 +190,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATSpectrograph}
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  authorize:
+    <<: *base-producer
+    container_name: producer-authorize
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Authorize}
+      LOVE_CSC_PRODUCER: Authorize:0
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
