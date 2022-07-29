@@ -414,8 +414,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      - /usr/src/love/love/node_modules
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+      - /usr/src/love/node_modules
     environment:
       CI: "true"
     logging:
