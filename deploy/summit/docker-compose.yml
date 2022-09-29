@@ -178,6 +178,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATSpectrograph}
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  atwhitelight:
+    <<: *base-producer
+    container_name: producer-atwhitelight
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATWhiteLight}
+      LOVE_CSC_PRODUCER: ATWhiteLight:0
   auxteless01:
     <<: *base-producer
     container_name: producer-auxtel-ess01
@@ -477,6 +484,10 @@ services:
   manager_m2:
     <<: *manager-service
     container_name: love-manager-m2
+  
+  manager_atcalsys:
+    <<: *manager-service
+    container_name: love-manager-atcalsys
 
 
   #----- LOVE FRONTEND --------------
