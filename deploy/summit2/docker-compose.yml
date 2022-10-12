@@ -381,9 +381,149 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
-  manager:
+  manager01:
     <<: *service
-    container_name: love-manager
+    container_name: love-manager01
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager/static
+
+  manager02:
+    <<: *service
+    container_name: love-manager02
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager/static
+
+  manager03:
+    <<: *service
+    container_name: love-manager03
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager/static
+
+  manager04:
+    <<: *service
+    container_name: love-manager04
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+      - manager-static:/usr/src/love/manager/static
+
+  manager05:
+    <<: *service
+    container_name: love-manager05
     image: ts-dockerhub.lsst.org/love-manager:${cycle}
     depends_on:
       - redis
@@ -449,7 +589,75 @@ services:
     volumes:
       - ./config:/usr/src/love/manager/config
       - ./media:/usr/src/love/manager/media
-  
+
+  manager_atqueue02:
+    <<: *service
+    container_name: love-manager-atqueue02
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+
+  manager_atqueue03:
+    <<: *service
+    container_name: love-manager-atqueue03
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    depends_on:
+      - redis
+      - database
+      - commander
+    environment:
+      - SERVER_URL=${SERVER_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_CONFIG_EXPIRY=5
+      - REDIS_CONFIG_CAPACITY=5000
+      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+      - SECRET_KEY=${MANAGER_SECRET_KEY}
+      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
+      - USER_USER_PASS=${USER_USER_PASS}
+      - CMD_USER_PASS=${CMD_USER_PASS}
+      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - COMMANDER_HOSTNAME=love-commander
+      - COMMANDER_PORT=5000
+      - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    volumes:
+      - ./config:/usr/src/love/manager/config
+      - ./media:/usr/src/love/manager/media
+
   manager_mtqueue:
     <<: *service
     container_name: love-manager-mtqueue
@@ -636,7 +844,11 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      - manager01
+      - manager02
+      - manager03
+      - manager04
+      - manager05
       - frontend
     ports:
       - 80:80
