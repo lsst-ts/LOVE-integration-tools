@@ -43,6 +43,7 @@ x-manager-service: &manager-service
     - manager-static:/usr/src/love/manager/static
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
+    - ./config/love.json:/usr/src/love/manager/media/configs/default.json
 
 x-base-producer-env: &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
@@ -190,6 +191,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATSpectrograph}
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  authorize:
+    <<: *base-producer
+    container_name: producer-authorize
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Authorize}
+      LOVE_CSC_PRODUCER: Authorize:0
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
@@ -253,6 +261,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DSM2}
       LOVE_CSC_PRODUCER: DSM:2
+  genericcamera1:
+    <<: *base-producer
+    container_name: producer-genericcamera1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GENERICCAMERA1}
+      LOVE_CSC_PRODUCER: GenericCamera:1
   love:
     <<: *base-producer
     container_name: producer-love
@@ -323,6 +338,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTRotator}
       LOVE_CSC_PRODUCER: MTRotator:0
+  mtaircompressor_1:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
+      LOVE_CSC_PRODUCER: MTAirCompressor:1
+  mtaircompressor_2:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
+      LOVE_CSC_PRODUCER: MTAirCompressor:2
+  mtalignment:
+    <<: *base-producer
+    container_name: producer-mtalignment
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAlignment}
+      LOVE_CSC_PRODUCER: MTAlignment:0
   mtscheduler:
     <<: *base-producer
     container_name: producer-mtscheduler
@@ -414,6 +450,10 @@ services:
     container_name: love-manager-maintel
     <<: *manager-service
 
+  manager_maintel_misc:
+    container_name: love-manager-maintel-misc
+    <<: *manager-service
+
   manager_comcam:
     container_name: love-manager-comcam
     <<: *manager-service
@@ -433,6 +473,10 @@ services:
   manager_m2:
     <<: *manager-service
     container_name: love-manager-m2
+
+  manager_gc:
+    <<: *manager-service
+    container_name: love-manager-gc
 
   #----- LOVE FRONTEND --------------
   frontend:
