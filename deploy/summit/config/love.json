@@ -5,6 +5,8 @@
   },
   "camFeeds": {
     "generic": "/gencam",
-    "allSky": "/gencam"
+    "allSky": "/gencam",
+    "starTrackerA": "/startrackera",
+    "starTrackerB": "/startrackerb"
   }
 }
