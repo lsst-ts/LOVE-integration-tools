@@ -31,8 +31,6 @@ x-base-producer: &base-producer
     options:
       max-file: "5"
       max-size: "10m"
-  depends_on:
-    - nginx
 
 version: "3.7"
 
@@ -81,21 +79,59 @@ services:
   MTM1M3:
     <<: *base-producer
     container_name: producer-mtm1m3-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTM1M3:0
+  MTM2:
+    <<: *base-producer
+    container_name: producer-mtm2-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTM2:0
   MTMount:
     <<: *base-producer
     container_name: producer-mtmount-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTMount:0
   MTRotator:
     <<: *base-producer
     container_name: producer-mtrotator-image-mount
+    depends_on:
+      - mtcs-sim
     environment:
       <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTRotator:0 
+      LOVE_CSC_PRODUCER: MTRotator:0
+  CameraHexapod:
+    <<: *base-producer
+    container_name: producer-camerahexapod-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:1
+  M2Hexapod:
+    <<: *base-producer
+    container_name: producer-m2hexapod-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTHexapod:2
+  MTDome:
+    <<: *base-producer
+    container_name: producer-mtdome-image-mount
+    depends_on:
+      - mtcs-sim
+    environment:
+      <<: *base-producer-environment
+      LOVE_CSC_PRODUCER: MTDome:0
   Watcher:
     <<: *base-producer
     container_name: producer-watcher-image-mount
@@ -192,6 +228,7 @@ services:
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_SITE=${LSST_SITE}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -203,29 +240,28 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  # weatherstation-sim:
-  #  build:
-  #    context: ${DOCKERFILE_PATH_SIMULATOR}
-  #    dockerfile: docker/Dockerfile-weatherstation
-  #    args:
-  #      dev_cycle: "${dev_cycle}"
-  #  container_name: weatherstation-sim-build
-  #  entrypoint: ["/home/saluser/weatherstation-setup.sh"]
-  #  environment:
-  #    - OSPL_URI=${OSPL_URI}
-  #    - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #  network_mode: ${NETWORK_NAME}
-  #  restart: always
-  #  volumes:
-  #    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #    - ./config:/home/saluser/config/
-  #  logging:
-  #    driver: "json-file"
-  #    options:
-  #      max-file: "5"
-  #      max-size: "10m"
+  weatherstation-sim:
+   build:
+     context: ${DOCKERFILE_PATH_SIMULATOR}
+     dockerfile: docker/Dockerfile-weatherstation
+     args:
+       dev_cycle: "${dev_cycle}"
+   container_name: weatherstation-sim-build
+   entrypoint: ["/home/saluser/weatherstation-setup.sh"]
+   environment:
+     - OSPL_URI=${OSPL_URI}
+     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+   network_mode: ${NETWORK_NAME}
+   restart: always
+   volumes:
+     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+     - ./config:/home/saluser/config/
+   logging:
+     driver: "json-file"
+     options:
+       max-file: "5"
+       max-size: "10m"
 
-  # TODO: we should use a public image
   # gencam-sim:
   #   image: ts-dockerhub.lsst.org/genericcamera:c0020.004
   #   container_name: gencam-sim
@@ -279,6 +315,7 @@ services:
     image: love-commander-image-mount
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - S3_INSTANCE=${S3_INSTANCE}
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -336,7 +373,10 @@ services:
       - SERVER_URL=${SERVER_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
-      - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+      - AUTH_LDAP_1_SERVER_URI=${AUTH_LDAP_1_SERVER_URI}
+      - AUTH_LDAP_2_SERVER_URI=${AUTH_LDAP_2_SERVER_URI}
+      - AUTH_LDAP_3_SERVER_URI=${AUTH_LDAP_3_SERVER_URI}
+      - AUTH_LDAP_BIND_PASSWORD=${AUTH_LDAP_BIND_PASSWORD}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
       - SECRET_KEY=${MANAGER_SECRET_KEY}
       - ADMIN_USER_PASS=${ADMIN_USER_PASS}
@@ -351,6 +391,10 @@ services:
       - DB_PORT=${DB_PORT}
       - COMMANDER_HOSTNAME=love-commander-mount
       - COMMANDER_PORT=5000
+      - JIRA_API_HOSTNAME=${JIRA_API_HOSTNAME}
+      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
+      - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
     network_mode: ${NETWORK_NAME}
     ports:
       - "8000:8000"
@@ -376,8 +420,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      - /usr/src/love/love/node_modules
+      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+      - /usr/src/love/node_modules
     environment:
       CI: "true"
     logging:
@@ -386,24 +430,24 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  styleguide:
-    container_name: love-styleguide-mount
-    build:
-      context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: docker/Dockerfile-dev
-    image: love-frontend-image-mount
-    command: yarn guide:start --disable-host-check
-    network_mode: ${NETWORK_NAME}
-    ports:
-      - "3001:3001"
-    volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}:/usr/src/love
-      - /usr/src/love/love/node_modules
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # styleguide:
+  #   container_name: love-styleguide-mount
+  #   build:
+  #     context: ${DOCKERFILE_PATH_FRONTEND}
+  #     dockerfile: docker/Dockerfile-dev
+  #   image: love-frontend-image-mount
+  #   command: yarn guide:start --disable-host-check
+  #   network_mode: ${NETWORK_NAME}
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
+  #     - /usr/src/love/node_modules
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   nginx:
     container_name: love-nginx-mount
