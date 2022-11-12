@@ -4,8 +4,6 @@
     "minSeverityNotification": "warning"
   },
   "camFeeds": {
-    "generic": "/gencam",
-    "allSky": "/gencam",
     "starTrackerA": "/startrackera",
     "starTrackerB": "/startrackerb"
   }
