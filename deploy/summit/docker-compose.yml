@@ -5,14 +5,16 @@
 # 139.229.167.195
 # 139.229.167.196
 
-x-service: &service
+x-service:
+  &service
   logging:
     driver: "json-file"
     options:
       max-file: "5"
       max-size: "10m"
 
-x-manager-service: &manager-service
+x-manager-service:
+  &manager-service
   <<: *service
   image: ts-dockerhub.lsst.org/love-manager:${cycle}
   depends_on:
@@ -53,12 +55,14 @@ x-manager-service: &manager-service
     - ./media:/usr/src/love/manager/media
     - manager-static:/usr/src/love/manager/static
 
-x-base-producer-env: &base-producer-environment
+x-base-producer-env:
+  &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
 
-x-base-producer: &base-producer
+x-base-producer:
+  &base-producer
   image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
@@ -265,6 +269,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
       LOVE_CSC_PRODUCER: Electrometer:1
+  electrometer201:
+    <<: *base-producer
+    container_name: producer-electrometer201
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      LOVE_CSC_PRODUCER: Electrometer:201
+  fiber-spectrograph3:
+    <<: *base-producer
+    container_name: producer-fiber-spectrograph3
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      LOVE_CSC_PRODUCER: FiberSpectrograph:3
   hvac:
     <<: *base-producer
     container_name: producer-hvac
@@ -536,11 +554,10 @@ services:
   manager_m2:
     <<: *manager-service
     container_name: love-manager-m2
-  
+
   manager_atcalsys:
     <<: *manager-service
     container_name: love-manager-atcalsys
-
 
   #----- LOVE FRONTEND --------------
   frontend:
