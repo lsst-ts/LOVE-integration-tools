@@ -433,6 +433,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC102}
       LOVE_CSC_PRODUCER: GenericCamera:102
+  genericcamera103:
+    <<: *base-producer
+    container_name: producer-genericcamera103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC103}
+      LOVE_CSC_PRODUCER: GenericCamera:103
   gcheaderservice101:
     <<: *base-producer
     container_name: producer-gcheaderservice101
@@ -447,6 +454,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS102}
       LOVE_CSC_PRODUCER: GCHeaderService:102
+  gcheaderservice103:
+    <<: *base-producer
+    container_name: producer-gcheaderservice103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS103}
+      LOVE_CSC_PRODUCER: GCHeaderService:103
 
   #-----LOVE COMMANDER -----------
   commander:
