@@ -136,6 +136,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMCS}
       LOVE_CSC_PRODUCER: ATMCS:0
+  atmonochromator:
+    <<: *base-producer
+    container_name: producer-atmonochromator
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMONOCHROMATOR}
+      LOVE_CSC_PRODUCER: ATMonochromator:0
   atocps:
     <<: *base-producer
     container_name: producer-atocps
