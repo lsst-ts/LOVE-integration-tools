@@ -264,6 +264,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DSM2}
       LOVE_CSC_PRODUCER: DSM:2
+  gcheaderservice1:
+    <<: *base-producer
+    container_name: producer-gcheaderservice1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHEADERSERVICE1}
+      LOVE_CSC_PRODUCER: GCHeaderService:1
   genericcamera1:
     <<: *base-producer
     container_name: producer-genericcamera1
