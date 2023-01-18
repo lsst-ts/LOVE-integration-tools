@@ -525,8 +525,44 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
-  manager:
-    container_name: love-manager
+  manager_01:
+    container_name: love-manager-01
+    <<: *manager-service
+
+  manager_02:
+    container_name: love-manager-02
+    <<: *manager-service
+
+  manager_03:
+    container_name: love-manager-03
+    <<: *manager-service
+
+  manager_04:
+    container_name: love-manager-04
+    <<: *manager-service
+
+  manager_05:
+    container_name: love-manager-05
+    <<: *manager-service
+
+  manager_06:
+    container_name: love-manager-06
+    <<: *manager-service
+
+  manager_07:
+    container_name: love-manager-07
+    <<: *manager-service
+
+  manager_08:
+    container_name: love-manager-08
+    <<: *manager-service
+
+  manager_09:
+    container_name: love-manager-09
+    <<: *manager-service
+
+  manager_10:
+    container_name: love-manager-10
     <<: *manager-service
 
   manager_auxtel:
@@ -550,8 +586,44 @@ services:
     container_name: love-manager-eas
     <<: *manager-service
 
-  manager_obssys:
-    container_name: love-manager-obssys
+  manager_obssys_01:
+    container_name: love-manager-obssys-01
+    <<: *manager-service
+
+  manager_obssys_02:
+    container_name: love-manager-obssys-02
+    <<: *manager-service
+
+  manager_obssys_03:
+    container_name: love-manager-obssys-03
+    <<: *manager-service
+
+  manager_obssys_04:
+    container_name: love-manager-obssys-04
+    <<: *manager-service
+
+  manager_obssys_05:
+    container_name: love-manager-obssys-05
+    <<: *manager-service
+
+  manager_obssys_06:
+    container_name: love-manager-obssys-06
+    <<: *manager-service
+
+  manager_obssys_07:
+    container_name: love-manager-obssys-07
+    <<: *manager-service
+
+  manager_obssys_08:
+    container_name: love-manager-obssys-08
+    <<: *manager-service
+
+  manager_obssys_09:
+    container_name: love-manager-obssys-09
+    <<: *manager-service
+
+  manager_obssys_10:
+    container_name: love-manager-obssys-10
     <<: *manager-service
 
   manager_m1m3:
@@ -582,10 +654,28 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      - manager_01
+      - manager_02
+      - manager_03
+      - manager_04
+      - manager_05
+      - manager_06
+      - manager_07
+      - manager_08
+      - manager_09
+      - manager_10
       - manager_auxtel
       - manager_maintel
-      - manager_obssys
+      - manager_obssys_01
+      - manager_obssys_02
+      - manager_obssys_03
+      - manager_obssys_04
+      - manager_obssys_05
+      - manager_obssys_06
+      - manager_obssys_07
+      - manager_obssys_08
+      - manager_obssys_09
+      - manager_obssys_10
       - manager_m1m3
       - frontend
     ports:
