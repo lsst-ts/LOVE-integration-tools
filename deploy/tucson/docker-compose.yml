@@ -18,7 +18,10 @@ x-manager-service: &manager-service
     - REDIS_PASS=${REDIS_PASS}
     - REDIS_CONFIG_EXPIRY=5
     - REDIS_CONFIG_CAPACITY=5000
-    - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+    - AUTH_LDAP_1_SERVER_URI=${AUTH_LDAP_1_SERVER_URI}
+    - AUTH_LDAP_2_SERVER_URI=${AUTH_LDAP_2_SERVER_URI}
+    - AUTH_LDAP_3_SERVER_URI=${AUTH_LDAP_3_SERVER_URI}
+    - AUTH_LDAP_BIND_PASSWORD=${AUTH_LDAP_BIND_PASSWORD}
     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     - SECRET_KEY=${MANAGER_SECRET_KEY}
     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
@@ -261,6 +264,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DSM2}
       LOVE_CSC_PRODUCER: DSM:2
+  gcheaderservice1:
+    <<: *base-producer
+    container_name: producer-gcheaderservice1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHEADERSERVICE1}
+      LOVE_CSC_PRODUCER: GCHeaderService:1
   genericcamera1:
     <<: *base-producer
     container_name: producer-genericcamera1
@@ -387,6 +397,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
       LOVE_CSC_PRODUCER: WeatherStation:1
+  weatherforecast:
+    <<: *base-producer
+    container_name: producer-weatherforecast
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
+      LOVE_CSC_PRODUCER: WeatherForecast:0
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -395,6 +412,11 @@ services:
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - S3_INSTANCE=${S3_INSTANCE}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL}
+      - MYS3_SECRET_KEY=${MYS3_SECRET_KEY}
+      - MYS3_ACCESS_KEY=${MYS3_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ipc: host
     pid: host
     # networks:
