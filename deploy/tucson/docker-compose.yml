@@ -278,6 +278,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GenericCamera1}
       LOVE_CSC_PRODUCER: GenericCamera:1
+  lasertracker1:
+    <<: *base-producer
+    container_name: producer-lasertracker1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LaserTracker1}
+      LOVE_CSC_PRODUCER: LaserTracker:1
   love:
     <<: *base-producer
     container_name: producer-love
@@ -362,13 +369,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
       LOVE_CSC_PRODUCER: MTAirCompressor:2
-  mtalignment:
-    <<: *base-producer
-    container_name: producer-mtalignment
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAlignment}
-      LOVE_CSC_PRODUCER: MTAlignment:0
   mtscheduler:
     <<: *base-producer
     container_name: producer-mtscheduler
