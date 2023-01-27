@@ -269,14 +269,14 @@ services:
     container_name: producer-gcheaderservice1
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHEADERSERVICE1}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHeaderService1}
       LOVE_CSC_PRODUCER: GCHeaderService:1
   genericcamera1:
     <<: *base-producer
     container_name: producer-genericcamera1
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GENERICCAMERA1}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GenericCamera1}
       LOVE_CSC_PRODUCER: GenericCamera:1
   love:
     <<: *base-producer
@@ -348,16 +348,16 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTRotator}
       LOVE_CSC_PRODUCER: MTRotator:0
-  mtaircompressor_1:
+  mtaircompressor1:
     <<: *base-producer
-    container_name: producer-mtaircompressor-1
+    container_name: producer-mtaircompressor1
     environment:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
       LOVE_CSC_PRODUCER: MTAirCompressor:1
-  mtaircompressor_2:
+  mtaircompressor2:
     <<: *base-producer
-    container_name: producer-mtaircompressor-2
+    container_name: producer-mtaircompressor2
     environment:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
@@ -390,13 +390,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Watcher}
       LOVE_CSC_PRODUCER: Watcher:0
-  weatherstation1:
-    <<: *base-producer
-    container_name: producer-weatherstation1
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
-      LOVE_CSC_PRODUCER: WeatherStation:1
   weatherforecast:
     <<: *base-producer
     container_name: producer-weatherforecast
@@ -404,6 +397,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
+  weatherstation1:
+    <<: *base-producer
+    container_name: producer-weatherstation1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
+      LOVE_CSC_PRODUCER: WeatherStation:1
 
   #-----LOVE COMMANDER -----------
   commander:
