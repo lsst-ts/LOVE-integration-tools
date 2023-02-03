@@ -5,14 +5,16 @@
 # 139.229.167.195
 # 139.229.167.196
 
-x-service: &service
+x-service:
+  &service
   logging:
     driver: "json-file"
     options:
       max-file: "5"
       max-size: "10m"
 
-x-manager-service: &manager-service
+x-manager-service:
+  &manager-service
   <<: *service
   image: ts-dockerhub.lsst.org/love-manager:${cycle}
   depends_on:
@@ -53,12 +55,14 @@ x-manager-service: &manager-service
     - ./media:/usr/src/love/manager/media
     - manager-static:/usr/src/love/manager/static
 
-x-base-producer-env: &base-producer-environment
+x-base-producer-env:
+  &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
 
-x-base-producer: &base-producer
+x-base-producer:
+  &base-producer
   image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
@@ -132,6 +136,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMCS}
       LOVE_CSC_PRODUCER: ATMCS:0
+  atmonochromator:
+    <<: *base-producer
+    container_name: producer-atmonochromator
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMONOCHROMATOR}
+      LOVE_CSC_PRODUCER: ATMonochromator:0
   atocps:
     <<: *base-producer
     container_name: producer-atocps
@@ -265,6 +276,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
       LOVE_CSC_PRODUCER: Electrometer:1
+  electrometer201:
+    <<: *base-producer
+    container_name: producer-electrometer201
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      LOVE_CSC_PRODUCER: Electrometer:201
+  fiber-spectrograph3:
+    <<: *base-producer
+    container_name: producer-fiber-spectrograph3
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      LOVE_CSC_PRODUCER: FiberSpectrograph:3
   hvac:
     <<: *base-producer
     container_name: producer-hvac
@@ -405,6 +430,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Watcher}
       LOVE_CSC_PRODUCER: Watcher:0
+  weatherforecast:
+    <<: *base-producer
+    container_name: producer-weatherforecast
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
+      LOVE_CSC_PRODUCER: WeatherForecast
   weatherstation1:
     <<: *base-producer
     container_name: producer-weatherstation1
@@ -426,6 +458,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC102}
       LOVE_CSC_PRODUCER: GenericCamera:102
+  genericcamera103:
+    <<: *base-producer
+    container_name: producer-genericcamera103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC103}
+      LOVE_CSC_PRODUCER: GenericCamera:103
   gcheaderservice101:
     <<: *base-producer
     container_name: producer-gcheaderservice101
@@ -440,6 +479,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS102}
       LOVE_CSC_PRODUCER: GCHeaderService:102
+  gcheaderservice103:
+    <<: *base-producer
+    container_name: producer-gcheaderservice103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS103}
+      LOVE_CSC_PRODUCER: GCHeaderService:103
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -479,8 +525,44 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
-  manager:
-    container_name: love-manager
+  manager_01:
+    container_name: love-manager-01
+    <<: *manager-service
+
+  manager_02:
+    container_name: love-manager-02
+    <<: *manager-service
+
+  manager_03:
+    container_name: love-manager-03
+    <<: *manager-service
+
+  manager_04:
+    container_name: love-manager-04
+    <<: *manager-service
+
+  manager_05:
+    container_name: love-manager-05
+    <<: *manager-service
+
+  manager_06:
+    container_name: love-manager-06
+    <<: *manager-service
+
+  manager_07:
+    container_name: love-manager-07
+    <<: *manager-service
+
+  manager_08:
+    container_name: love-manager-08
+    <<: *manager-service
+
+  manager_09:
+    container_name: love-manager-09
+    <<: *manager-service
+
+  manager_10:
+    container_name: love-manager-10
     <<: *manager-service
 
   manager_auxtel:
@@ -504,8 +586,44 @@ services:
     container_name: love-manager-eas
     <<: *manager-service
 
-  manager_obssys:
-    container_name: love-manager-obssys
+  manager_obssys_01:
+    container_name: love-manager-obssys-01
+    <<: *manager-service
+
+  manager_obssys_02:
+    container_name: love-manager-obssys-02
+    <<: *manager-service
+
+  manager_obssys_03:
+    container_name: love-manager-obssys-03
+    <<: *manager-service
+
+  manager_obssys_04:
+    container_name: love-manager-obssys-04
+    <<: *manager-service
+
+  manager_obssys_05:
+    container_name: love-manager-obssys-05
+    <<: *manager-service
+
+  manager_obssys_06:
+    container_name: love-manager-obssys-06
+    <<: *manager-service
+
+  manager_obssys_07:
+    container_name: love-manager-obssys-07
+    <<: *manager-service
+
+  manager_obssys_08:
+    container_name: love-manager-obssys-08
+    <<: *manager-service
+
+  manager_obssys_09:
+    container_name: love-manager-obssys-09
+    <<: *manager-service
+
+  manager_obssys_10:
+    container_name: love-manager-obssys-10
     <<: *manager-service
 
   manager_m1m3:
@@ -515,11 +633,10 @@ services:
   manager_m2:
     <<: *manager-service
     container_name: love-manager-m2
-  
+
   manager_atcalsys:
     <<: *manager-service
     container_name: love-manager-atcalsys
-
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -537,10 +654,28 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      - manager_01
+      - manager_02
+      - manager_03
+      - manager_04
+      - manager_05
+      - manager_06
+      - manager_07
+      - manager_08
+      - manager_09
+      - manager_10
       - manager_auxtel
       - manager_maintel
-      - manager_obssys
+      - manager_obssys_01
+      - manager_obssys_02
+      - manager_obssys_03
+      - manager_obssys_04
+      - manager_obssys_05
+      - manager_obssys_06
+      - manager_obssys_07
+      - manager_obssys_08
+      - manager_obssys_09
+      - manager_obssys_10
       - manager_m1m3
       - frontend
     ports:
