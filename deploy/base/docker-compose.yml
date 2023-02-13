@@ -235,6 +235,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GENERICCAMERA1}
       LOVE_CSC_PRODUCER: GenericCamera:1
+  lasertracker1:
+    <<: *base-producer
+    container_name: producer-lasertracker1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LaserTracker}
+      LOVE_CSC_PRODUCER: LaserTracker:1
   love:
     <<: *base-producer
     container_name: producer-love
@@ -249,6 +256,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2Hexapod}
       LOVE_CSC_PRODUCER: MTHexapod:2
+  mtaircompressor_1:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
+      LOVE_CSC_PRODUCER: MTAirCompressor:1
+  mtaircompressor_2:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
+      LOVE_CSC_PRODUCER: MTAirCompressor:2
   mtaos:
     <<: *base-producer
     container_name: producer-mtaos
@@ -400,6 +421,10 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
+    <<: *manager-service
+
+  manager_maintel_misc:
+    container_name: love-manager-maintel-misc
     <<: *manager-service
 
   manager_eas:
