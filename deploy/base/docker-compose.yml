@@ -193,34 +193,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  cccamera:
-    <<: *base-producer
-    container_name: producer-cccamera
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCCamera}
-      LOVE_CSC_PRODUCER: CCCamera:0
-  ccheaderservice:
-    <<: *base-producer
-    container_name: producer-ccheaderservice
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCHeaderService}
-      LOVE_CSC_PRODUCER: CCHeaderService:0
-  ccocps:
-    <<: *base-producer
-    container_name: producer-ccocps
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
-      LOVE_CSC_PRODUCER: OCPS:2
-  ccoods:
-    <<: *base-producer
-    container_name: producer-ccoods
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
-      LOVE_CSC_PRODUCER: CCOODS:0
   dimm1:
     <<: *base-producer
     container_name: producer-dimm1
@@ -414,10 +386,6 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
-    <<: *manager-service
-
-  manager_comcam:
-    container_name: love-manager-comcam
     <<: *manager-service
 
   manager_eas:
