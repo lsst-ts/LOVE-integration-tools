@@ -535,7 +535,11 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      - manager01
+      - manager02
+      - manager03
+      - manager04
+      - manager05
       - manager_auxtel
       - manager_maintel
       - manager_obssys
