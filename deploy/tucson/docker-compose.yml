@@ -456,8 +456,24 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
-  manager:
-    container_name: love-manager
+  manager01:
+    container_name: love-manager01
+    <<: *manager-service
+
+  manager02:
+    container_name: love-manager02
+    <<: *manager-service
+
+  manager03:
+    container_name: love-manager03
+    <<: *manager-service
+
+  manager04:
+    container_name: love-manager04
+    <<: *manager-service
+
+  manager05:
+    container_name: love-manager05
     <<: *manager-service
 
   manager_auxtel:
