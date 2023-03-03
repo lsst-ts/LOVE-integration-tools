@@ -18,7 +18,10 @@ x-manager-service: &manager-service
     - REDIS_PASS=${REDIS_PASS}
     - REDIS_CONFIG_EXPIRY=5
     - REDIS_CONFIG_CAPACITY=5000
-    - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+    - AUTH_LDAP_1_SERVER_URI=${AUTH_LDAP_1_SERVER_URI}
+    - AUTH_LDAP_2_SERVER_URI=${AUTH_LDAP_2_SERVER_URI}
+    - AUTH_LDAP_3_SERVER_URI=${AUTH_LDAP_3_SERVER_URI}
+    - AUTH_LDAP_BIND_PASSWORD=${AUTH_LDAP_BIND_PASSWORD}
     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     - SECRET_KEY=${MANAGER_SECRET_KEY}
     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
@@ -35,10 +38,15 @@ x-manager-service: &manager-service
     - COMMANDER_PORT=5000
     - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
     - LOVE_SITE=${LOVE_SITE}
+    - JIRA_API_HOSTNAME=${JIRA_API_HOSTNAME}
+    - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+    - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
+    - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
   volumes:
     - manager-static:/usr/src/love/manager/static
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
+    - ./config/love.json:/usr/src/love/manager/media/configs/default.json
 
 x-base-producer-env: &base-producer-environment
   LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
@@ -407,8 +415,24 @@ services:
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
-  manager:
-    container_name: love-manager
+  manager01:
+    container_name: love-manager01
+    <<: *manager-service
+
+  manager02:
+    container_name: love-manager02
+    <<: *manager-service
+
+  manager03:
+    container_name: love-manager03
+    <<: *manager-service
+
+  manager04:
+    container_name: love-manager04
+    <<: *manager-service
+
+  manager05:
+    container_name: love-manager05
     <<: *manager-service
 
   manager_auxtel:
@@ -466,7 +490,11 @@ services:
     container_name: love-nginx
     image: nginx:1.13.1
     depends_on:
-      - manager
+      - manager01
+      - manager02
+      - manager03
+      - manager04
+      - manager05
       - manager_auxtel
       - manager_maintel
       - manager_obssys
