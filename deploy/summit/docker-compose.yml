@@ -304,6 +304,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
       LOVE_CSC_PRODUCER: FiberSpectrograph:3
+  gis:
+    <<: *base-producer
+    container_name: producer-gis
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GIS}
+      LOVE_CSC_PRODUCER: GIS:0
   hvac:
     <<: *base-producer
     container_name: producer-hvac
