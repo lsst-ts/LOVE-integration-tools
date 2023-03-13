@@ -423,6 +423,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_PMD}
       LOVE_CSC_PRODUCER: PMD:1
+  sstess02:
+    <<: *base-producer
+    container_name: producer-sst-ess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_SstESS02}
+      LOVE_CSC_PRODUCER: ESS:104
   watcher:
     <<: *base-producer
     container_name: producer-watcher
