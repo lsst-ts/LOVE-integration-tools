@@ -139,8 +139,9 @@ This docker-compose does not copy the code into the image, but instead it mounts
 Follow these instructions to run the application in a docker container and get into it:
 
 ```
+cd docsrc
 docker-compose up -d
-docker-exec tools bash
+docker-compose exec tools bash
 ```
 
 ### Build documentation
