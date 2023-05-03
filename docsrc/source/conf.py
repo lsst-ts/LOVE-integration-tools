@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "LOVE-integration-tools"
-copyright = "2019, Inria Chile"
+copyright = "2023, Inria Chile"
 author = "Inria Chile"
 
 # The full version, including alpha/beta/rc tags
@@ -34,7 +34,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
-    "m2r",
+    "m2r2",
 ]
 source_suffix = [".rst", ".md"]
 
