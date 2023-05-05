@@ -74,6 +74,8 @@ x-manager-service:
     - JIRA_API_TOKEN=${JIRA_API_TOKEN}
     - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
     - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
+    - LOVE_SITE=${LOVE_SITE}
+    - REMOTE_STORAGE=${REMOTE_STORAGE}
   volumes:
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
