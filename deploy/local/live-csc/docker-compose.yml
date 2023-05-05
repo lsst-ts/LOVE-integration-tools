@@ -228,7 +228,7 @@ services:
     environment:
       - OSPL_URI=${OSPL_URI}
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - LSST_SITE=${LSST_SITE}
+      - LSST_SITE=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
