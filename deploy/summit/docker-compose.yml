@@ -141,7 +141,7 @@ services:
     container_name: producer-atmonochromator
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMONOCHROMATOR}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATMonochromator}
       LOVE_CSC_PRODUCER: ATMonochromator:0
   atocps:
     <<: *base-producer
@@ -171,13 +171,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATPtg}
       LOVE_CSC_PRODUCER: ATPtg:0
-  atscriptqueue:
-    <<: *base-producer
-    container_name: producer-atscriptqueue
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScriptQueue}
-      LOVE_CSC_PRODUCER: ScriptQueue:2 --log-level 10
   atscheduler:
     <<: *base-producer
     container_name: producer-atscheduler
@@ -185,6 +178,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScheduler}
       LOVE_CSC_PRODUCER: Scheduler:2
+  atscriptqueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScriptQueue}
+      LOVE_CSC_PRODUCER: ScriptQueue:2 --log-level 10
   atspectrograph:
     <<: *base-producer
     container_name: producer-atspectrograph
@@ -241,13 +241,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  tmaess01:
-    <<: *base-producer
-    container_name: producer-tma-ess01
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TmaESS01}
-      LOVE_CSC_PRODUCER: ESS:1
   cccamera:
     <<: *base-producer
     container_name: producer-cccamera
@@ -295,7 +288,7 @@ services:
     container_name: producer-electrometer1
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Electrometer1}
       LOVE_CSC_PRODUCER: Electrometer:1
   electrometer201:
     <<: *base-producer
@@ -311,6 +304,48 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
       LOVE_CSC_PRODUCER: FiberSpectrograph:3
+  genericcamera101:
+    <<: *base-producer
+    container_name: producer-genericcamera101
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC101}
+      LOVE_CSC_PRODUCER: GenericCamera:101
+  genericcamera102:
+    <<: *base-producer
+    container_name: producer-genericcamera102
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC102}
+      LOVE_CSC_PRODUCER: GenericCamera:102
+  genericcamera103:
+    <<: *base-producer
+    container_name: producer-genericcamera103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC103}
+      LOVE_CSC_PRODUCER: GenericCamera:103
+  gcheaderservice101:
+    <<: *base-producer
+    container_name: producer-gcheaderservice101
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS101}
+      LOVE_CSC_PRODUCER: GCHeaderService:101
+  gcheaderservice102:
+    <<: *base-producer
+    container_name: producer-gcheaderservice102
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS102}
+      LOVE_CSC_PRODUCER: GCHeaderService:102
+  gcheaderservice103:
+    <<: *base-producer
+    container_name: producer-gcheaderservice103
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS103}
+      LOVE_CSC_PRODUCER: GCHeaderService:103
   gis:
     <<: *base-producer
     container_name: producer-gis
@@ -458,6 +493,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_PMD}
       LOVE_CSC_PRODUCER: PMD:1
+  tmaess01:
+    <<: *base-producer
+    container_name: producer-tma-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TmaESS01}
+      LOVE_CSC_PRODUCER: ESS:1
   tmaess104:
     <<: *base-producer
     container_name: producer-tma-ess104
@@ -486,48 +528,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast
-  genericcamera101:
-    <<: *base-producer
-    container_name: producer-genericcamera101
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC101}
-      LOVE_CSC_PRODUCER: GenericCamera:101
-  genericcamera102:
-    <<: *base-producer
-    container_name: producer-genericcamera102
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC102}
-      LOVE_CSC_PRODUCER: GenericCamera:102
-  genericcamera103:
-    <<: *base-producer
-    container_name: producer-genericcamera103
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC103}
-      LOVE_CSC_PRODUCER: GenericCamera:103
-  gcheaderservice101:
-    <<: *base-producer
-    container_name: producer-gcheaderservice101
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS101}
-      LOVE_CSC_PRODUCER: GCHeaderService:101
-  gcheaderservice102:
-    <<: *base-producer
-    container_name: producer-gcheaderservice102
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS102}
-      LOVE_CSC_PRODUCER: GCHeaderService:102
-  gcheaderservice103:
-    <<: *base-producer
-    container_name: producer-gcheaderservice103
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHS103}
-      LOVE_CSC_PRODUCER: GCHeaderService:103
 
   #-----LOVE COMMANDER -----------
   commander:
