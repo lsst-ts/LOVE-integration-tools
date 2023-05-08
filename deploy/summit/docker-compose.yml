@@ -295,14 +295,14 @@ services:
     container_name: producer-electrometer201
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Electrometer201}
       LOVE_CSC_PRODUCER: Electrometer:201
   fiber-spectrograph3:
     <<: *base-producer
     container_name: producer-fiber-spectrograph3
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ELECTROMETER1}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_FiberSpectrograph3}
       LOVE_CSC_PRODUCER: FiberSpectrograph:3
   genericcamera101:
     <<: *base-producer
