@@ -411,19 +411,19 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  sstess01:
+  tmaess01:
     <<: *base-producer
-    container_name: producer-sst-ess01
+    container_name: producer-tma-ess01
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_SSTESS01}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS01}
       LOVE_CSC_PRODUCER: ESS:1
-  sstess104:
+  tmaess104:
     <<: *base-producer
-    container_name: producer-sst-ess104
+    container_name: producer-tma-ess104
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_SSTESS104}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS104}
       LOVE_CSC_PRODUCER: ESS:104
   watcher:
     <<: *base-producer
