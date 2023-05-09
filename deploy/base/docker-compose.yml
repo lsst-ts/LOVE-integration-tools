@@ -425,6 +425,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS104}
       LOVE_CSC_PRODUCER: ESS:104
+  tmaess105:
+    <<: *base-producer
+    container_name: producer-tma-ess105
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS105}
+      LOVE_CSC_PRODUCER: ESS:105
   watcher:
     <<: *base-producer
     container_name: producer-watcher
