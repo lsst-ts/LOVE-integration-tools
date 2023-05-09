@@ -439,13 +439,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
-  weatherstation1:
-    <<: *base-producer
-    container_name: producer-weatherstation1
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
-      LOVE_CSC_PRODUCER: WeatherStation:1
 
   #-----LOVE COMMANDER -----------
   commander:
