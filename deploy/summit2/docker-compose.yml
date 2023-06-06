@@ -245,6 +245,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_HVAC}
       LOVE_CSC_PRODUCER: HVAC:0
+  gis:
+    <<: *base-producer
+    container_name: producer-gis
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GIS}
+      LOVE_CSC_PRODUCER: GIS:0
   love:
     <<: *base-producer
     container_name: producer-love
@@ -407,6 +414,11 @@ services:
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - S3_INSTANCE=${S3_INSTANCE}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL}
+      - MYS3_SECRET_KEY=${MYS3_SECRET_KEY}
+      - MYS3_ACCESS_KEY=${MYS3_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ipc: host
     pid: host
     logging:

@@ -1,6 +1,6 @@
 x-service: &service
   logging:
-    driver: json-file
+    driver: "json-file"
     options:
       max-file: "5"
       max-size: "10m"
@@ -67,7 +67,7 @@ x-base-producer: &base-producer
     - ./config:/usr/src/love/producer/config/
     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   logging:
-    driver: json-file
+    driver: "json-file"
     options:
       max-file: "5"
       max-size: "10m"
@@ -201,6 +201,41 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Authorize}
       LOVE_CSC_PRODUCER: Authorize:0
+  auxteless01:
+    <<: *base-producer
+    container_name: producer-auxtel-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS01}
+      LOVE_CSC_PRODUCER: ESS:201
+  auxteless02:
+    <<: *base-producer
+    container_name: producer-auxtel-ess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS02}
+      LOVE_CSC_PRODUCER: ESS:202
+  auxteless03:
+    <<: *base-producer
+    container_name: producer-auxtel-ess03
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS03}
+      LOVE_CSC_PRODUCER: ESS:203
+  auxteless04:
+    <<: *base-producer
+    container_name: producer-auxtel-ess04
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS04}
+      LOVE_CSC_PRODUCER: ESS:204
+  calibhilless01:
+    <<: *base-producer
+    container_name: producer-calibhill-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CalibHillESS01}
+      LOVE_CSC_PRODUCER: ESS:301
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
@@ -208,34 +243,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  cccamera:
-    <<: *base-producer
-    container_name: producer-cccamera
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCCamera}
-      LOVE_CSC_PRODUCER: CCCamera:0
-  ccheaderservice:
-    <<: *base-producer
-    container_name: producer-ccheaderservice
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCHeaderService}
-      LOVE_CSC_PRODUCER: CCHeaderService:0
-  ccocps:
-    <<: *base-producer
-    container_name: producer-ccocps
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
-      LOVE_CSC_PRODUCER: OCPS:2
-  ccoods:
-    <<: *base-producer
-    container_name: producer-ccoods
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
-      LOVE_CSC_PRODUCER: CCOODS:0
   dimm1:
     <<: *base-producer
     container_name: producer-dimm1
@@ -299,6 +306,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2Hexapod}
       LOVE_CSC_PRODUCER: MTHexapod:2
+  mtaircompressor_1:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
+      LOVE_CSC_PRODUCER: MTAirCompressor:1
+  mtaircompressor_2:
+    <<: *base-producer
+    container_name: producer-mtaircompressor-2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
+      LOVE_CSC_PRODUCER: MTAirCompressor:2
   mtaos:
     <<: *base-producer
     container_name: producer-mtaos
@@ -313,6 +334,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDome}
       LOVE_CSC_PRODUCER: MTDome:0
+  mtdomeess01:
+    <<: *base-producer
+    container_name: producer-mtdome-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS01}
+      LOVE_CSC_PRODUCER: ESS:101
+  mtdomeess02:
+    <<: *base-producer
+    container_name: producer-mtdome-ess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS02}
+      LOVE_CSC_PRODUCER: ESS:102
+  mtdomeess03:
+    <<: *base-producer
+    container_name: producer-mtdome-ess03
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS03}
+      LOVE_CSC_PRODUCER: ESS:103
   mtdometrajectory:
     <<: *base-producer
     container_name: producer-mtdometrajectory
@@ -355,20 +397,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTRotator}
       LOVE_CSC_PRODUCER: MTRotator:0
-  mtaircompressor1:
-    <<: *base-producer
-    container_name: producer-mtaircompressor1
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
-      LOVE_CSC_PRODUCER: MTAirCompressor:1
-  mtaircompressor2:
-    <<: *base-producer
-    container_name: producer-mtaircompressor2
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
-      LOVE_CSC_PRODUCER: MTAirCompressor:2
   mtscheduler:
     <<: *base-producer
     container_name: producer-mtscheduler
@@ -383,6 +411,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  sstess01:
+    <<: *base-producer
+    container_name: producer-sst-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_SSTESS01}
+      LOVE_CSC_PRODUCER: ESS:1
+  sstess104:
+    <<: *base-producer
+    container_name: producer-sst-ess104
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_SSTESS104}
+      LOVE_CSC_PRODUCER: ESS:104
   watcher:
     <<: *base-producer
     container_name: producer-watcher
@@ -411,18 +453,12 @@ services:
     image: ts-dockerhub.lsst.org/love-commander:${cycle}
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - S3_INSTANCE=${S3_INSTANCE}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL}
-      - MYS3_SECRET_KEY=${MYS3_SECRET_KEY}
-      - MYS3_ACCESS_KEY=${MYS3_ACCESS_KEY}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ipc: host
     pid: host
     # networks:
     #   - dds-network
     logging:
-      driver: json-file
+      driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
@@ -490,10 +526,6 @@ services:
 
   manager_maintel_misc:
     container_name: love-manager-maintel-misc
-    <<: *manager-service
-
-  manager_comcam:
-    container_name: love-manager-comcam
     <<: *manager-service
 
   manager_eas:

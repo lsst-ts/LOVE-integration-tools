@@ -4,8 +4,8 @@
     "minSeverityNotification": "warning"
   },
   "camFeeds": {
-    "simcam": "/simcam",
     "generic": "/gencam",
-    "allSky": "/gencam"
+    "allSky": "/gencam",
+    "simcam": "/simcam"
   }
 }
