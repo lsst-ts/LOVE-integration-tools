@@ -201,6 +201,41 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Authorize}
       LOVE_CSC_PRODUCER: Authorize:0
+  auxteless01:
+    <<: *base-producer
+    container_name: producer-auxteless01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS01}
+      LOVE_CSC_PRODUCER: ESS:201
+  auxteless02:
+    <<: *base-producer
+    container_name: producer-auxteless02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS02}
+      LOVE_CSC_PRODUCER: ESS:202
+  auxteless03:
+    <<: *base-producer
+    container_name: producer-auxteless03
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS03}
+      LOVE_CSC_PRODUCER: ESS:203
+  auxteless04:
+    <<: *base-producer
+    container_name: producer-auxteless04
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS04}
+      LOVE_CSC_PRODUCER: ESS:204
+  calibhilless01:
+    <<: *base-producer
+    container_name: producer-calibhilless01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CalibHillESS01}
+      LOVE_CSC_PRODUCER: ESS:301
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
@@ -313,6 +348,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDome}
       LOVE_CSC_PRODUCER: MTDome:0
+  mtdomeess01:
+    <<: *base-producer
+    container_name: producer-mtdomeess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS01}
+      LOVE_CSC_PRODUCER: ESS:101
+  mtdomeess02:
+    <<: *base-producer
+    container_name: producer-mtdomeess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS02}
+      LOVE_CSC_PRODUCER: ESS:102
+  mtdomeess03:
+    <<: *base-producer
+    container_name: producer-mtdomeess03
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS03}
+      LOVE_CSC_PRODUCER: ESS:103
   mtdometrajectory:
     <<: *base-producer
     container_name: producer-mtdometrajectory
@@ -383,6 +439,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  tmaess01:
+    <<: *base-producer
+    container_name: producer-tmaess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS01}
+      LOVE_CSC_PRODUCER: ESS:1
+  tmaess104:
+    <<: *base-producer
+    container_name: producer-tmaess104
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS104}
+      LOVE_CSC_PRODUCER: ESS:104
+  tmaess105:
+    <<: *base-producer
+    container_name: producer-tmaess105
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS105}
+      LOVE_CSC_PRODUCER: ESS:105
   watcher:
     <<: *base-producer
     container_name: producer-watcher
@@ -397,13 +474,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
-  weatherstation1:
-    <<: *base-producer
-    container_name: producer-weatherstation1
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherStation1}
-      LOVE_CSC_PRODUCER: WeatherStation:1
 
   #-----LOVE COMMANDER -----------
   commander:
