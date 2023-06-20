@@ -444,6 +444,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3}
       LOVE_CSC_PRODUCER: MTM1M3:0
+  mtm1m3ts:
+    <<: *base-producer
+    container_name: producer-mtm1m3ts
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3TS}
+      LOVE_CSC_PRODUCER: MTM1M3TS:0
   mtm2:
     <<: *base-producer
     container_name: producer-mtm2
