@@ -381,11 +381,13 @@ services:
   redis:
     container_name: redis
     image: redis:5.0.3
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     network_mode: ${NETWORK_NAME}
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - ./redis.conf:/data/redis.conf
     logging:
       driver: "json-file"
       options:
