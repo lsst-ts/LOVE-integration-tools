@@ -557,9 +557,11 @@ services:
     <<: *service
     container_name: redis
     image: redis:5.0.3
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     ports:
       - "6379:6379"
+    volumes:
+      - ./redis.conf:/data/redis.conf
 
   database:
     <<: *service
