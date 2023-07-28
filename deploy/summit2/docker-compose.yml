@@ -406,6 +406,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
+  genericcamera101:
+    <<: *base-producer
+    container_name: producer-genericcamera101
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC101}
+      LOVE_CSC_PRODUCER: GenericCamera:101
 
   #-----LOVE COMMANDER -----------
   commander:
