@@ -374,6 +374,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LOVE}
       LOVE_CSC_PRODUCER: LOVE:0
+  m2ess01:
+    <<: *base-producer
+    container_name: producer-m2-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2ESS01}
+      LOVE_CSC_PRODUCER: ESS:106
   m2hexapod:
     <<: *base-producer
     container_name: producer-m2-hexapod
