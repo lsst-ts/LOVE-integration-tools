@@ -471,12 +471,14 @@ services:
     <<: *service
     container_name: redis
     image: redis:7
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     # networks:
     #   - dds-network
     # network_mode: host
     ports:
       - "6379:6379"
+    volumes:
+      - ./redis.conf:/data/redis.conf
 
   database:
     <<: *service
