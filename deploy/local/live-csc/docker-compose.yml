@@ -380,7 +380,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis:5.0.3
+    image: redis:7
     command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     network_mode: ${NETWORK_NAME}
     ports:
@@ -396,7 +396,7 @@ services:
 
   database:
     container_name: love-database
-    image: postgres:12.0
+    image: postgres:15.0
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -467,7 +467,7 @@ services:
 
   nginx:
     container_name: love-nginx-mount
-    image: nginx:1.13.1
+    image: nginx:1.25.1
     depends_on:
       - frontend
       - manager01
