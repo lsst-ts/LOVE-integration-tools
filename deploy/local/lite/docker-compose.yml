@@ -44,7 +44,7 @@ services:
 
   nginx:
     container_name: love-nginx-mount
-    image: nginx:1.13.1
+    image: nginx:1.25.1
     depends_on:
       - frontend
     network_mode: ${NETWORK_NAME}
