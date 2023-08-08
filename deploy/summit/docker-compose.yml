@@ -645,8 +645,24 @@ services:
     container_name: love-manager-comcam
     <<: *manager-service
 
-  manager_eas:
-    container_name: love-manager-eas
+  manager_eas_01:
+    container_name: love-manager-eas-01
+    <<: *manager-service
+
+  manager_eas_02:
+    container_name: love-manager-eas-02
+    <<: *manager-service
+
+  manager_eas_03:
+    container_name: love-manager-eas-03
+    <<: *manager-service
+
+  manager_eas_04:
+    container_name: love-manager-eas-04
+    <<: *manager-service
+
+  manager_eas_05:
+    container_name: love-manager-eas-05
     <<: *manager-service
 
   manager_obssys_01:
