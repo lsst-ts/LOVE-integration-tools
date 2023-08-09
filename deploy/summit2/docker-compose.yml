@@ -427,7 +427,7 @@ services:
   redis:
     <<: *service
     container_name: redis
-    image: redis:5.0.3
+    image: redis:7
     command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     ports:
       - "6379:6379"
@@ -437,7 +437,7 @@ services:
   database:
     <<: *service
     container_name: love-database
-    image: postgres:12.0
+    image: postgres:15.0
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -511,7 +511,7 @@ services:
   nginx:
     <<: *service
     container_name: love-nginx
-    image: nginx:1.13.1
+    image: nginx:1.25.1
     depends_on:
       - manager01
       - manager02
