@@ -189,6 +189,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS01}
       LOVE_CSC_PRODUCER: ESS:201
+  calibhilless01:
+    <<: *base-producer
+    container_name: producer-calibhill-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CalibHillESS01}
+      LOVE_CSC_PRODUCER: ESS:301
   camerahexapod:
     <<: *base-producer
     container_name: producer-camera-hexapod
@@ -399,6 +406,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
+  genericcamera101:
+    <<: *base-producer
+    container_name: producer-genericcamera101
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC101}
+      LOVE_CSC_PRODUCER: GenericCamera:101
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -496,6 +510,10 @@ services:
   manager_m1m3:
     <<: *manager-service
     container_name: love-manager-m1m3
+
+  manager_eas:
+    <<: *manager-service
+    container_name: love-manager-eas
 
   #----- LOVE FRONTEND --------------
   frontend:

@@ -16,7 +16,7 @@ x-service:
 x-manager-service:
   &manager-service
   <<: *service
-  image: ts-dockerhub.lsst.org/love-manager:${cycle}
+  image: ts-dockerhub.lsst.org/love-manager:${cycle}${manager_rev}
   depends_on:
     - redis
     - database
@@ -63,7 +63,7 @@ x-base-producer-env:
 
 x-base-producer:
   &base-producer
-  image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}${producer_rev}
   environment:
     <<: *base-producer-environment
   ipc: host
@@ -374,6 +374,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LOVE}
       LOVE_CSC_PRODUCER: LOVE:0
+  m2ess01:
+    <<: *base-producer
+    container_name: producer-m2-ess01
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2ESS01}
+      LOVE_CSC_PRODUCER: ESS:106
   m2hexapod:
     <<: *base-producer
     container_name: producer-m2-hexapod
@@ -444,6 +451,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3}
       LOVE_CSC_PRODUCER: MTM1M3:0
+  mtm1m3ts:
+    <<: *base-producer
+    container_name: producer-mtm1m3ts
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3TS}
+      LOVE_CSC_PRODUCER: MTM1M3TS:0
   mtm2:
     <<: *base-producer
     container_name: producer-mtm2
@@ -532,7 +546,7 @@ services:
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
-    image: ts-dockerhub.lsst.org/love-commander:${cycle}
+    image: ts-dockerhub.lsst.org/love-commander:${cycle}${commander_rev}
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - S3_INSTANCE=${S3_INSTANCE}
@@ -624,15 +638,31 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
-    image: ts-dockerhub.lsst.org/love-manager:${cycle}
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}${manager_rev}
     <<: *manager-service
 
   manager_comcam:
     container_name: love-manager-comcam
     <<: *manager-service
 
-  manager_eas:
-    container_name: love-manager-eas
+  manager_eas_01:
+    container_name: love-manager-eas-01
+    <<: *manager-service
+
+  manager_eas_02:
+    container_name: love-manager-eas-02
+    <<: *manager-service
+
+  manager_eas_03:
+    container_name: love-manager-eas-03
+    <<: *manager-service
+
+  manager_eas_04:
+    container_name: love-manager-eas-04
+    <<: *manager-service
+
+  manager_eas_05:
+    container_name: love-manager-eas-05
     <<: *manager-service
 
   manager_obssys_01:
@@ -691,7 +721,7 @@ services:
   frontend:
     <<: *service
     container_name: love-frontend
-    image: ts-dockerhub.lsst.org/love-frontend:${cycle}
+    image: ts-dockerhub.lsst.org/love-frontend:${cycle}${frontend_rev}
     # depends_on:
     #   - manager
     volumes:
