@@ -334,6 +334,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAOS}
       LOVE_CSC_PRODUCER: MTAOS:0
+  mtcamera:
+    <<: *base-producer
+    container_name: producer-mtcamera
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTCamera}
+      LOVE_CSC_PRODUCER: MTCamera:0
   mtdome:
     <<: *base-producer
     container_name: producer-mtdome
@@ -369,6 +376,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeTrajectory}
       LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  mtheaderservice:
+    <<: *base-producer
+    container_name: producer-mtheaderservice
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTHeaderService}
+      LOVE_CSC_PRODUCER: MTHeaderService:0
   mtm1m3:
     <<: *base-producer
     container_name: producer-mtm1m3
@@ -390,6 +404,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTMount}
       LOVE_CSC_PRODUCER: MTMount:0
+  mtocps:
+    <<: *base-producer
+    container_name: producer-mtocps
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTOCPS}
+      LOVE_CSC_PRODUCER: OCPS:3
+  mtoods:
+    <<: *base-producer
+    container_name: producer-mtoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTOODS}
+      LOVE_CSC_PRODUCER: MTOODS:0
   mtptg:
     <<: *base-producer
     container_name: producer-mtptg
@@ -556,6 +584,10 @@ services:
   manager_gc:
     <<: *manager-service
     container_name: love-manager-gc
+
+  manager_lsstcam:
+    <<: *manager-service
+    container_name: love-manager-lsstcam
 
   #----- LOVE FRONTEND --------------
   frontend:
