@@ -49,7 +49,12 @@ x-manager-service: &manager-service
     - ./config/love.json:/usr/src/love/manager/media/configs/default.json
 
 x-base-producer-env: &base-producer-environment
-  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  LSST_TOPIC_SUBNAME: ${LSST_TOPIC_SUBNAME}
+  LSST_KAFKA_BROKER_ADDR: ${LSST_KAFKA_BROKER_ADDR}
+  LSST_SCHEMA_REGISTRY_URL: ${LSST_SCHEMA_REGISTRY_URL}
+  LSST_KAFKA_SECURITY_USERNAME: ${LSST_KAFKA_SECURITY_USERNAME}
+  LSST_KAFKA_SECURITY_PASSWORD: ${LSST_KAFKA_SECURITY_PASSWORD}
+  LSST_KAFKA_SECURITY_PROTOCOL: ${LSST_KAFKA_SECURITY_PROTOCOL}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
 
@@ -59,13 +64,9 @@ x-base-producer: &base-producer
     <<: *base-producer-environment
   # networks:
   #   - dds-network
-  ipc: host
-  pid: host
   restart: always
   volumes:
-    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
     - ./config:/usr/src/love/producer/config/
-    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
   logging:
     driver: json-file
     options:
@@ -82,18 +83,15 @@ services:
     container_name: love-csc
     image: ts-dockerhub.lsst.org/love-csc:${cycle}
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=${LSST_TOPIC_SUBNAME}
+      - LSST_KAFKA_BROKER_ADDR=${LSST_KAFKA_BROKER_ADDR}
+      - LSST_SCHEMA_REGISTRY_URL=${LSST_SCHEMA_REGISTRY_URL}
       - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
       - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-    ipc: host
-    pid: host
     # networks:
     #   - dds-network
     depends_on:
       - nginx
-    volumes:
-      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   #----- LOVE PRODUCER --------------
   ataos:
@@ -480,15 +478,18 @@ services:
     container_name: love-commander
     image: ts-dockerhub.lsst.org/love-commander:${cycle}
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=${LSST_TOPIC_SUBNAME}
+      - LSST_KAFKA_BROKER_ADDR=${LSST_KAFKA_BROKER_ADDR}
+      - LSST_SCHEMA_REGISTRY_URL=${LSST_SCHEMA_REGISTRY_URL}
+      - LSST_KAFKA_SECURITY_USERNAME=${LSST_KAFKA_SECURITY_USERNAME}
+      - LSST_KAFKA_SECURITY_PASSWORD=${LSST_KAFKA_SECURITY_PASSWORD}
+      - LSST_KAFKA_SECURITY_PROTOCOL=${LSST_KAFKA_SECURITY_PROTOCOL}
       - S3_INSTANCE=${S3_INSTANCE}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - S3_ENDPOINT_URL=${S3_ENDPOINT_URL}
       - MYS3_SECRET_KEY=${MYS3_SECRET_KEY}
       - MYS3_ACCESS_KEY=${MYS3_ACCESS_KEY}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-    ipc: host
-    pid: host
     # networks:
     #   - dds-network
     logging:
@@ -496,9 +497,6 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-    volumes:
-      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   # #----- LOVE MANAGER --------------
   redis:
