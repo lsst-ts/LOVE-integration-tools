@@ -153,7 +153,7 @@ cd docsrc
 ./create_docs.sh
 ```
 
---
+---
 
 ## Testing
 
@@ -181,3 +181,16 @@ Then open `localhost:1234` on your web browser and enter into jupyter using the 
 In jupyter open the file `notebooks/stress_test.ipynb` and run all the cells
 
 The tests are also available from any jupyter installation along side a love deployment. For example `deploy/local/live`, depending on the case you may need to change the `manager_location` variable on the first cell accordingly (see comments in cell).
+
+---
+
+## Linting & Formatting
+
+This code uses pre-commit to maintain `black` formatting, `isort` and `flake8` compliance. To enable this, run the following commands once (the first removes the previous pre-commit hook):
+
+```
+git config --unset-all core.hooksPath
+generate_pre_commit_conf
+```
+
+For more details on how to use `generate_pre_commit_conf` please follow: https://tssw-developer.lsst.io/procedures/pre_commit.html#ts-pre-commit-conf.
