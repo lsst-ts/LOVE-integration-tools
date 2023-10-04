@@ -1,7 +1,7 @@
 # LOVE-integration-tools instructions
 
 The LOVE-integration-tools repository provides scripts and tools to integrate the applications from the different development repositories, in order to be used for development and deployment purposes.
-See the full documentation here: https://lsst-ts.github.io/LOVE-integration-tools/html/index.html
+See the full documentation here: https://love-integration-tools.lsst.io/
 
 ## Directory tree
 
