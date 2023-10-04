@@ -1,4 +1,4 @@
 #!/bin/bash
-rm -rf ../docs/doctrees
-rm -rf ../docs/html
 make html
+# Create index.html
+echo "<meta http-equiv='refresh' content='0; url=./html/index.html' />" > ../docs/index.html
