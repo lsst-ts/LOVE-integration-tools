@@ -19,3 +19,10 @@ webpack-stats.*
 **/*.log
 **/ts_externalscripts
 **/ts_standardscripts
+.pre-commit-config.yaml
+.clang-format
+.flake8
+.isort.cfg
+.mypy.ini
+.ruff.toml
+towncrier.toml
