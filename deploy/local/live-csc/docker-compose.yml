@@ -12,6 +12,56 @@ x-base-producer-env: &base-producer-environment
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
 
+x-manager-env: &manager-environment
+  SERVER_URL: ${SERVER_URL}
+  REDIS_HOST: ${REDIS_HOST}
+  REDIS_PASS: ${REDIS_PASS}
+  AUTH_LDAP_1_SERVER_URI: ${AUTH_LDAP_1_SERVER_URI}
+  AUTH_LDAP_2_SERVER_URI: ${AUTH_LDAP_2_SERVER_URI}
+  AUTH_LDAP_3_SERVER_URI: ${AUTH_LDAP_3_SERVER_URI}
+  AUTH_LDAP_BIND_PASSWORD: ${AUTH_LDAP_BIND_PASSWORD}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  SECRET_KEY: ${MANAGER_SECRET_KEY}
+  ADMIN_USER_PASS: ${ADMIN_USER_PASS}
+  USER_USER_PASS: ${USER_USER_PASS}
+  CMD_USER_PASS: ${CMD_USER_PASS}
+  AUTHLIST_USER_PASS: ${AUTHLIST_USER_PASS}
+  DB_ENGINE: ${DB_ENGINE}
+  DB_NAME: ${DB_NAME}
+  DB_USER: ${DB_USER}
+  DB_PASS: ${DB_PASS}
+  DB_HOST: ${DB_HOST}
+  DB_PORT: ${DB_PORT}
+  COMMANDER_HOSTNAME: love-commander-mount
+  COMMANDER_PORT: 5000
+  JIRA_API_HOSTNAME: ${JIRA_API_HOSTNAME}
+  JIRA_API_TOKEN: ${JIRA_API_TOKEN}
+  JIRA_PROJECT_ID: ${JIRA_PROJECT_ID}
+  OLE_API_HOSTNAME: ${OLE_API_HOSTNAME}
+
+x-base-manager: &base-manager
+  build:
+    context: ${DOCKERFILE_PATH_MANAGER}
+    dockerfile: docker/Dockerfile-dev
+  image: love-manager-image-mount
+  depends_on:
+    - redis
+    - database
+    - commander
+  environment:
+    <<: *manager-environment
+  network_mode: ${NETWORK_NAME}
+  restart: always
+  volumes:
+    - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+    - ./config:/usr/src/love/manager/config
+    - ./media:/usr/src/love/manager/media
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+
 x-base-producer: &base-producer
   build:
     context: ${DOCKERFILE_PATH_PRODUCER}
@@ -262,25 +312,25 @@ services:
        max-file: "5"
        max-size: "10m"
 
-  # gencam-sim:
-  #   image: ts-dockerhub.lsst.org/genericcamera:c0020.004
-  #   container_name: gencam-sim
-  #   environment:
-  #     - OSPL_URI=${OSPL_URI}
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #     - RUN_ARG=1
-  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-  #   network_mode: ${NETWORK_NAME}
-  #   # restart: always
-  #   volumes:
-  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-  #   ports:
-  #     - 5013:5013
+  gencam-sim:
+    image: ts-dockerhub.lsst.org/genericcamera:c0020.004
+    container_name: gencam-sim
+    environment:
+      - OSPL_URI=${OSPL_URI}
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - RUN_ARG=1
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+    network_mode: ${NETWORK_NAME}
+    # restart: always
+    volumes:
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - 5013:5013
 
   jupyter:
     container_name: love-jupyter
@@ -330,12 +380,14 @@ services:
 
   redis:
     container_name: redis
-    image: redis:5.0.3
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASS}
+    image: redis:7
+    command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
     network_mode: ${NETWORK_NAME}
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - ./redis.conf:/data/redis.conf
     logging:
       driver: "json-file"
       options:
@@ -344,7 +396,7 @@ services:
 
   database:
     container_name: love-database
-    image: postgres:12.0
+    image: postgres:15.0
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -359,55 +411,19 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  manager:
-    container_name: love-manager-mount
-    build:
-      context: ${DOCKERFILE_PATH_MANAGER}
-      dockerfile: docker/Dockerfile-dev
-    image: love-manager-image-mount
-    depends_on:
-      - redis
-      - database
-      - commander
+  manager01:
+    <<: *base-manager
+    container_name: love-manager-mount-01
     environment:
-      - SERVER_URL=${SERVER_URL}
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PASS=${REDIS_PASS}
-      - AUTH_LDAP_1_SERVER_URI=${AUTH_LDAP_1_SERVER_URI}
-      - AUTH_LDAP_2_SERVER_URI=${AUTH_LDAP_2_SERVER_URI}
-      - AUTH_LDAP_3_SERVER_URI=${AUTH_LDAP_3_SERVER_URI}
-      - AUTH_LDAP_BIND_PASSWORD=${AUTH_LDAP_BIND_PASSWORD}
-      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
-      - SECRET_KEY=${MANAGER_SECRET_KEY}
-      - ADMIN_USER_PASS=${ADMIN_USER_PASS}
-      - USER_USER_PASS=${USER_USER_PASS}
-      - CMD_USER_PASS=${CMD_USER_PASS}
-      - AUTHLIST_USER_PASS=${AUTHLIST_USER_PASS}
-      - DB_ENGINE=${DB_ENGINE}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - COMMANDER_HOSTNAME=love-commander-mount
-      - COMMANDER_PORT=5000
-      - JIRA_API_HOSTNAME=${JIRA_API_HOSTNAME}
-      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
-      - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
-      - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
-    network_mode: ${NETWORK_NAME}
-    ports:
-      - "8000:8000"
-    restart: always
-    volumes:
-      - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
-      - ./config:/usr/src/love/manager/config
-      - ./media:/usr/src/love/manager/media
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDED: "True"
+
+  manager02:
+    <<: *base-manager
+    container_name: love-manager-mount-02
+    environment:
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDED: "False"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -451,10 +467,11 @@ services:
 
   nginx:
     container_name: love-nginx-mount
-    image: nginx:1.13.1
+    image: nginx:1.25.1
     depends_on:
       - frontend
-      - manager
+      - manager01
+      - manager02
       # - styleguide
       # - gencam-sim
     network_mode: ${NETWORK_NAME}

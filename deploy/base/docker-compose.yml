@@ -1,47 +1,11 @@
-# available ips
-# 139.229.167.192
-# 139.229.167.193
-# 139.229.167.194
-# 139.229.167.195
-# 139.229.167.196
-
-x-service:
-  &service
+x-service: &service
   logging:
     driver: "json-file"
     options:
       max-file: "5"
       max-size: "10m"
 
-x-base-producer-env:
-  &base-producer-environment
-  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
-  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
-  LOVE_CSC_PRODUCER: Test.1
-
-x-base-producer:
-  &base-producer
-  image: ts-dockerhub.lsst.org/love-producer:${cycle}
-  environment:
-    <<: *base-producer-environment
-  ipc: host
-  pid: host
-  restart: always
-  volumes:
-    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
-    - ./config:/usr/src/love/producer/config/
-    - ../SALSubsystems.xml:/home/saluser/repos/ts_xml/sal_interfaces/SALSubsystems.xml
-    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-  logging:
-    driver: "json-file"
-    options:
-      max-file: "5"
-      max-size: "10m"
-  depends_on:
-    - nginx
-
-x-manager-service:
-  &manager-service
+x-manager-service: &manager-service
   <<: *service
   image: ts-dockerhub.lsst.org/love-manager:${cycle}
   depends_on:
@@ -54,7 +18,10 @@ x-manager-service:
     - REDIS_PASS=${REDIS_PASS}
     - REDIS_CONFIG_EXPIRY=5
     - REDIS_CONFIG_CAPACITY=5000
-    - AUTH_LDAP_SERVER_URI=${LOVE_MANAGER_LDAP_SERVER_URI}
+    - AUTH_LDAP_1_SERVER_URI=${AUTH_LDAP_1_SERVER_URI}
+    - AUTH_LDAP_2_SERVER_URI=${AUTH_LDAP_2_SERVER_URI}
+    - AUTH_LDAP_3_SERVER_URI=${AUTH_LDAP_3_SERVER_URI}
+    - AUTH_LDAP_BIND_PASSWORD=${AUTH_LDAP_BIND_PASSWORD}
     - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
     - SECRET_KEY=${MANAGER_SECRET_KEY}
     - ADMIN_USER_PASS=${ADMIN_USER_PASS}
@@ -70,18 +37,63 @@ x-manager-service:
     - COMMANDER_HOSTNAME=love-commander
     - COMMANDER_PORT=5000
     - LOVE_CSC_PRODUCER=${LOVE_CSC_PRODUCER}
+    - LOVE_SITE=${LOVE_SITE}
     - JIRA_API_HOSTNAME=${JIRA_API_HOSTNAME}
     - JIRA_API_TOKEN=${JIRA_API_TOKEN}
     - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
     - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
   volumes:
+    - manager-static:/usr/src/love/manager/static
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
-    - manager-static:/usr/src/love/manager/static
+    - ./config/love.json:/usr/src/love/manager/media/configs/default.json
+
+x-base-producer-env: &base-producer-environment
+  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
+  LOVE_CSC_PRODUCER: Test.1
+
+x-base-producer: &base-producer
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
+  environment:
+    <<: *base-producer-environment
+  # networks:
+  #   - dds-network
+  ipc: host
+  pid: host
+  restart: always
+  volumes:
+    - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+    - ./config:/usr/src/love/producer/config/
+    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "5"
+      max-size: "10m"
+  depends_on:
+    - nginx
 
 version: "3.7"
 
 services:
+  love-csc:
+    <<: *service
+    container_name: love-csc
+    image: ts-dockerhub.lsst.org/love-csc:${cycle}
+    environment:
+      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - WEBSOCKET_HOST=${LOVE_PRODUCER_WEBSOCKET_HOST}
+      - PROCESS_CONNECTION_PASS=${PROCESS_CONNECTION_PASS}
+    ipc: host
+    pid: host
+    # networks:
+    #   - dds-network
+    depends_on:
+      - nginx
+    volumes:
+      - ${OSPL_SHMEM_SOCKET_DIR}:/tmp/
+      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
 
   #----- LOVE PRODUCER --------------
   ataos:
@@ -161,6 +173,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATPtg}
       LOVE_CSC_PRODUCER: ATPtg:0
+  atscriptqueue:
+    <<: *base-producer
+    container_name: producer-atscriptqueue
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScriptQueue}
+      LOVE_CSC_PRODUCER: ScriptQueue:2
   atscheduler:
     <<: *base-producer
     container_name: producer-atscheduler
@@ -168,13 +187,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScheduler}
       LOVE_CSC_PRODUCER: Scheduler:2
-  atscriptqueue:
-    <<: *base-producer
-    container_name: producer-atscriptqueue
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATScriptQueue}
-      LOVE_CSC_PRODUCER: ScriptQueue:2 --log-level 10
   atspectrograph:
     <<: *base-producer
     container_name: producer-atspectrograph
@@ -182,6 +194,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_ATSpectrograph}
       LOVE_CSC_PRODUCER: ATSpectrograph:0
+  authorize:
+    <<: *base-producer
+    container_name: producer-authorize
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Authorize}
+      LOVE_CSC_PRODUCER: Authorize:0
   auxteless01:
     <<: *base-producer
     container_name: producer-auxtel-ess01
@@ -189,6 +208,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS01}
       LOVE_CSC_PRODUCER: ESS:201
+  auxteless02:
+    <<: *base-producer
+    container_name: producer-auxtel-ess02
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS02}
+      LOVE_CSC_PRODUCER: ESS:202
+  auxteless03:
+    <<: *base-producer
+    container_name: producer-auxtel-ess03
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS03}
+      LOVE_CSC_PRODUCER: ESS:203
+  auxteless04:
+    <<: *base-producer
+    container_name: producer-auxtel-ess04
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS04}
+      LOVE_CSC_PRODUCER: ESS:204
   calibhilless01:
     <<: *base-producer
     container_name: producer-calibhill-ess01
@@ -203,34 +243,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CameraHexapod}
       LOVE_CSC_PRODUCER: MTHexapod:1
-  cccamera:
-    <<: *base-producer
-    container_name: producer-cccamera
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCCamera}
-      LOVE_CSC_PRODUCER: CCCamera:0
-  ccheaderservice:
-    <<: *base-producer
-    container_name: producer-ccheaderservice
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCHeaderService}
-      LOVE_CSC_PRODUCER: CCHeaderService:0
-  ccocps:
-    <<: *base-producer
-    container_name: producer-ccocps
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOCPS}
-      LOVE_CSC_PRODUCER: OCPS:2
-  ccoods:
-    <<: *base-producer
-    container_name: producer-ccoods
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_CCOODS}
-      LOVE_CSC_PRODUCER: CCOODS:0
   dimm1:
     <<: *base-producer
     container_name: producer-dimm1
@@ -238,20 +250,48 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DIMM1}
       LOVE_CSC_PRODUCER: DIMM:1
-  hvac:
+  dimm2:
     <<: *base-producer
-    container_name: producer-hvac
+    container_name: producer-dimm2
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_HVAC}
-      LOVE_CSC_PRODUCER: HVAC:0
-  gis:
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DIMM2}
+      LOVE_CSC_PRODUCER: DIMM:2
+  dsm1:
     <<: *base-producer
-    container_name: producer-gis
+    container_name: producer-dsm1
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GIS}
-      LOVE_CSC_PRODUCER: GIS:0
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DSM1}
+      LOVE_CSC_PRODUCER: DSM:1
+  dsm2:
+    <<: *base-producer
+    container_name: producer-dsm2
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_DSM2}
+      LOVE_CSC_PRODUCER: DSM:2
+  gcheaderservice1:
+    <<: *base-producer
+    container_name: producer-gcheaderservice1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GCHeaderService1}
+      LOVE_CSC_PRODUCER: GCHeaderService:1
+  genericcamera1:
+    <<: *base-producer
+    container_name: producer-genericcamera1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GenericCamera1}
+      LOVE_CSC_PRODUCER: GenericCamera:1
+  lasertracker1:
+    <<: *base-producer
+    container_name: producer-lasertracker1
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LaserTracker1}
+      LOVE_CSC_PRODUCER: LaserTracker:1
   love:
     <<: *base-producer
     container_name: producer-love
@@ -259,6 +299,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_LOVE}
       LOVE_CSC_PRODUCER: LOVE:0
+  m2ess106:
+    <<: *base-producer
+    container_name: producer-m2-ess106
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2ESS106}
+      LOVE_CSC_PRODUCER: ESS:106
   m2hexapod:
     <<: *base-producer
     container_name: producer-m2-hexapod
@@ -266,16 +313,16 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_M2Hexapod}
       LOVE_CSC_PRODUCER: MTHexapod:2
-  mtaircompressor1:
+  mtaircompressor_1:
     <<: *base-producer
-    container_name: producer-mtaircompressor1
+    container_name: producer-mtaircompressor-1
     environment:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor1}
       LOVE_CSC_PRODUCER: MTAirCompressor:1
-  mtaircompressor2:
+  mtaircompressor_2:
     <<: *base-producer
-    container_name: producer-mtaircompressor2
+    container_name: producer-mtaircompressor-2
     environment:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAirCompressor2}
@@ -287,6 +334,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAOS}
       LOVE_CSC_PRODUCER: MTAOS:0
+  mtcamera:
+    <<: *base-producer
+    container_name: producer-mtcamera
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTCamera}
+      LOVE_CSC_PRODUCER: MTCamera:0
   mtdome:
     <<: *base-producer
     container_name: producer-mtdome
@@ -322,6 +376,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeTrajectory}
       LOVE_CSC_PRODUCER: MTDomeTrajectory:0
+  mtheaderservice:
+    <<: *base-producer
+    container_name: producer-mtheaderservice
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTHeaderService}
+      LOVE_CSC_PRODUCER: MTHeaderService:0
   mtm1m3:
     <<: *base-producer
     container_name: producer-mtm1m3
@@ -329,13 +390,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3}
       LOVE_CSC_PRODUCER: MTM1M3:0
-  mtm1m3ts:
-    <<: *base-producer
-    container_name: producer-mtm1m3ts
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTM1M3TS}
-      LOVE_CSC_PRODUCER: MTM1M3TS:0
   mtm2:
     <<: *base-producer
     container_name: producer-mtm2
@@ -350,6 +404,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTMount}
       LOVE_CSC_PRODUCER: MTMount:0
+  mtocps:
+    <<: *base-producer
+    container_name: producer-mtocps
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTOCPS}
+      LOVE_CSC_PRODUCER: OCPS:3
+  mtoods:
+    <<: *base-producer
+    container_name: producer-mtoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTOODS}
+      LOVE_CSC_PRODUCER: MTOODS:0
   mtptg:
     <<: *base-producer
     container_name: producer-mtptg
@@ -378,20 +446,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
-  pmd:
-    <<: *base-producer
-    container_name: producer-pmd
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_PMD}
-      LOVE_CSC_PRODUCER: PMD:1
   tmaess01:
     <<: *base-producer
     container_name: producer-tma-ess01
     environment:
       <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TmaESS01}
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS01}
       LOVE_CSC_PRODUCER: ESS:1
+  tmaess104:
+    <<: *base-producer
+    container_name: producer-tma-ess104
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS104}
+      LOVE_CSC_PRODUCER: ESS:104
+  tmaess105:
+    <<: *base-producer
+    container_name: producer-tma-ess105
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_TMAESS105}
+      LOVE_CSC_PRODUCER: ESS:105
   watcher:
     <<: *base-producer
     container_name: producer-watcher
@@ -406,13 +481,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_WeatherForecast}
       LOVE_CSC_PRODUCER: WeatherForecast:0
-  genericcamera101:
-    <<: *base-producer
-    container_name: producer-genericcamera101
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_GC101}
-      LOVE_CSC_PRODUCER: GenericCamera:101
 
   #-----LOVE COMMANDER -----------
   commander:
@@ -420,14 +488,10 @@ services:
     image: ts-dockerhub.lsst.org/love-commander:${cycle}
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - S3_INSTANCE=${S3_INSTANCE}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL}
-      - MYS3_SECRET_KEY=${MYS3_SECRET_KEY}
-      - MYS3_ACCESS_KEY=${MYS3_ACCESS_KEY}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ipc: host
     pid: host
+    # networks:
+    #   - dds-network
     logging:
       driver: "json-file"
       options:
@@ -443,6 +507,9 @@ services:
     container_name: redis
     image: redis:7
     command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
+    # networks:
+    #   - dds-network
+    # network_mode: host
     ports:
       - "6379:6379"
     volumes:
@@ -456,75 +523,85 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
+    # networks:
+    #   - dds-network
+    # network_mode: host
     volumes:
       - ./db_data:/var/lib/postgresql/data
 
   manager01:
-    <<: *manager-service
     container_name: love-manager01
+    <<: *manager-service
 
   manager02:
-    <<: *manager-service
     container_name: love-manager02
+    <<: *manager-service
 
   manager03:
-    <<: *manager-service
     container_name: love-manager03
+    <<: *manager-service
 
   manager04:
-    <<: *manager-service
     container_name: love-manager04
+    <<: *manager-service
 
   manager05:
-    <<: *manager-service
     container_name: love-manager05
-
-  manager_atqueue:
     <<: *manager-service
-    container_name: love-manager-atqueue
-
-  manager_atqueue02:
-    <<: *manager-service
-    container_name: love-manager-atqueue02
-
-  manager_atqueue03:
-    <<: *manager-service
-    container_name: love-manager-atqueue03
-
-  manager_mtqueue:
-    <<: *manager-service
-    container_name: love-manager-mtqueue
 
   manager_auxtel:
-    <<: *manager-service
     container_name: love-manager-auxtel
+    <<: *manager-service
+
+  manager_latiss:
+    container_name: love-manager-latiss
+    <<: *manager-service
 
   manager_maintel:
-    <<: *manager-service
     container_name: love-manager-maintel
-
-  manager_obssys:
     <<: *manager-service
-    container_name: love-manager-obssys
 
-  manager_m1m3:
+  manager_maintel_misc:
+    container_name: love-manager-maintel-misc
     <<: *manager-service
-    container_name: love-manager-m1m3
 
   manager_eas:
-    <<: *manager-service
     container_name: love-manager-eas
+    <<: *manager-service
+
+  manager_obssys:
+    container_name: love-manager-obssys
+    <<: *manager-service
+
+  manager_m1m3:
+    container_name: love-manager-m1m3
+    <<: *manager-service
+
+  manager_m2:
+    <<: *manager-service
+    container_name: love-manager-m2
+
+  manager_gc:
+    <<: *manager-service
+    container_name: love-manager-gc
+
+  manager_lsstcam:
+    <<: *manager-service
+    container_name: love-manager-lsstcam
 
   #----- LOVE FRONTEND --------------
   frontend:
     <<: *service
     container_name: love-frontend
-    image: ts-dockerhub.lsst.org/love-frontend:${cycle}${rev}
+    image: ts-dockerhub.lsst.org/love-frontend:${cycle}
     # depends_on:
     #   - manager
+    network_mode: host
     volumes:
       - frontend-volume:/usr/src/love
     tty: true
+    # networks:
+    #   - dds-network
 
   nginx:
     <<: *service
@@ -536,7 +613,14 @@ services:
       - manager03
       - manager04
       - manager05
+      - manager_auxtel
+      - manager_maintel
+      - manager_obssys
+      - manager_m1m3
       - frontend
+    # networks:
+    #   - dds-network
+    # network_mode: host
     ports:
       - 80:80
     volumes:
@@ -548,3 +632,10 @@ services:
 volumes:
   frontend-volume:
   manager-static:
+
+# networks:
+#   default:
+#     external:
+#       name: dds-network
+#   dds-network:
+#     external: true
