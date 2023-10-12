@@ -2,6 +2,39 @@
 Version History
 ===============
 
+v5.4.1
+------
+
+* Add missing CHANGELOG `<https://github.com/lsst-ts/LOVE-integration-tools/pull/185>`_
+* Tickets/dm40123 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/184>`_
+* Hotfix for Jenkinsfile `<https://github.com/lsst-ts/LOVE-integration-tools/pull/183>`_
+* Move docs creation to CI `<https://github.com/lsst-ts/LOVE-integration-tools/pull/182>`_
+* Clean lite environment `<https://github.com/lsst-ts/LOVE-integration-tools/pull/181>`_
+* Add ts_pre_commit_conf `<https://github.com/lsst-ts/LOVE-integration-tools/pull/180>`_
+* Bump urllib3 from 2.0.2 to 2.0.6 in /docsrc `<https://github.com/lsst-ts/LOVE-integration-tools/pull/179>`_
+* Improve copyright file `<https://github.com/lsst-ts/LOVE-integration-tools/pull/178>`_
+* LOVE License `<https://github.com/lsst-ts/LOVE-integration-tools/pull/177>`_
+* tickets/DM-39587 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/176>`_
+* tickets/DM-39588 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/175>`_
+* Update nginx, redis and postgres images `<https://github.com/lsst-ts/LOVE-integration-tools/pull/174>`_
+* Extend redis configuration to flush idle clients `<https://github.com/lsst-ts/LOVE-integration-tools/pull/173>`_
+* Bump certifi from 2022.12.7 to 2023.7.22 in /docsrc `<https://github.com/lsst-ts/LOVE-integration-tools/pull/172>`_
+* tickets/DM-39586 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/171>`_
+* tickets/DM-38941 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/170>`_
+* tickets/DM-38940 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/169>`_
+* tickets/DM-38939 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/168>`_
+* Bump requests from 2.28.1 to 2.31.0 in /docsrc `<https://github.com/lsst-ts/LOVE-integration-tools/pull/167>`_
+* tickets/DM-36177 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/166>`_
+* tickets/DM-37650 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/165>`_
+* tickets/DM-37649 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/163>`_
+* Update Sphinx dependencies `<https://github.com/lsst-ts/LOVE-integration-tools/pull/162>`_
+* Update ScriptQueue configurations for linode deployment `<https://github.com/lsst-ts/LOVE-integration-tools/pull/160>`_
+* tickets/DM-37099 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/158>`_
+* tickets/DM-37098 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/157>`_
+* Bump certifi from 2019.6.16 to 2022.12.7 in /docsrc `<https://github.com/lsst-ts/LOVE-integration-tools/pull/155>`_
+* tickets/DM-36693 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/154>`_
+* tickets/DM-36746 `<https://github.com/lsst-ts/LOVE-integration-tools/pull/153>`_
+
 v5.4.0
 ------
 
