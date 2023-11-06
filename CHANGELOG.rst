@@ -5,6 +5,7 @@ Version History
 v5.4.2
 ------
 
+* Add missing changelog checker action `<https://github.com/lsst-ts/LOVE-integration-tools/pull/189>`_
 * Add LOVE uptime tests notebook `<https://github.com/lsst-ts/LOVE-integration-tools/pull/188>`_
 
 v5.4.1
