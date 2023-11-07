@@ -34,7 +34,8 @@ class LoveManagerClient:
     Parameters
     ----------
     location : `str`
-        Host of the running LOVE-manager instance
+        Complete URL of the running LOVE instance
+        e.g. https://base-lsp.lsst.codes/love or http://love01.ls.lsst.org
     username: `str`
         LOVE username to use as authenticator
     password: `str`
@@ -73,7 +74,6 @@ class LoveManagerClient:
 
         self.token = None
         self.websocket_url = None
-        self.command_url = None
         self.__api_headers = None
 
         self.__msg_tracing = msg_tracing
@@ -83,6 +83,9 @@ class LoveManagerClient:
         self.__location = location
         self.__password = password
         self.__websocket = None
+
+        self.__secure = location.split(":")[0] == "https"
+        self.__domain = location.split("//")[1]
 
         self.start_task = utils.make_done_future()
 
@@ -96,7 +99,7 @@ class LoveManagerClient:
         RuntimeError
              If the token cannot be retrieved.
         """
-        url = f"http://{self.__location}/manager/api/get-token/"
+        url = f"{self.__location}/manager/api/get-token/"
         data = {
             "username": self.username,
             "password": self.__password,
@@ -108,14 +111,15 @@ class LoveManagerClient:
                     json_data = await resp.json()
                     token = json_data["token"]
                     self.websocket_url = (
-                        f"ws://{self.__location}/manager/ws/subscription?token={token}"
+                        f"ws://{self.__domain}/manager/ws/subscription?token={token}"
+                        if not self.__secure
+                        else f"wss://{self.__domain}/manager/ws/subscription?token={token}"
                     )
                     self.__api_headers = {
                         "Authorization": f"Token {token}",
                         "Accept": "application/json",
                         "Content-Type": "application/json",
                     }
-                    self.command_url = f"http://{self.__location}/manager/api/cmd/"
             except Exception as e:
                 raise RuntimeError("Authentication failed.") from e
 
@@ -195,6 +199,8 @@ class LoveManagerClient:
         params: `dict`
             Parameters of the command to be sent
         """
+
+        url = f"{self.__location}/manager/api/cmd/"
         data = {
             "csc": csc,
             "salindex": salindex,
@@ -204,7 +210,7 @@ class LoveManagerClient:
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(
-                    self.command_url, data=json.dumps(data), headers=self.__api_headers
+                    url, data=json.dumps(data), headers=self.__api_headers
                 ) as resp:
                     json_data = await resp.json()
                     self.log.info("Command sent: ", json_data)
