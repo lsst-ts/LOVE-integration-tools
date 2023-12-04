@@ -2,9 +2,12 @@
 Version History
 ===============
 
+
+
 v5.4.2
 ------
 
+* Increase body size for nginx requests to 5MB `<https://github.com/lsst-ts/LOVE-integration-tools/pull/192>`_
 * Refactor LOVE stress test scripts url setting `<https://github.com/lsst-ts/LOVE-integration-tools/pull/190>`_
 * Add missing changelog checker action `<https://github.com/lsst-ts/LOVE-integration-tools/pull/189>`_
 * Add LOVE uptime tests notebook `<https://github.com/lsst-ts/LOVE-integration-tools/pull/188>`_
