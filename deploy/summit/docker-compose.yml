@@ -227,6 +227,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS04}
       LOVE_CSC_PRODUCER: ESS:204
+  auxteless05:
+    <<: *base-producer
+    container_name: producer-auxtel-ess05
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_AuxTelESS05}
+      LOVE_CSC_PRODUCER: ESS:205
   calibhilless01:
     <<: *base-producer
     container_name: producer-calibhill-ess01
@@ -571,7 +578,7 @@ services:
     <<: *service
     container_name: redis
     image: redis:7
-    command: redis-server /data/redis.conf --appendonly yes --requirepass ${REDIS_PASS}
+    command: redis-server /data/redis.conf --requirepass ${REDIS_PASS}
     ports:
       - "6379:6379"
     volumes:
