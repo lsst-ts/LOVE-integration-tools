@@ -50,6 +50,9 @@ x-manager-service:
     - JIRA_API_TOKEN=${JIRA_API_TOKEN}
     - JIRA_PROJECT_ID=${JIRA_PROJECT_ID}
     - OLE_API_HOSTNAME=${OLE_API_HOSTNAME}
+    - SMTP_USER=${SMTP_USER}
+    - SMTP_PASSWORD=${SMTP_PASSWORD}
+    - NIGHTREPORT_MAIL_ADDRESS=${NIGHTREPORT_MAIL_ADDRESS}
   volumes:
     - ./config:/usr/src/love/manager/config
     - ./media:/usr/src/love/manager/media
