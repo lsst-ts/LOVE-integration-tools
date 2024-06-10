@@ -85,8 +85,6 @@ x-base-producer:
   depends_on:
     - nginx
 
-version: "3.7"
-
 services:
 
   #----- LOVE PRODUCER --------------
