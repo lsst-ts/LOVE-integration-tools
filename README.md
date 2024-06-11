@@ -1,40 +1,39 @@
 # LOVE-integration-tools instructions
 
 The LOVE-integration-tools repository provides scripts and tools to integrate the applications from the different development repositories, in order to be used for development and deployment purposes.
-See the full documentation here: https://love-integration-tools.lsst.io/
+See the full documentation here: https://love-integration-tools.lsst.io/.
 
 ## Directory tree
 
 ```
 .
 ├── deploy              # Config scripts for all of the deployment environments
-│   ├── linode            # Monolith configuration with simulators and LOVE stack
+│   ├── base              # Monolith config for the deployment at the Base Test Stand
+│   ├── k8s               # Configurations for deploying the system in a Kubernetes cluster
 │   ├── local             # Monolith config for local configurations
 │   │   ├── build           # Uses locally built docker images
 │   │   ├── lite            # Uses local frontend and a remote backend
 │   │   ├── live            # Local frontend, backend and simulators
 │   │   ├── live-csc        # As live, but backend is split by CSC instead of message type
-│   ├── summit           # Monolith config for the deployment at the Summit lba
-│   └── tucson           # Monolith config for the deployment at the Tucson lab
-├── docs               # Built docs files to be served as a static page
-├── docsrc             # Source files of the docs
-├── jupyter            # Jupyter notebooks to send SAL commands for manual tests
-└── tests              # Integration and load tests and similar
+│   ├── summit            # Monolith config for the deployment at the Summit Bare Metal Machine #1
+│   ├── summit2           # Monolith config for the deployment at the Summit Bare Metal Machine #2
+│   └── tucson            # Monolith config for the deployment at the Tucson Test Stand
+├── docsrc              # Source files of the docs
+├── jupyter             # Jupyter notebooks to send SAL commands for manual tests
+└── tests               # Integration and load tests and similar
 ```
 
 ## The `deploy` folder
 
-This directory contains different the files needed for deployment environments. Each environment is enclosed in a directory, with the possibility of having sub-environments in nested sub-directories, following a tree structure.
+This directory contains the different files needed for deployment environments. Each environment is enclosed in a directory, with the possibility of having sub-environments in nested sub-directories, following a tree structure.
 
 ### Environment content
 
 Each environment contains the following types of files:
 
-- `docker-compose.yml:` these files define the services that will be run with docker
+- `docker-compose.yml:` these files define the services that will be run with docker.
 - `.env:` these files contains the environment variables with different configuration parameters, such as the different project paths, network configuration, among others.
-- `nginx` directory: contains NGINX configuration files (`default.conf` and `Dockerfile`) in order to coordinate HTTP requests between the django server and the frontend.
-  - `default.conf`: Nginx configuraiton file that defines the routing and other network configuraitons
-  - `Dockerfile`: to build the docker image needed to run the Nginx service
+- `nginx.conf`: nginx configuration file that defines the routing and other network configurations.
 
 **IMPORTANT:** make sure to redefine the secrets defined by the `.env` files for real production environments. You can do that by defining them in your environment directly, if the variables are defined in your environment they will have priority over the values defines in the `.env` files. See the `.env` files to see which variables should be overriden, search for the following comment line:
 
@@ -44,22 +43,22 @@ Each environment contains the following types of files:
 
 The `deploy` directory is structured as follows:
 
-- **linode**: corresponds to the deployment in Inria linode machines, for demonstration purposes
-  - `docker-compose-dev.yml`: deploys the development version, using docker images pulled from dockerhub tagged as `dev`
-  - `docker-compose.yml`: deploys the development version, using docker images pulled from dockerhub tagged as
-- **local**: contains environments for local development. Building images from local repositories, located as described in "Expected folder structure"
+- **local**: contains environments for local development. Building images from local repositories, located as described in "Directory tree".
   - **build**: contains the files for deploying the system by building production docker images from local repositories.
   - **live**: contains the files for deploying the system by building development docker images from local repositories. These images work by mounting the source code of their corresponding repositories as a volume, rather than copying it. They also use development or "live" modes for running some of the applications, Manager and Frontend.
-- **tucson**: corresponds to the deployment in the machines in Tucson. The configuration is different in the network configuration, in order to connect to the SAL components.
+  - **live-csc (recommended)**: same as live, but using backend is split by CSC.
+  - **lite**: similar to live ones, but contains the files for just deploying a locally built Frontend application, which can connect to a remote backend. Not recommended, to be used mainly by advanced users.
+- **summit**: corresponds to the deployment in the machines in the Summit Bare Metal Machine #1. The configuration is different in the network configuration, in order to connect to the SAL components.
+- **summit2**: same as summit, but for Bare Metal Machine #2.
+- **base**: corresponds to the deployment in the machines in the Base Test Stand. The configuration is different in the network configuration, in order to connect to the SAL components.
+- **tucson**: corresponds to the deployment in the machines in the Tucson Test Stand. The configuration is different in the network configuration, in order to connect to the SAL components.
+- **k8s**: contains the files for deploying the system in a Kubernetes cluster. The configuration is different in the network configuration, in order to connect to the SAL components.
 
 ## Jenkinsfile
 
-Defines the jobs to be executed by a Jenkins machine when changes are committed in this repository. These jobs include:
+Defines the jobs to be executed by a Jenkins machine when changes are committed in this repository. There is currently only one job:
 
-- Building and pushing Nginx docker images to Dockerhub, when there are changes in the corresponding `nginx` directories
-- Pulling images, and redeploying the LOVE services in the production environments, when there are changes in the definition of the environments (or if triggered by the jobs that update the docker image in each related repo). Currently, this is only done for the Linode environments (master and develop)
-
----
+- Building and pushing the documentation to [love-integration-tools.lsst.io](https://love-integration-tools.lsst.io).
 
 ## Running the project
 
@@ -82,7 +81,7 @@ For this you need to have the following tree structure:
 You can run a locally-built version of the application as
 
 ```
-cd LOVE-integration-tools/deploy/local/build
+cd LOVE-integration-tools/deploy/local/live-csc
 docker-compose down -v
 docker-compose build
 docker-compose up -d
@@ -91,39 +90,7 @@ docker-compose up -d
 If there is a problem loading the static files from the browser, try deleting the docker volumes:
 
 ```
-docker-system prune --volumes
-```
-
-### Pulling images form Dockerhub
-
-#### Master branch version
-
-```
-cd LOVE-integration-tools/linode
-docker-compose -f docker-compose-master.yml down -v
-docker-compose -f docker-compose-master.yml build
-docker-compose -f docker-compose-master.yml up -d
-```
-
-If there is a problem loading the static files from the browser, try deleting the docker volumes:
-
-```
-docker-system prune --volumes
-```
-
-#### Develop branch version
-
-```
-cd LOVE-integration-tools/linode
-docker-compose down -v
-docker-compose build
-docker-compose up -d
-```
-
-If there is a problem loading the static files from the browser, try deleting the docker volumes:
-
-```
-docker-system prune --volumes
+docker system prune --volumes
 ```
 
 ---
