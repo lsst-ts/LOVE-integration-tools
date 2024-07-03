@@ -418,14 +418,42 @@ services:
     container_name: love-manager-mount-01
     environment:
       <<: *manager-environment
-      HEARTBEAT_QUERY_COMMANDED: "True"
+      HEARTBEAT_QUERY_COMMANDER: "False"
 
   manager02:
     <<: *base-manager
     container_name: love-manager-mount-02
     environment:
       <<: *manager-environment
-      HEARTBEAT_QUERY_COMMANDED: "False"
+      HEARTBEAT_QUERY_COMMANDER: "False"
+
+  manager03:
+    <<: *base-manager
+    container_name: love-manager-mount-03
+    environment:
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDER: "True"
+
+  manager04:
+    <<: *base-manager
+    container_name: love-manager-mount-04
+    environment:
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDER: "True"
+
+  manager05:
+    <<: *base-manager
+    container_name: love-manager-mount-05
+    environment:
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDER: "True"
+
+  manager06:
+    <<: *base-manager
+    container_name: love-manager-mount-06
+    environment:
+      <<: *manager-environment
+      HEARTBEAT_QUERY_COMMANDER: "True"
 
   #----- LOVE FRONTEND --------------
   frontend:
@@ -474,6 +502,10 @@ services:
       - frontend
       - manager01
       - manager02
+      - manager03
+      - manager04
+      - manager05
+      - manager06
       # - styleguide
       # - gencam-sim
     network_mode: ${NETWORK_NAME}
