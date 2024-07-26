@@ -16,7 +16,7 @@ x-service:
 x-manager-service:
   &manager-service
   <<: *service
-  image: ts-dockerhub.lsst.org/love-manager:${cycle}${manager_rev}
+  image: ts-dockerhub.lsst.org/love-manager:${cycle}
   depends_on:
     - redis
     - database
@@ -66,7 +66,7 @@ x-base-producer-env:
 
 x-base-producer:
   &base-producer
-  image: ts-dockerhub.lsst.org/love-producer:${cycle}${producer_rev}
+  image: ts-dockerhub.lsst.org/love-producer:${cycle}
   environment:
     <<: *base-producer-environment
   ipc: host
@@ -84,8 +84,6 @@ x-base-producer:
       max-size: "10m"
   depends_on:
     - nginx
-
-version: "3.7"
 
 services:
 
@@ -556,7 +554,7 @@ services:
   #-----LOVE COMMANDER -----------
   commander:
     container_name: love-commander
-    image: ts-dockerhub.lsst.org/love-commander:${cycle}${commander_rev}
+    image: ts-dockerhub.lsst.org/love-commander:${cycle}
     environment:
       - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
       - S3_INSTANCE=${S3_INSTANCE}
@@ -648,7 +646,7 @@ services:
 
   manager_maintel:
     container_name: love-manager-maintel
-    image: ts-dockerhub.lsst.org/love-manager:${cycle}${manager_rev}
+    image: ts-dockerhub.lsst.org/love-manager:${cycle}
     <<: *manager-service
 
   manager_comcam:
@@ -731,7 +729,7 @@ services:
   frontend:
     <<: *service
     container_name: love-frontend
-    image: ts-dockerhub.lsst.org/love-frontend:${cycle}${frontend_rev}
+    image: ts-dockerhub.lsst.org/love-frontend:${cycle}
     # depends_on:
     #   - manager
     volumes:
