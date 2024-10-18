@@ -305,6 +305,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_Electrometer201}
       LOVE_CSC_PRODUCER: Electrometer:201
+  epm301:
+    <<: *base-producer
+    container_name: producer-epm301
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_EPM301}
+      LOVE_CSC_PRODUCER: EPM:301
   fiber-spectrograph3:
     <<: *base-producer
     container_name: producer-fiber-spectrograph3
