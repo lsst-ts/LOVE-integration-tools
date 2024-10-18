@@ -508,6 +508,13 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  ocps101:
+    <<: *base-producer
+    container_name: producer-ocps101
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_OCPS101}
+      LOVE_CSC_PRODUCER: OCPS:101
   ocsscheduler:
     <<: *base-producer
     container_name: producer-ocsscheduler
