@@ -417,6 +417,27 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTAOS}
       LOVE_CSC_PRODUCER: MTAOS:0
+  mtcamera:
+    <<: *base-producer
+    container_name: producer-mtcamera
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTCamera}
+      LOVE_CSC_PRODUCER: MTCamera:0
+  mtheaderservice:
+    <<: *base-producer
+    container_name: producer-mtheaderservice
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTHeaderService}
+      LOVE_CSC_PRODUCER: MTHeaderService:0
+  mtoods:
+    <<: *base-producer
+    container_name: producer-mtoods
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTOODS}
+      LOVE_CSC_PRODUCER: MTOODS:0
   mtdome:
     <<: *base-producer
     container_name: producer-mtdome
@@ -424,27 +445,6 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDome}
       LOVE_CSC_PRODUCER: MTDome:0
-  mtdomeess01:
-    <<: *base-producer
-    container_name: producer-mtdome-ess01
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS01}
-      LOVE_CSC_PRODUCER: ESS:101
-  mtdomeess02:
-    <<: *base-producer
-    container_name: producer-mtdome-ess02
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS02}
-      LOVE_CSC_PRODUCER: ESS:102
-  mtdomeess03:
-    <<: *base-producer
-    container_name: producer-mtdome-ess03
-    environment:
-      <<: *base-producer-environment
-      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTDomeESS03}
-      LOVE_CSC_PRODUCER: ESS:103
   mtdometrajectory:
     <<: *base-producer
     container_name: producer-mtdometrajectory
@@ -508,6 +508,20 @@ services:
       <<: *base-producer-environment
       WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_MTScriptQueue}
       LOVE_CSC_PRODUCER: ScriptQueue:1
+  ocsscheduler:
+    <<: *base-producer
+    container_name: producer-ocsscheduler
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_OCSScheduler}
+      LOVE_CSC_PRODUCER: Scheduler:3
+  ocsscriptqueue:
+    <<: *base-producer
+    container_name: producer-ocsscriptqueue
+    environment:
+      <<: *base-producer-environment
+      WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST_OCSScriptQueue}
+      LOVE_CSC_PRODUCER: ScriptQueue:3
   pmd:
     <<: *base-producer
     container_name: producer-pmd
@@ -724,6 +738,10 @@ services:
   manager_atcalsys:
     <<: *manager-service
     container_name: love-manager-atcalsys
+
+  manager_lsstcam:
+    <<: *manager-service
+    container_name: love-manager-lsstcam
 
   #----- LOVE FRONTEND --------------
   frontend:
