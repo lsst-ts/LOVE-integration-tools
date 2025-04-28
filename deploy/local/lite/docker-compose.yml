@@ -20,24 +20,6 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  styleguide:
-    container_name: love-styleguide-mount
-    build:
-      context: ${DOCKERFILE_PATH_FRONTEND}
-      dockerfile: docker/Dockerfile-dev
-    image: love-frontend-image-mount
-    command: yarn guide:start
-    ports:
-      - "3001:3001"
-    volumes:
-      - ${DOCKERFILE_PATH_FRONTEND}/love:/usr/src/love
-      - /usr/src/love/node_modules
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-
   nginx:
     container_name: love-nginx-mount
     image: nginx:1.25.1
