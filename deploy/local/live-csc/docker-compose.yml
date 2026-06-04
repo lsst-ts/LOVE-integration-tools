@@ -7,10 +7,11 @@ x-service: &service
       max-size: "10m"
 
 x-base-producer-env: &base-producer-environment
-  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
+  # LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
+  LSST_TOPIC_SUBNAME: test
 
 x-manager-env: &manager-environment
   SERVER_URL: ${SERVER_URL}
@@ -38,6 +39,7 @@ x-manager-env: &manager-environment
   JIRA_API_TOKEN: ${JIRA_API_TOKEN}
   JIRA_PROJECT_ID: ${JIRA_PROJECT_ID}
   OLE_API_HOSTNAME: ${OLE_API_HOSTNAME}
+  URL_SUBPATH: /love
 
 x-base-manager: &base-manager
   build:
@@ -86,143 +88,143 @@ version: "3.7"
 
 services:
   # -------------- LOVE PRODUCERS --------------
-  LOVE:
-    <<: *base-producer
-    container_name: producer-love-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: LOVE:0
-  ATDome:
-    <<: *base-producer
-    container_name: producer-atdome-image-mount
-    depends_on:
-      - atcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATDome:0
-  ATMCS:
-    <<: *base-producer
-    container_name: producer-atmcs-image-mount
-    depends_on:
-      - atcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATMCS:0
-  ATAOS:
-    <<: *base-producer
-    container_name: producer-ataos-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATAOS:0
-  ATSpectrograph:
-    <<: *base-producer
-    container_name: producer-atspectrograph-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATSpectrograph:0
-  ATCamera:
-    <<: *base-producer
-    container_name: producer-atcamera-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ATCamera:0
-  MTM1M3:
-    <<: *base-producer
-    container_name: producer-mtm1m3-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTM1M3:0
-  MTM2:
-    <<: *base-producer
-    container_name: producer-mtm2-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTM2:0
-  MTMount:
-    <<: *base-producer
-    container_name: producer-mtmount-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTMount:0
-  MTRotator:
-    <<: *base-producer
-    container_name: producer-mtrotator-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTRotator:0
-  CameraHexapod:
-    <<: *base-producer
-    container_name: producer-camerahexapod-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTHexapod:1
-  M2Hexapod:
-    <<: *base-producer
-    container_name: producer-m2hexapod-image-mount
-    depends_on:
-      - mtcs-sim
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: MTHexapod:2
+  # LOVE:
+  #   <<: *base-producer
+  #   container_name: producer-love-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: LOVE:0
+  # ATDome:
+  #   <<: *base-producer
+  #   container_name: producer-atdome-image-mount
+  #   depends_on:
+  #     - atcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATDome:0
+  # ATMCS:
+  #   <<: *base-producer
+  #   container_name: producer-atmcs-image-mount
+  #   depends_on:
+  #     - atcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATMCS:0
+  # ATAOS:
+  #   <<: *base-producer
+  #   container_name: producer-ataos-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATAOS:0
+  # ATSpectrograph:
+  #   <<: *base-producer
+  #   container_name: producer-atspectrograph-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATSpectrograph:0
+  # ATCamera:
+  #   <<: *base-producer
+  #   container_name: producer-atcamera-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ATCamera:0
+  # MTM1M3:
+  #   <<: *base-producer
+  #   container_name: producer-mtm1m3-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM1M3:0
+  # MTM2:
+  #   <<: *base-producer
+  #   container_name: producer-mtm2-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTM2:0
+  # MTMount:
+  #   <<: *base-producer
+  #   container_name: producer-mtmount-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTMount:0
+  # MTRotator:
+  #   <<: *base-producer
+  #   container_name: producer-mtrotator-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTRotator:0
+  # CameraHexapod:
+  #   <<: *base-producer
+  #   container_name: producer-camerahexapod-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTHexapod:1
+  # M2Hexapod:
+  #   <<: *base-producer
+  #   container_name: producer-m2hexapod-image-mount
+  #   depends_on:
+  #     - mtcs-sim
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: MTHexapod:2
   MTDome:
     <<: *base-producer
-    container_name: producer-mtdome-image-mount
+    container_name: producer-mtdome
     depends_on:
       - mtcs-sim
     environment:
       <<: *base-producer-environment
       LOVE_CSC_PRODUCER: MTDome:0
-  Watcher:
-    <<: *base-producer
-    container_name: producer-watcher-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: Watcher:0
-  ScriptQueue:
-    <<: *base-producer
-    container_name: producer-scriptqueue-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: ScriptQueue:1
-  WeatherStation1:
-    <<: *base-producer
-    container_name: producer-weatherstation1-image-mount
-    environment:
-      <<: *base-producer-environment
-      LOVE_CSC_PRODUCER: WeatherStation:1
+  # Watcher:
+  #   <<: *base-producer
+  #   container_name: producer-watcher-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: Watcher:0
+  # ScriptQueue:
+  #   <<: *base-producer
+  #   container_name: producer-scriptqueue-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: ScriptQueue:1
+  # WeatherStation1:
+  #   <<: *base-producer
+  #   container_name: producer-weatherstation1-image-mount
+  #   environment:
+  #     <<: *base-producer-environment
+  #     LOVE_CSC_PRODUCER: WeatherStation:1
 
   # -------------- simulators --------------
-  atcs-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: docker/Dockerfile-atcs
-      args:
-        dev_cycle: "${dev_cycle}"
-    container_name: atcs-sim-build
-    entrypoint: ["/home/saluser/atcs-setup.sh"]
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # atcs-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: docker/Dockerfile-atcs
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   container_name: atcs-sim-build
+  #   entrypoint: ["/home/saluser/atcs-setup.sh"]
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
   mtcs-sim:
     build:
@@ -233,8 +235,9 @@ services:
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      # - OSPL_URI=${OSPL_URI}
+      # - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -246,113 +249,113 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  scriptqueue-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: docker/Dockerfile-scriptqueue
-      args:
-        dev_cycle: "${dev_cycle}"
-    container_name: scriptqueue-sim-build
-    environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ./config:/home/saluser/config/
-      - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
-      - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # scriptqueue-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: docker/Dockerfile-scriptqueue
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   container_name: scriptqueue-sim-build
+  #   environment:
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ./config:/home/saluser/config/
+  #     - ${TS_STANDARDSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/standard/
+  #     - ${TS_EXTERNALSCRIPTS}:/home/saluser/repos/ts_scriptqueue/tests/data/external/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
-  watcher-sim:
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: docker/Dockerfile-watcher
-      args:
-        dev_cycle: "${dev_cycle}"
-    container_name: watcher-sim-build
-    entrypoint: ["/home/saluser/watcher-setup.sh"]
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - LSST_SITE=${LSST_SITE}
-    network_mode: ${NETWORK_NAME}
-    restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-      - ./config:/home/saluser/config/
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+  # watcher-sim:
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: docker/Dockerfile-watcher
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   container_name: watcher-sim-build
+  #   entrypoint: ["/home/saluser/watcher-setup.sh"]
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #     - LSST_SITE=${LSST_SITE}
+  #   network_mode: ${NETWORK_NAME}
+  #   restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #     - ./config:/home/saluser/config/
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
 
-  weatherstation-sim:
-   build:
-     context: ${DOCKERFILE_PATH_SIMULATOR}
-     dockerfile: docker/Dockerfile-weatherstation
-     args:
-       dev_cycle: "${dev_cycle}"
-   container_name: weatherstation-sim-build
-   entrypoint: ["/home/saluser/weatherstation-setup.sh"]
-   environment:
-     - OSPL_URI=${OSPL_URI}
-     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-   network_mode: ${NETWORK_NAME}
-   restart: always
-   volumes:
-     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-     - ./config:/home/saluser/config/
-   logging:
-     driver: "json-file"
-     options:
-       max-file: "5"
-       max-size: "10m"
+  # weatherstation-sim:
+  #  build:
+  #    context: ${DOCKERFILE_PATH_SIMULATOR}
+  #    dockerfile: docker/Dockerfile-weatherstation
+  #    args:
+  #      dev_cycle: "${dev_cycle}"
+  #  container_name: weatherstation-sim-build
+  #  entrypoint: ["/home/saluser/weatherstation-setup.sh"]
+  #  environment:
+  #    - OSPL_URI=${OSPL_URI}
+  #    - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #  network_mode: ${NETWORK_NAME}
+  #  restart: always
+  #  volumes:
+  #    - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #    - ./config:/home/saluser/config/
+  #  logging:
+  #    driver: "json-file"
+  #    options:
+  #      max-file: "5"
+  #      max-size: "10m"
 
-  gencam-sim:
-    image: ts-dockerhub.lsst.org/genericcamera:c0020.004
-    container_name: gencam-sim
-    environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - RUN_ARG=1
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-    network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    ports:
-      - 5013:5013
+  # gencam-sim:
+  #   image: ts-dockerhub.lsst.org/genericcamera:c0020.004
+  #   container_name: gencam-sim
+  #   environment:
+  #     - OSPL_URI=${OSPL_URI}
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #     - RUN_ARG=1
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #   network_mode: ${NETWORK_NAME}
+  #   # restart: always
+  #   volumes:
+  #     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  #   ports:
+  #     - 5013:5013
 
-  jupyter:
-    container_name: love-jupyter
-    build:
-      context: ${DOCKERFILE_PATH_SIMULATOR}
-      dockerfile: docker/Dockerfile-jupyter
-      args:
-        dev_cycle: "${dev_cycle}"
-    environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - JUPYTER_PASS=${JUPYTER_PASS}
-    user: root
-    network_mode: ${NETWORK_NAME}
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    volumes:
-      - ${JUPYTER_PATH}:/home/saluser/notebooks
-    ports:
-      - 1234:1234
+  # jupyter:
+  #   container_name: love-jupyter
+  #   build:
+  #     context: ${DOCKERFILE_PATH_SIMULATOR}
+  #     dockerfile: docker/Dockerfile-jupyter
+  #     args:
+  #       dev_cycle: "${dev_cycle}"
+  #   environment:
+  #     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+  #     - JUPYTER_PASS=${JUPYTER_PASS}
+  #   user: root
+  #   network_mode: ${NETWORK_NAME}
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "5"
+  #       max-size: "10m"
+  #   volumes:
+  #     - ${JUPYTER_PATH}:/home/saluser/notebooks
+  #   ports:
+  #     - 1234:1234
 
   #----- LOVE COMMANDER ---------
   commander:
@@ -364,7 +367,8 @@ services:
         dev_cycle: "${dev_cycle}"
     image: love-commander-image-mount
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      # - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
       - S3_INSTANCE=${S3_INSTANCE}
     network_mode: ${NETWORK_NAME}
     restart: always
@@ -377,7 +381,6 @@ services:
         max-size: "10m"
   
   #----- LOVE MANAGER --------------
-
   redis:
     container_name: redis
     image: redis:7
@@ -486,3 +489,9 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
+
+networks:
+  kafka:
+    name: kafka
+    driver: bridge
+    external: true
