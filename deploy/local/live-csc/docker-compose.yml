@@ -208,6 +208,8 @@ services:
       dockerfile: docker/Dockerfile-atcs
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: atcs-sim-build
     entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
@@ -228,6 +230,8 @@ services:
       dockerfile: docker/Dockerfile-mtcs
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+          - linux/amd64
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
@@ -248,6 +252,8 @@ services:
       dockerfile: docker/Dockerfile-scriptqueue
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: scriptqueue-sim-build
     environment:
       - LSST_TOPIC_SUBNAME=test
@@ -269,6 +275,8 @@ services:
       dockerfile: docker/Dockerfile-watcher
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
@@ -284,24 +292,26 @@ services:
         max-size: "10m"
 
   weatherstation-sim:
-   build:
-     context: ${DOCKERFILE_PATH_SIMULATOR}
-     dockerfile: docker/Dockerfile-weatherstation
-     args:
-       dev_cycle: "${dev_cycle}"
-   container_name: weatherstation-sim-build
-   entrypoint: ["/home/saluser/weatherstation-setup.sh"]
-   environment:
-     - LSST_TOPIC_SUBNAME=test
-   network_mode: ${NETWORK_NAME}
-   restart: always
-   volumes:
-     - ./config:/home/saluser/config/
-   logging:
-     driver: "json-file"
-     options:
-       max-file: "5"
-       max-size: "10m"
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: docker/Dockerfile-weatherstation
+      args:
+        dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
+    container_name: weatherstation-sim-build
+    entrypoint: ["/home/saluser/weatherstation-setup.sh"]
+    environment:
+      - LSST_TOPIC_SUBNAME=test
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   gencam-sim:
     image: ts-dockerhub.lsst.org/genericcamera:c0020.004
@@ -326,6 +336,8 @@ services:
       dockerfile: docker/Dockerfile-jupyter
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     environment:
       - LSST_TOPIC_SUBNAME=test
     user: root
@@ -348,6 +360,8 @@ services:
       dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+          - linux/amd64
     image: love-commander-image-mount
     environment:
       - LSST_TOPIC_SUBNAME=test
@@ -425,6 +439,7 @@ services:
       - /usr/src/love/node_modules
     environment:
       CI: "true"
+      PUBLIC_URL: /love
     logging:
       driver: "json-file"
       options:
