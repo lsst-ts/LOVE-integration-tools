@@ -232,6 +232,8 @@ services:
       dockerfile: docker/Dockerfile-mtcs
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+          - linux/amd64
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
@@ -365,6 +367,8 @@ services:
       dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+          - linux/amd64
     image: love-commander-image-mount
     environment:
       # - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
@@ -443,6 +447,7 @@ services:
       - /usr/src/love/node_modules
     environment:
       CI: "true"
+      PUBLIC_URL: /love
     logging:
       driver: "json-file"
       options:
