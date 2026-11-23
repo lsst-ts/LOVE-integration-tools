@@ -53,7 +53,7 @@ x-base-manager: &base-manager
   network_mode: ${NETWORK_NAME}
   restart: always
   volumes:
-    - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
+    - ${DOCKERFILE_PATH_MANAGER}/python/love/manager:/usr/src/love
     - love-manager-static:/usr/src/love-manager
   logging:
     driver: "json-file"
