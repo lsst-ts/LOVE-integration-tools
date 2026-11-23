@@ -1,4 +1,3 @@
-
 x-service: &service
   logging:
     driver: "json-file"
@@ -231,7 +230,7 @@ services:
       args:
         dev_cycle: "${dev_cycle}"
       platforms:
-          - linux/amd64
+        - linux/amd64
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
@@ -361,7 +360,7 @@ services:
       args:
         dev_cycle: "${dev_cycle}"
       platforms:
-          - linux/amd64
+        - linux/amd64
     image: love-commander-image-mount
     environment:
       - LSST_TOPIC_SUBNAME=test
@@ -375,7 +374,7 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-  
+
   #----- LOVE MANAGER --------------
   redis:
     container_name: redis
