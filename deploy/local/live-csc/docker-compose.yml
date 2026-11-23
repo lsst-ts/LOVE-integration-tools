@@ -313,13 +313,13 @@ services:
         max-size: "10m"
 
   gencam-sim:
-    image: ts-dockerhub.lsst.org/genericcamera:c0020.004
+    image: ts-dockerhub.lsst.org/genericcamera:develop
     container_name: gencam-sim
     environment:
       - LSST_TOPIC_SUBNAME=test
       - RUN_ARG=1
     network_mode: ${NETWORK_NAME}
-    # restart: always
+    restart: always
     logging:
       driver: "json-file"
       options:
