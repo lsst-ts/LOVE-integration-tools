@@ -54,7 +54,7 @@ x-base-manager: &base-manager
   restart: always
   volumes:
     - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
-    - ./media:/usr/src/love/manager/media
+    - love-manager-static:/usr/src/love-manager
   logging:
     driver: "json-file"
     options:
@@ -479,7 +479,7 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./media:/usr/src/love-manager/media
+      - love-manager-static:/usr/src/love-manager
     logging:
       driver: "json-file"
       options:
@@ -491,3 +491,6 @@ networks:
     name: kafka
     driver: bridge
     external: true
+
+volumes:
+  love-manager-static:
