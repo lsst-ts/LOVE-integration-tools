@@ -1,4 +1,3 @@
-
 x-service: &service
   logging:
     driver: "json-file"
@@ -7,10 +6,10 @@ x-service: &service
       max-size: "10m"
 
 x-base-producer-env: &base-producer-environment
-  LSST_DDS_PARTITION_PREFIX: ${LSST_DDS_PARTITION_PREFIX}
   WEBSOCKET_HOST: ${LOVE_PRODUCER_WEBSOCKET_HOST}
   PROCESS_CONNECTION_PASS: ${PROCESS_CONNECTION_PASS}
   LOVE_CSC_PRODUCER: Test.1
+  LSST_TOPIC_SUBNAME: test
 
 x-manager-env: &manager-environment
   SERVER_URL: ${SERVER_URL}
@@ -38,6 +37,7 @@ x-manager-env: &manager-environment
   JIRA_API_TOKEN: ${JIRA_API_TOKEN}
   JIRA_PROJECT_ID: ${JIRA_PROJECT_ID}
   OLE_API_HOSTNAME: ${OLE_API_HOSTNAME}
+  URL_SUBPATH: /love
 
 x-base-manager: &base-manager
   build:
@@ -53,9 +53,8 @@ x-base-manager: &base-manager
   network_mode: ${NETWORK_NAME}
   restart: always
   volumes:
-    - ${DOCKERFILE_PATH_MANAGER}:/usr/src/love
-    - ./config:/usr/src/love/manager/config
-    - ./media:/usr/src/love/manager/media
+    - ${DOCKERFILE_PATH_MANAGER}/python/love/manager:/usr/src/love
+    - love-manager-static:/usr/src/love-manager
   logging:
     driver: "json-file"
     options:
@@ -208,15 +207,15 @@ services:
       dockerfile: docker/Dockerfile-atcs
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: atcs-sim-build
     entrypoint: ["/home/saluser/atcs-setup.sh"]
     environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
@@ -230,15 +229,15 @@ services:
       dockerfile: docker/Dockerfile-mtcs
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: mtcs-sim-build
     entrypoint: ["/home/saluser/mtcs-setup.sh"]
     environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
@@ -252,9 +251,11 @@ services:
       dockerfile: docker/Dockerfile-scriptqueue
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: scriptqueue-sim-build
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
@@ -273,16 +274,15 @@ services:
       dockerfile: docker/Dockerfile-watcher
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     container_name: watcher-sim-build
     entrypoint: ["/home/saluser/watcher-setup.sh"]
     environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - LSST_SITE=${LSST_SITE}
+      - LSST_TOPIC_SUBNAME=test
     network_mode: ${NETWORK_NAME}
     restart: always
     volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
       - ./config:/home/saluser/config/
     logging:
       driver: "json-file"
@@ -291,39 +291,35 @@ services:
         max-size: "10m"
 
   weatherstation-sim:
-   build:
-     context: ${DOCKERFILE_PATH_SIMULATOR}
-     dockerfile: docker/Dockerfile-weatherstation
-     args:
-       dev_cycle: "${dev_cycle}"
-   container_name: weatherstation-sim-build
-   entrypoint: ["/home/saluser/weatherstation-setup.sh"]
-   environment:
-     - OSPL_URI=${OSPL_URI}
-     - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-   network_mode: ${NETWORK_NAME}
-   restart: always
-   volumes:
-     - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
-     - ./config:/home/saluser/config/
-   logging:
-     driver: "json-file"
-     options:
-       max-file: "5"
-       max-size: "10m"
+    build:
+      context: ${DOCKERFILE_PATH_SIMULATOR}
+      dockerfile: docker/Dockerfile-weatherstation
+      args:
+        dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
+    container_name: weatherstation-sim-build
+    entrypoint: ["/home/saluser/weatherstation-setup.sh"]
+    environment:
+      - LSST_TOPIC_SUBNAME=test
+    network_mode: ${NETWORK_NAME}
+    restart: always
+    volumes:
+      - ./config:/home/saluser/config/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
   gencam-sim:
-    image: ts-dockerhub.lsst.org/genericcamera:c0020.004
+    image: ts-dockerhub.lsst.org/genericcamera:develop
     container_name: gencam-sim
     environment:
-      - OSPL_URI=${OSPL_URI}
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
       - RUN_ARG=1
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
     network_mode: ${NETWORK_NAME}
-    # restart: always
-    volumes:
-      - ${OSPL_CONFIG_PATH}:${OSPL_MOUNT_POINT}
+    restart: always
     logging:
       driver: "json-file"
       options:
@@ -339,9 +335,10 @@ services:
       dockerfile: docker/Dockerfile-jupyter
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
-      - JUPYTER_PASS=${JUPYTER_PASS}
+      - LSST_TOPIC_SUBNAME=test
     user: root
     network_mode: ${NETWORK_NAME}
     logging:
@@ -362,9 +359,11 @@ services:
       dockerfile: docker/Dockerfile-dev
       args:
         dev_cycle: "${dev_cycle}"
+      platforms:
+        - linux/amd64
     image: love-commander-image-mount
     environment:
-      - LSST_DDS_PARTITION_PREFIX=${LSST_DDS_PARTITION_PREFIX}
+      - LSST_TOPIC_SUBNAME=test
       - S3_INSTANCE=${S3_INSTANCE}
     network_mode: ${NETWORK_NAME}
     restart: always
@@ -375,9 +374,8 @@ services:
       options:
         max-file: "5"
         max-size: "10m"
-  
-  #----- LOVE MANAGER --------------
 
+  #----- LOVE MANAGER --------------
   redis:
     container_name: redis
     image: redis:7
@@ -440,6 +438,7 @@ services:
       - /usr/src/love/node_modules
     environment:
       CI: "true"
+      PUBLIC_URL: /love
     logging:
       driver: "json-file"
       options:
@@ -480,9 +479,18 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./media:/usr/src/love-manager/media
+      - love-manager-static:/usr/src/love-manager
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
+
+networks:
+  kafka:
+    name: kafka
+    driver: bridge
+    external: true
+
+volumes:
+  love-manager-static:
